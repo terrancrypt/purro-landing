@@ -38,9 +38,9 @@ const socials = [
     <div
       class="p-3 flex justify-between items-center bg-[#b1cac4]/30 rounded-full"
     >
-      <img src={logo.src} alt="logo" class="h-7 ml-3" />
+      <img src={logo.src} alt="logo" class="h-5 md:h-7 ml-3" />
       <div class="flex items-center gap-2">
-        <div class="flex items-center">
+        <div class="items-center hidden md:flex">
           {
             socials.map((social) => (
               <a
@@ -91,7 +91,7 @@ const socials = [
           <span>Download for Chrome</span>
         </button>
         <p
-          class="text-center text-sm md:text-md font-light mt-4 text-[#b1cac4]"
+          class="max-w-2xl text-center text-sm md:text-md font-light mt-4 text-[#b1cac4]"
         >
           Built for real onchain grinders: smooth UX, unified assets. <br /> 40%
           fees come back to you.
