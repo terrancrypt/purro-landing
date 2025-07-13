@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import ToasterWrapper from "../components/ToasterWrapper";
 ---
 
 <!doctype html>
@@ -23,6 +24,7 @@ import "../styles/global.css";
 
   <body class="font-figtree">
     <slot />
+    <ToasterWrapper client:load />
   </body>
 
   <style>

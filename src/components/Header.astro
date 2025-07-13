@@ -1,0 +1,51 @@
+---
+import logo from "../assets/purro-logo.png";
+import xIcon from "../assets/xIcon.svg";
+import discordIcon from "../assets/discordIcon.svg";
+import telegramIcon from "../assets/teleIcon.svg";
+import Button from "./Button";
+
+const socials = [
+  {
+    icon: xIcon.src,
+    url: "https://x.com/purro_xyz",
+  },
+  {
+    icon: discordIcon.src,
+    url: "https://discord.gg/purro",
+  },
+  {
+    icon: telegramIcon.src,
+    url: "https://t.me/purro_xyz",
+  },
+];
+---
+
+<header
+  class="fixed top-0 left-1/2 max-w-6xl transform -translate-x-1/2 w-full container mx-auto mt-6 px-2 z-50"
+>
+  <div
+    class="p-3 flex justify-between items-center bg-[#b1cac4]/30 rounded-full"
+  >
+    <img src={logo.src} alt="logo" class="h-5 md:h-7 ml-3" />
+    <div class="flex items-center gap-2">
+      <div class="items-center hidden md:flex">
+        {
+          socials.map((social) => (
+            <a
+              href={social.url}
+              target="_blank"
+              class="hover:bg-white/10 p-2 rounded-full transition-all duration-300"
+            >
+              <img src={social.icon} alt={social.icon} class="h-6" />
+            </a>
+          ))
+        }
+      </div>
+
+      <Button isToast={true} toastMessage="Coming soon" client:load>
+        Download
+      </Button>
+    </div>
+  </div>
+</header>
