@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.font-livvic {
+    font-family: "Livvic", sans-serif;
+}
+
+.font-figtree {
+    font-family: "Figtree", sans-serif;
+}
