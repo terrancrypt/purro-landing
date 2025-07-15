@@ -1,5 +1,4 @@
 ---
-import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import MeowFeatures from "../components/MeowFeatures.astro";
 import ScreenFeatures from "../components/ScreenFeatures.astro";
@@ -9,10 +8,19 @@ import Footer from "../components/Footer.astro";
 ---
 
 <Layout>
-  <Header />
-  <Hero />
-  <MeowFeatures />
-  <ScreenFeatures />
-  <NFTSection />
-  <Footer />
+  <section class="scroll-snap-section">
+    <Hero />
+  </section>
+  <section class="scroll-snap-section">
+    <MeowFeatures />
+  </section>
+  <section class="scroll-snap-section">
+    <ScreenFeatures />
+  </section>
+  <section class="scroll-snap-section">
+    <NFTSection />
+  </section>
+  <section class="footer-section">
+    <Footer />
+  </section>
 </Layout>
