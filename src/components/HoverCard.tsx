@@ -8,6 +8,8 @@ const HoverCard = () => {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
       className={cn(
         "relative aspect-video bg-[#77b6b3] w-full md:w-[200px] rounded-[30px] transition-colors duration-500",
         isHovered && "bg-[#005b4a] cursor-pointer"
@@ -16,8 +18,8 @@ const HoverCard = () => {
       <div className="absolute top-0 left-0 w-full h-full rounded-[30px] p-2">
         <div
           className={cn(
-            "bg-white w-full h-full rounded-[22px] text-center flex justify-center items-center transition-transform duration-500 ease-out",
-            isHovered && "translate-y-[-70%]"
+            "bg-white w-full h-full rounded-[22px] text-center flex justify-center items-center transition-transform duration-500 ease-out text-xs sm:text-sm",
+            isHovered && "translate-y-[-50%] md:translate-y-[-70%]"
           )}
         >
           40% off trading fees back to staker
