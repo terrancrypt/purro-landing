@@ -5,30 +5,46 @@ import purroIcon from "@/assets/purro-icon.png";
 
 <div class="min-h-screen bg-[#f1f7f6] relative overflow-hidden">
   <div class="container max-w-7xl mx-auto py-28 px-2">
-    <h2 class="md:text-5xl text-3xl text-center text-[#005b4a]">
-      The purr-fect crypto companion <br /> for smart traders
-    </h2>
-    <p class="text-center mt-2 md:text-lg text-sm">
-      Cat hate complexity. You to doo. Purro gets it.
-    </p>
+    <div class="scroll-animate">
+      <h2 class="md:text-5xl text-3xl text-center text-[#005b4a]">
+        The purr-fect crypto companion <br /> for smart traders
+      </h2>
+      <p class="text-center mt-2 md:text-lg text-sm">
+        Cat hate complexity. You to doo. Purro gets it.
+      </p>
+    </div>
 
-    <div class="flex gap-2 justify-between mt-10">
-      <HoverCard client:load />
-      <HoverCard client:load />
-    </div>
-    <div class="flex gap-10 justify-between mt-10">
-      <HoverCard client:load />
-      <HoverCard client:load />
-    </div>
-    <div class="flex gap-10 justify-between mt-10">
-      <HoverCard client:load />
-      <HoverCard client:load />
+    <div class="scroll-animate delay-200">
+      <div class="flex gap-2 justify-between mt-10">
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+      </div>
+      <div class="flex gap-10 justify-between mt-10">
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+      </div>
+      <div class="flex gap-10 justify-between mt-10">
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+        <div class="scroll-animate-stagger">
+          <HoverCard client:load />
+        </div>
+      </div>
     </div>
 
     <img
       src={purroIcon.src}
       alt="purro icon"
-      class="w-[35%] absolute bottom-0 left-0 right-0 mx-auto translate-y-[24%]"
+      class="w-[35%] absolute bottom-0 left-0 right-0 mx-auto translate-y-[24%] scroll-animate-scale delay-400"
     />
   </div>
 </div>

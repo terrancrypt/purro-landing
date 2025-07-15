@@ -25,14 +25,164 @@ import ToasterWrapper from "../components/ToasterWrapper";
   <body class="font-figtree">
     <slot />
     <ToasterWrapper client:load />
+
+    <script is:inline>
+      // Wait for DOM to be ready
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM loaded, initializing scroll animations...");
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px",
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              console.log("Element entering viewport:", entry.target);
+              entry.target.classList.add("animate-in");
+
+              // Handle staggered animations
+              const staggeredElements = entry.target.querySelectorAll(
+                ".scroll-animate-stagger"
+              );
+              staggeredElements.forEach((el, index) => {
+                setTimeout(() => {
+                  el.classList.add("animate-in");
+                }, index * 100);
+              });
+            }
+          });
+        }, observerOptions);
+
+        // Initialize animations
+        const animatedElements = document.querySelectorAll(
+          ".scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale"
+        );
+
+        console.log("Found animated elements:", animatedElements.length);
+
+        animatedElements.forEach((el) => {
+          observer.observe(el);
+        });
+      });
+    </script>
   </body>
 
-  <style>
+  <style is:global>
     html,
     body {
       margin: 0;
       width: 100%;
       height: 100%;
+    }
+
+    /* Header specific animations */
+    .header-animate {
+      opacity: 0;
+      transform: translateY(-20px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+      animation: headerSlideIn 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Scroll Animation Styles */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(50px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+    }
+
+    .scroll-animate.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-animate-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+    }
+
+    .scroll-animate-left.animate-in {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scroll-animate-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+    }
+
+    .scroll-animate-right.animate-in {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scroll-animate-scale {
+      opacity: 0;
+      transform: scale(0.8);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+    }
+
+    .scroll-animate-scale.animate-in {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .scroll-animate-stagger {
+      opacity: 0;
+      transform: translateY(30px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    }
+
+    .scroll-animate-stagger.animate-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Delay classes for staggered animations */
+    .delay-100 {
+      transition-delay: 0.1s;
+    }
+    .delay-200 {
+      transition-delay: 0.2s;
+    }
+    .delay-300 {
+      transition-delay: 0.3s;
+    }
+    .delay-400 {
+      transition-delay: 0.4s;
+    }
+    .delay-500 {
+      transition-delay: 0.5s;
+    }
+    .delay-600 {
+      transition-delay: 0.6s;
     }
   </style>
 </html>
