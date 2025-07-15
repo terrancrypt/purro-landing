@@ -25,7 +25,7 @@ const HoverCard = () => {
           40% off trading fees back to staker
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 w-full scale-[1.05] flex justify-center items-end translate-y-[2%]">
+      <div className="absolute bottom-0 left-0 right-0 w-full scale-[1.05] flex justify-center items-end translate-y-[2%] z-[2]">
         <Wallet fill={isHovered ? "#005b4a" : "#77b6b3"} />
       </div>
     </div>
