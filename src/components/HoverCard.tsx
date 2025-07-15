@@ -1,0 +1,33 @@
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Wallet } from "@/assets/wallet";
+
+const HoverCard = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={cn(
+        "relative aspect-video bg-[#77b6b3] w-full md:w-[200px] rounded-[30px] transition-colors duration-500",
+        isHovered && "bg-[#005b4a] cursor-pointer"
+      )}
+    >
+      <div className="absolute top-0 left-0 w-full h-full rounded-[30px] p-2">
+        <div
+          className={cn(
+            "bg-white w-full h-full rounded-[22px] text-center flex justify-center items-center transition-transform duration-500 ease-out",
+            isHovered && "translate-y-[-70%]"
+          )}
+        >
+          40% off trading fees back to staker
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 w-full scale-[1.05] flex justify-center items-end translate-y-[2%]">
+        <Wallet fill={isHovered ? "#005b4a" : "#77b6b3"} />
+      </div>
+    </div>
+  );
+};
+
+export default HoverCard;
