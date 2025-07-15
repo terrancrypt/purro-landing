@@ -16,7 +16,7 @@ import wallet1 from "@/assets/wallet1.jpg";
     fetchpriority="high"
   />
   <div
-    class="absolute w-[70%] h-full flex justify-between top-0 left-0 right-0 mx-auto z-20"
+    class="absolute w-full md:w-[70%] h-full flex justify-between top-0 left-0 right-0 mx-auto z-20"
   >
     <img
       src={leftHand.src}
@@ -31,28 +31,28 @@ import wallet1 from "@/assets/wallet1.jpg";
   </div>
 
   <div
-    class="container max-w-7xl mx-auto text-white py-28 px-2 h-full flex justify-between"
+    class="container max-w-7xl mx-auto text-white py-28 px-4 h-full flex flex-col md:flex-row justify-between"
   >
     <div class="flex flex-col justify-between h-full">
-      <div class="w-3/4 scroll-animate-left">
-        <h2 class="text-6xl mb-4">Trade smarter, not harder.</h2>
-        <p class="text-lg">
+      <div class="w-full md:w-3/4 scroll-animate-left">
+        <h2 class="text-4xl md:text-6xl mb-4">Trade smarter, not harder.</h2>
+        <p class="text-base md:text-lg">
           No switching tabs, no missing fees. <br />
-          Just clean UX, and all yours assets in one view.
+          Just clean UX, and all your assets in one view.
         </p>
       </div>
-      <div class="scroll-animate-left delay-200">
-        <p class="text-lg">Build on</p>
-        <div class="flex gap-6 h-10 items-end mt-4">
+      <div class="scroll-animate-left delay-200 mt-6 md:mt-0">
+        <p class="text-base md:text-lg">Build on</p>
+        <div class="flex gap-4 md:gap-6 h-10 items-end mt-4">
           <img src={hyperliquid.src} alt="Hyperliquid" class="h-full" />
           <img src={sui.src} alt="Sui" class="h-full" />
         </div>
       </div>
     </div>
     <div
-      class="flex flex-col gap-4 items-center justify-center scroll-animate-right delay-100"
+      class="flex flex-col gap-4 items-center justify-center scroll-animate-right delay-100 mt-6 md:mt-0"
     >
-      <img src={wallet1.src} alt="wallet" />
+      <img src={wallet1.src} alt="wallet" class="w-full md:w-auto" />
     </div>
   </div>
 </div>

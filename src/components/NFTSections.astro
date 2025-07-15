@@ -14,12 +14,14 @@ import nft12 from "@/assets/nfts/12.png";
 ---
 
 <div class="min-h-screen relative bg-[#f1f7f6]">
-  <div class="container max-w-7xl mx-auto py-28 px-2">
-    <div class="w-1/2">
-      <h2 class="text-6xl mb-8 text-[#005b4a] scroll-animate">
+  <div class="container max-w-7xl mx-auto py-28 px-4">
+    <div class="w-full md:w-1/2">
+      <h2 class="text-4xl md:text-6xl mb-8 text-[#005b4a] scroll-animate">
         Limited NFTs <br /> for Early Users
       </h2>
-      <div class="grid grid-cols-4 gap-4 scroll-animate delay-200">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 scroll-animate delay-200"
+      >
         <img src={nft1.src} alt="nft1" class="w-full scroll-animate-stagger" />
         <img src={nft2.src} alt="nft2" class="w-full scroll-animate-stagger" />
         <img src={nft3.src} alt="nft3" class="w-full scroll-animate-stagger" />
