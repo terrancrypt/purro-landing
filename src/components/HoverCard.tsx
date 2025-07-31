@@ -11,7 +11,7 @@ const HoverCard = () => {
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={() => setIsHovered(false)}
       className={cn(
-        "relative aspect-video bg-[#77b6b3] w-full md:w-[200px] rounded-[30px] transition-colors duration-500",
+        "relative aspect-video bg-[#77b6b3] w-full md:w-[240px] rounded-[30px] transition-colors duration-500",
         isHovered && "bg-[#005b4a] cursor-pointer"
       )}
     >

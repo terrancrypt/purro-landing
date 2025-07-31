@@ -18,7 +18,7 @@ import wallet1 from "@/assets/wallet1.jpg";
   <div
     class="absolute w-full md:w-[70%] h-full flex justify-between top-0 left-0 right-0 mx-auto z-20"
   >
-    <img
+    <!-- <img
       src={leftHand.src}
       alt="left hand"
       class="w-1/2 h-[80px] md:h-[150px] lg:h-[200px] translate-y-[-40%] md:translate-y-[-55%] scroll-animate-left delay-300"
@@ -27,21 +27,23 @@ import wallet1 from "@/assets/wallet1.jpg";
       src={rightHand.src}
       alt="right hand"
       class="w-1/2 h-[80px] md:h-[150px] lg:h-[200px] translate-y-[-40%] md:translate-y-[-55%] scroll-animate-right delay-300"
-    />
+    /> -->
   </div>
 
   <div
     class="container max-w-7xl mx-auto text-white py-20 px-4 h-full flex flex-col md:flex-row justify-between"
   >
     <div class="flex flex-col justify-between h-full">
-      <div class="w-full md:w-3/4 scroll-animate-left">
-        <h2 class="text-4xl md:text-6xl mb-4">Trade smarter, not harder.</h2>
-        <p class="text-base md:text-lg">
+      <div>
+        <h2 class="text-4xl md:text-6xl mb-4 whitespace-nowrap">
+          Trade smarter, not harder.
+        </h2>
+        <p class="text-base md:text-lg mb-12">
           No switching tabs, no missing fees. <br />
           Just clean UX, and all your assets in one view.
         </p>
       </div>
-      <div class="scroll-animate-left delay-200 mt-6 md:mt-0">
+      <div>
         <p class="text-base md:text-lg">Build on</p>
         <div class="flex gap-4 md:gap-6 h-10 items-end mt-4">
           <img src={hyperliquid.src} alt="Hyperliquid" class="h-full" />
@@ -49,10 +51,12 @@ import wallet1 from "@/assets/wallet1.jpg";
         </div>
       </div>
     </div>
-    <div
-      class="flex flex-col gap-4 items-center justify-center scroll-animate-right delay-100 mt-6 md:mt-0"
-    >
-      <img src={wallet1.src} alt="wallet" class="w-full md:w-auto" />
+
+    <div class="flex flex-col h-full">
+      <div class="mt-[56px] md:mt-[72px]">
+        <img src={wallet1.src} alt="wallet" class="w-full md:w-auto object-contain" />
+      </div>
+      <div class="flex-grow"></div>
     </div>
   </div>
 </div>
