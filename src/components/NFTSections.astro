@@ -15,33 +15,45 @@ import Button from "./Button";
 import NFTCarousel from "./NFTCarousel";
 ---
 
-<div class="min-h-screen relative bg-[#f1f7f6]">
-  <div class="container max-w-7xl mx-auto py-20 flex flex-col md:flex-row items-center gap-8">
-    <div class="w-full md:w-1/2">
-      <h2 class="text-lg md:text-6xl mb-5 text-[#005b4a] leading-[1.2] scroll-animate whitespace-nowrap">
+<div class="min-h-screen relative bg-gradient-to-b from-[#033b32] via-[#022a22] to-[#021919]">
+  <div class="container max-w-7xl mx-auto py-20 px-4 flex flex-col lg:flex-row items-center md:items-start gap-8">
+    <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
+      <h2 class="text-3xl md:text-5xl text-center lg:text-left text-white whitespace-nowrap">
         Limited NFT Collection <br /> for Early Users
       </h2>
-      <p class="text-lg md:text-[1.3rem] mb-20 leading-relaxed">
+      <p class="mt-2 text-base lg:text-base leading-relaxed text-white text-center lg:text-left whitespace-nowrap">
         Claim your 1st NFT and join the exclusive community <br/>
         of Purro pioneers. Each NFT grants special privileges<br/>
         and early access to premium features.
       </p>
-      <Button 
-        isToast={true} 
-        toastMessage="Coming soon" 
-        client:load 
-        className="px-8 py-4 text-lg md:text-xl mb-30"
-      >
-        Claim now!
-      </Button>
+      <div class="text-center lg:text-left hidden lg:block mt-22">
+        <Button 
+          isToast={true} 
+          toastMessage="Coming soon" 
+          client:load 
+          className="px-8 py-4 text-lg lg:text-xl lg:mt-15"
+        >
+          Claim now!
+        </Button>
+      </div>
     </div>
 
-    <div class="w-full md:w-1/2">
+    <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
       <div class="relative">
         <NFTCarousel 
           nfts={[nft1, nft2, nft3, nft4, nft5, nft6, nft7, nft8, nft9, nft10, nft11, nft12]} 
           client:load 
         />
+      </div>
+      <div class="text-center lg:hidden mt-6">
+        <Button 
+          isToast={true} 
+          toastMessage="Coming soon" 
+          client:load 
+          className="px-8 py-4 text-lg lg:text-xl"
+        >
+          Claim now!
+        </Button>
       </div>
     </div>
   </div>

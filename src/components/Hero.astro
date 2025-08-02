@@ -18,43 +18,34 @@ import Header from "./Header.astro";
     fetchpriority="high"
   />
 
-  <div class="container mx-auto">
+  <div class="container mx-auto relative">
     <div class="flex flex-col items-center justify-center h-screen">
-      <div class="mb-10 scroll-animate">
-        <div class="flex items-center justify-center gap-2">
-          <h1
-            class="text-[100px] md:text-[200px] font-bold text-[#02f1dc] leading-0 font-livvic"
-          >
-            Purro
-          </h1>
-          <!-- <img
-            src={icon.src}
-            alt="logo"
-            class="h-24 md:h-48 transform rotate-12 scroll-animate-scale delay-300"
-          /> -->
-        </div>
-        <p class="text-white text-center text-2xl md:text-5xl font-medium mt-30 ">
+      <div class="scroll-animate text-center">
+        <h1 class="font-livvic font-bold text-[#02f1dc] leading-none md:text-[200px] sm:text-[100px] text-[100px]"
+        >
+          Purro
+        </h1>
+        <p class="font-figtree font-medium text-white text-2xl md:text-5xl">
           Built to chill - Ready to win
         </p>
       </div>
 
-      <div
-        class="absolute bottom-12 flex flex-col items-center scroll-animate delay-500"
-      >
-        <!-- <Button
-          isToast={true}
-          toastMessage="Coming soon"
-          client:load
-          className="bg-white hover:bg-white/80"
-        >
-          <img src={chrome.src} alt="chrome" class="h-10" />
-          <span>Download for Chrome</span>
-        </Button> -->
-        <p
-          class="max-w-2xl text-center text-sm md:text-md font-light mb-[20%] mt-4 text-[#b1cac4]"
-        >
-          Built for real onchain grinders: smooth UX, unified assets. <br /> 40%
-          fees come back to you.
+      <div class="absolute bottom-4 sm:bottom-8 md:bottom-12 flex flex-col items-center scroll-animate delay-500">
+        <div class="scroll-animate delay-300">
+          <Button
+            isToast={true}
+            toastMessage="Coming soon"
+            client:load
+            className="bg-white hover:bg-white/80"
+          >
+            <img src={chrome.src} alt="chrome" class="h-8 md:h-10" />
+            <span>Download for Chrome</span>
+          </Button>
+        </div>
+
+        <p class="max-w-2xl text-center text-sm md:text-md font-light mt-20 md:mt-4 text-[#b1cac4]">
+          Built for real onchain grinders: smooth UX, unified assets. <br />
+          40% fees come back to you.
         </p>
       </div>
     </div>

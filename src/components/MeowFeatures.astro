@@ -1,38 +1,51 @@
 ---
 import HoverCard from "./HoverCard";
 import purroIcon from "@/assets/purro-icon.png";
+import Body from "@/assets/Body.png"
+import { gsap } from "gsap";
 ---
 
-<div class="min-h-screen bg-[#f1f7f6] relative overflow-hidden">
-  <div class="container max-w-7xl mx-auto py-15 px-4">
-    <div class="scroll-animate">
-      <h2 class="md:text-10xl text-6xl text-left text-[#005b4a]">
-        The purr-fect crypto companion <br /> for smart traders
-      </h2>
-      <p class="text-left mt-2 md:text-lg text-sm mb-22">
-        Cat hate complexity. You to doo. Purro gets it.
-      </p>
+<div class="min-h-screen bg-gradient-to-b from-[#021919] via-[#163737] to-[#005b4a] relative overflow-hidden">
+  <div class="container max-w-7xl mx-auto py-20 px-4 flex flex-col md:flex-row ">
+    <div class="w-full md:w-1/2 ">
+      <div class="scroll-animate">
+        <h2 class="text-3xl md:text-5xl text-center md:text-left text-white whitespace-nowrap">
+          The purr-fect crypto companion <br /> for smart traders
+        </h2>
+        <p class="mt-2 text-sm md:text-lg text-center md:text-left text-white">
+          Cat hate complexity. You to doo. Purro gets it.
+        </p>
+      </div>
+
+      <div class="scroll-animate delay-200 mt-22">
+        <div class="flex gap-10 justify-start mt-10 md:mt-0">
+          <HoverCard client:load />
+          <HoverCard client:load />
+        </div>
+        <div class="flex gap-10 justify-start mt-10">
+          <HoverCard client:load />
+          <HoverCard client:load />
+        </div>
+        <div class="flex gap-10 justify-start mt-10">
+          <HoverCard client:load />
+          <HoverCard client:load />
+        </div>
+      </div>
     </div>
 
-    <div class="scroll-animate delay-200 flex flex-col gap-10">
-      <div class="flex gap-10 justify-start w-1/2">
-        <HoverCard client:load />
-        <HoverCard client:load />
-      </div>
-      <div class="flex gap-10 justify-start w-1/2">
-        <HoverCard client:load />
-        <HoverCard client:load />
-      </div>
-      <div class="flex gap-10 justify-start w-1/2">
-        <HoverCard client:load />
-        <HoverCard client:load />
-      </div>
+    <div class="w-full md:w-1/2 
+    relative flex justify-center items-end md:items-center mt-30 md:mt-0">
+      <img 
+        id="purro-body"
+        src={Body.src} 
+        alt="Purro Body" 
+        class="w-[260px] lg:w-[350px] xl:w-[420px] 
+        [transform:scaleX(-1)] scale-150 overflow-hidden" 
+      />
+      <script>
+        import { initPurroAnimation } from "../scripts/purroAnimation";
+        initPurroAnimation();
+      </script>
     </div>
-
-    <!-- <img
-      src={purroIcon.src}
-      alt="purro icon"
-      class="w-[35%] md:w-[35%] sm:w-[40%] absolute bottom-0 left-0 right-0 mx-auto translate-y-[24%] scroll-animate-scale delay-400"
-    /> -->
   </div>
 </div>

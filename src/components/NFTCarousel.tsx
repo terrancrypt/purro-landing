@@ -4,7 +4,8 @@ interface NFTCarouselProps {
   nfts: Array<any>;
 }
 
-const THUMBNAILS_SHOWN = 4;
+const THUMBNAILS_SHOWN_LG = 4;
+const THUMBNAILS_SHOWN_SM = 3;
 const AUTOPLAY_INTERVAL = 2500;
 
 const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
@@ -12,7 +13,24 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
   const [groupIndex, setGroupIndex] = useState(0);
   // Index in the current group (0, 1, 2, 3)
   const [selectedInGroup, setSelectedInGroup] = useState(0);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Check screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 1200); // md breakpoint
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const THUMBNAILS_SHOWN = isSmallScreen
+    ? THUMBNAILS_SHOWN_SM
+    : THUMBNAILS_SHOWN_LG;
 
   // Calculate the actual index in the nfts array for each thumbnail
   const getThumbIndex = (groupIdx: number, idxInGroup: number) => {
@@ -22,7 +40,7 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
   // The main image index
   const selectedIndex = getThumbIndex(groupIndex, selectedInGroup);
 
-  // Build the 4 thumbnails, wrapping if needed
+  // Build the thumbnails, wrapping if needed
   const thumbnails = Array.from({ length: THUMBNAILS_SHOWN }, (_, i) => {
     return nfts[getThumbIndex(groupIndex, i)];
   });
@@ -82,21 +100,26 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
       if (autoplayRef.current) clearInterval(autoplayRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [THUMBNAILS_SHOWN]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-wrap justify-center items-center gap-2 mt-3 max-w-full overflow-hidden">
       {/* Big Image */}
-      <img
-        src={nfts[selectedIndex].src}
-        alt={`NFT Cat ${selectedIndex + 1}`}
-        className="w-100 max-h-[400px] h-auto rounded-xl shadow-lg mb-5  object-contain bg-white"
-      />
-      <div className="flex items-center gap-6 mt-6">
+      <div
+        className="w-[220px] sm:w-[270px] md:w-[300px] lg:w-[270px] xl:w-[400px] 
+        aspect-square rounded-xl shadow-lg mb-5 bg-white flex items-center justify-center"
+      >
+        <img
+          src={nfts[selectedIndex].src}
+          alt={`NFT Cat ${selectedIndex + 1}`}
+          className="w-full h-full object-contain rounded-xl"
+        />
+      </div>
+      <div className="flex items-center gap-2 mb-4">
         {/* Icon "<" */}
         <button
           onClick={handleLeft}
-          className="w-10 h-10 rounded-full bg-gray-200 hover:bg-[#00e6c7]/20 flex items-center justify-center text-2xl text-[#005b4a] transition-colors shadow-sm mr-2"
+          className="w-6 h-6 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-10 lg:h-10 flex items-center justify-center text-lg sm:text-2xl text-white transition-colors hover:text-[#00e6c7] cursor-pointer"
           aria-label="Previous"
         >
           <svg
@@ -108,6 +131,7 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             viewBox="0 0 24 24"
+            className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8"
           >
             <path d="M15 18l-6-6 6-6" />
           </svg>
@@ -119,7 +143,8 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
             key={getThumbIndex(groupIndex, idx)}
             src={nft.src}
             alt={`NFT Cat ${getThumbIndex(groupIndex, idx) + 1}`}
-            className={`w-27 h-27 rounded-lg cursor-pointer object-contain bg-white transition-all duration-200
+            className={`w-[80px] sm:w-[100px] xl:w-[110px] 
+              mx-2 md:mx-4 lg:mx-2 rounded-lg cursor-pointer object-contain bg-white transition-all duration-200
               ${
                 selectedInGroup === idx
                   ? "ring-4 ring-[#00e6c7] scale-110"
@@ -132,7 +157,7 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
         {/* Icon ">" */}
         <button
           onClick={handleRight}
-          className="w-10 h-10 rounded-full bg-gray-200 hover:bg-[#00e6c7]/20 flex items-center justify-center text-2xl text-[#005b4a] transition-colors shadow-sm ml-2"
+          className="w-6 h-6 sm:w-8 sm:h-8 md:w-8 md:h-8 lg:w-10 lg:h-10 flex items-center justify-center text-lg sm:text-2xl text-white transition-colors hover:text-[#00e6c7] cursor-pointer"
           aria-label="Next"
         >
           <svg
@@ -144,6 +169,7 @@ const NFTCarousel: React.FC<NFTCarouselProps> = ({ nfts }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             viewBox="0 0 24 24"
+            className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8"
           >
             <path d="M9 6l6 6-6 6" />
           </svg>

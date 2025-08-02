@@ -1,5 +1,4 @@
 ---
-import background from "@/assets/bg2.png";
 import leftHand from "@/assets/left-hand.svg";
 import rightHand from "@/assets/right-hand.svg";
 import hyperliquid from "@/assets/hyperliquid-logo-green.svg";
@@ -8,55 +7,37 @@ import wallet1 from "@/assets/wallet1.jpg";
 ---
 
 <div class="h-screen relative">
-  <div class="w-full h-full bg-[#005b4a] z-[-2] absolute top-0 left-0"></div>
-  <img
-    src={background.src}
-    alt="background"
-    class="absolute w-full h-full object-cover z-[-1]"
-    fetchpriority="high"
-  />
+  <div class="w-full h-full bg-gradient-to-b from-[#005b4a] via-[#03503c] to-[#033b32] z-[-2] absolute top-0 left-0"></div>
   <div
     class="absolute w-full md:w-[70%] h-full flex justify-between top-0 left-0 right-0 mx-auto z-20"
   >
-    <!-- <img
-      src={leftHand.src}
-      alt="left hand"
-      class="w-1/2 h-[80px] md:h-[150px] lg:h-[200px] translate-y-[-40%] md:translate-y-[-55%] scroll-animate-left delay-300"
-    />
-    <img
-      src={rightHand.src}
-      alt="right hand"
-      class="w-1/2 h-[80px] md:h-[150px] lg:h-[200px] translate-y-[-40%] md:translate-y-[-55%] scroll-animate-right delay-300"
-    /> -->
   </div>
 
-  <div
-    class="container max-w-7xl mx-auto text-white py-20 px-4 h-full flex flex-col md:flex-row justify-between"
-  >
-    <div class="flex flex-col justify-between h-full">
-      <div>
-        <h2 class="text-4xl md:text-6xl mb-4 whitespace-nowrap">
+  <div class="container max-w-7xl mx-auto py-20 px-4 flex flex-col md:flex-row">
+    <div class="w-full md:w-1/2 flex flex-col justify-between ">
+      <div class="scroll-animate-left">
+        <h2 class="text-4xl md:text-5xl text-center md:text-left text-white">
           Trade smarter, not harder.
         </h2>
-        <p class="text-base md:text-lg mb-12">
+        <p class="mt-2 text-sm md:text-lg text-center md:text-left text-white">
           No switching tabs, no missing fees. <br />
           Just clean UX, and all your assets in one view.
         </p>
       </div>
-      <div>
-        <p class="text-base md:text-lg">Build on</p>
-        <div class="flex gap-4 md:gap-6 h-10 items-end mt-4">
+      
+      <div class="scroll-animate-left mt-10 delay-200">
+        <p class="text-base md:text-lg text-center md:text-left text-white">Build on</p>
+        <div class="flex gap-4 md:gap-6 h-10 items-end mt-4 justify-center md:justify-start">
           <img src={hyperliquid.src} alt="Hyperliquid" class="h-full" />
           <img src={sui.src} alt="Sui" class="h-full" />
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col h-full">
-      <div class="mt-[56px] md:mt-[72px]">
-        <img src={wallet1.src} alt="wallet" class="w-full md:w-auto object-contain" />
+    <div class="w-full md:w-1/2 relative flex md:justify-end justify-center items-center mt-10 md:mt-15">
+      <div class="scroll-animate-right delay-100">
+        <img src={wallet1.src} alt="wallet" class="w-full md:w-[80%] lg:w-[90%] xl:w-full object-contain" />
       </div>
-      <div class="flex-grow"></div>
     </div>
   </div>
 </div>
