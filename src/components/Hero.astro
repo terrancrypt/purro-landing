@@ -4,24 +4,28 @@ import icon from "../assets/purro-icon.png";
 import chrome from "../assets/chrome.png";
 import Button from "./Button";
 import Header from "./Header.astro";
+import AuroraBg from "./AuroraBg";
 ---
 
 <div class="w-full h-screen overflow-hidden relative">
   <Header />
 
-  <div class="w-full h-full bg-[#081919] z-[-2] absolute top-0 left-0"></div>
+  <div class="w-full h-full bg-[#081919] z-[-2] absolute top-0 left-0">
+    <AuroraBg client:load />
+  </div>
 
-  <img
+  <!-- <img
     src={background.src}
     alt="background"
     class="absolute w-full h-full object-cover z-[-1]"
     fetchpriority="high"
-  />
+  /> -->
 
   <div class="container mx-auto relative">
     <div class="flex flex-col items-center justify-center h-screen">
       <div class="scroll-animate text-center">
-        <h1 class="font-livvic font-bold text-[#02f1dc] leading-none md:text-[200px] sm:text-[100px] text-[100px]"
+        <h1
+          class="font-livvic font-bold text-[#02f1dc] leading-none md:text-[200px] sm:text-[100px] text-[100px]"
         >
           Purro
         </h1>
@@ -30,7 +34,9 @@ import Header from "./Header.astro";
         </p>
       </div>
 
-      <div class="absolute bottom-8 flex flex-col items-center scroll-animate delay-500">
+      <div
+        class="absolute bottom-8 flex flex-col items-center scroll-animate delay-500"
+      >
         <div class="scroll-animate delay-300">
           <Button
             isToast={true}
@@ -43,7 +49,9 @@ import Header from "./Header.astro";
           </Button>
         </div>
 
-        <p class="max-w-2xl text-center text-sm md:text-md font-light mt-5 text-[#b1cac4]">
+        <p
+          class="max-w-2xl text-center text-sm md:text-md font-light mt-5 text-[#b1cac4]"
+        >
           Built for real onchain grinders: smooth UX, unified assets. <br />
           40% fees come back to you.
         </p>
