@@ -11,41 +11,49 @@ import nft9 from "@/assets/nfts/9.png";
 import nft10 from "@/assets/nfts/10.png";
 import nft11 from "@/assets/nfts/11.png";
 import nft12 from "@/assets/nfts/12.png";
+import Button from "./Button";
+import NFTCarousel from "./NFTCarousel";
 ---
 
-<div class="min-h-screen relative bg-[#f1f7f6]">
-  <div class="container max-w-7xl mx-auto py-20 px-4">
-    <div class="w-full md:w-1/2">
-      <h2 class="text-4xl md:text-6xl mb-8 text-[#005b4a] scroll-animate">
-        Limited NFTs <br /> for Early Users
+<div class="min-h-screen relative bg-gradient-to-b from-[#033b32] via-[#022a22] to-[#021919]">
+  <div class="container max-w-7xl mx-auto py-20 px-4 flex flex-col lg:flex-row items-center justify-center gap-8 min-h-screen">
+    <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
+      <h2 class="text-3xl md:text-5xl text-center lg:text-left text-white whitespace-nowrap">
+        Limited NFT Collection <br /> for Early Users
       </h2>
-      <div
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 scroll-animate delay-200"
-      >
-        <img src={nft1.src} alt="nft1" class="w-full scroll-animate-stagger" />
-        <img src={nft2.src} alt="nft2" class="w-full scroll-animate-stagger" />
-        <img src={nft3.src} alt="nft3" class="w-full scroll-animate-stagger" />
-        <img src={nft4.src} alt="nft4" class="w-full scroll-animate-stagger" />
-        <img src={nft5.src} alt="nft5" class="w-full scroll-animate-stagger" />
-        <img src={nft6.src} alt="nft6" class="w-full scroll-animate-stagger" />
-        <img src={nft7.src} alt="nft7" class="w-full scroll-animate-stagger" />
-        <img src={nft8.src} alt="nft8" class="w-full scroll-animate-stagger" />
-        <img src={nft9.src} alt="nft9" class="w-full scroll-animate-stagger" />
-        <img
-          src={nft10.src}
-          alt="nft10"
-          class="w-full scroll-animate-stagger"
+      <p class="mt-2 text-base lg:text-base leading-relaxed text-white text-center lg:text-left whitespace-nowrap">
+        Claim your 1st NFT and join the exclusive community <br/>
+        of Purro pioneers. Each NFT grants special privileges<br/>
+        and early access to premium features.
+      </p>
+      <div class="text-center lg:text-left hidden lg:block mt-22">
+        <Button 
+          isToast={true} 
+          toastMessage="Coming soon" 
+          client:load 
+          className="px-8 py-4 text-lg lg:text-xl lg:mt-15"
+        >
+          Claim now!
+        </Button>
+      </div>
+    </div>
+
+    <div class="w-full lg:w-1/2 flex flex-col items-center lg:items-start">
+      <div class="relative">
+        <NFTCarousel 
+          nfts={[nft1, nft2, nft3, nft4, nft5, nft6, nft7, nft8, nft9, nft10, nft11, nft12]} 
+          client:load 
         />
-        <img
-          src={nft11.src}
-          alt="nft11"
-          class="w-full scroll-animate-stagger"
-        />
-        <img
-          src={nft12.src}
-          alt="nft12"
-          class="w-full scroll-animate-stagger"
-        />
+      </div>
+      <div class="text-center lg:hidden mt-6">
+        <Button 
+          isToast={true} 
+          toastMessage="Coming soon" 
+          client:load 
+          className="px-8 py-4 text-lg lg:text-xl"
+        >
+          Claim now!
+        </Button>
       </div>
     </div>
   </div>
