@@ -1,0 +1,226 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+---
+
+<Layout>
+  <div class="min-h-screen bg-[#081919] text-white">
+    <Header />
+
+    <main class="container mx-auto px-4 pt-28 pb-16 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-bold text-[#02f1dc] mb-6">
+        Purro Wallet Privacy Policy
+      </h1>
+      <p class="text-sm text-[#b1cac4] mb-8">
+        Effective date: 11/08/2025 · Contact: terrancrypt@gmail.com · Website:
+        <a
+          class="underline hover:text-white"
+          href="https://purro.xyz/privacy"
+          target="_blank"
+          rel="noopener">https://purro.xyz/privacy</a
+        >
+      </p>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Overview</h2>
+        <p>
+          Purro is a non-custodial Web3 wallet. We do not collect, sell, or
+          share your personal information for advertising. Your seed phrase and
+          private keys are encrypted and stored locally on your device and never
+          leave it.
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Data We Process</h2>
+        <h3 class="text-xl font-semibold">
+          Local wallet data (stored on your device):
+        </h3>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Encrypted seed phrase, private keys, and password</li>
+          <li>
+            Wallet addresses, labels, settings, token/NFT caches, and UI
+            preferences
+          </li>
+        </ul>
+        <h3 class="text-xl font-semibold">Blockchain data:</h3>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Public on-chain information such as wallet addresses, balances, and
+            transactions
+          </li>
+        </ul>
+        <h3 class="text-xl font-semibold">
+          Service interaction data (when you use features):
+        </h3>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Requests to blockchain/RPC and market data providers (may include
+            your IP address and wallet address necessary to fulfill the request)
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">How We Use Data</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Provide wallet functionality: connect to dApps, sign
+            messages/transactions, show balances/portfolio
+          </li>
+          <li>
+            Operate features reliably: refresh data, auto-lock, and background
+            tasks compliant with Chrome MV3
+          </li>
+          <li>Notify you of transaction/signing status (if enabled)</li>
+        </ul>
+        <p>
+          Legal bases (where applicable, e.g., GDPR): performance of a contract,
+          legitimate interests in operating the service, and/or your consent
+          (e.g., notifications).
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Third-Party Services</h2>
+        <p>
+          When you use wallet features, requests may be sent to third-party
+          services to read or broadcast data, for example:
+        </p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            RPC/node providers (e.g., Alchemy) for reading/pushing transactions
+          </li>
+          <li>
+            Indexers/market data (e.g., GeckoTerminal) for pricing/metadata
+          </li>
+          <li>
+            Protocol-specific APIs (e.g., Hyperliquid, Hyperscan) for related
+            features
+          </li>
+        </ul>
+        <p>
+          These providers may process your IP address and wallet address to
+          deliver results. Please review their privacy policies.
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Storage &amp; Security</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Sensitive data (seed/keys) is encrypted and stored locally on your
+            device
+          </li>
+          <li>We do not upload seed/keys to our servers</li>
+          <li>
+            You are responsible for safeguarding your device, seed phrase, and
+            password
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Your Choices &amp; Rights</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Export, reset, or delete local wallet data and caches in settings at
+            any time
+          </li>
+          <li>
+            Withdraw consent for optional features (e.g., disable notifications)
+          </li>
+          <li>
+            If local laws grant additional rights (GDPR/CCPA), contact us at
+            [support@email.com].
+          </li>
+        </ul>
+        <p>Note: We cannot recover your seed/keys as we never store them.</p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Data Retention</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>
+            Wallet data remains on your device until you reset or uninstall the
+            extension
+          </li>
+          <li>
+            Minimal technical logs (if any) are retained only as necessary and
+            purged on a reasonable schedule
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">International Transfers</h2>
+        <p>
+          Requests to third-party providers may be processed on servers outside
+          your country. Their policies and safeguards apply to those transfers.
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Children’s Privacy</h2>
+        <p>
+          The wallet is not directed to individuals under 18. We do not
+          knowingly collect data from children.
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Cookies &amp; Tracking</h2>
+        <p>
+          No advertising trackers. We use browser storage and local caching
+          strictly to operate wallet features.
+        </p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Browser Permissions &amp; APIs</h2>
+        <p>
+          We use browser permissions (e.g., storage, scripting, notifications,
+          side panel, alarms, offscreen) solely to:
+        </p>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>Store local wallet data/settings</li>
+          <li>Inject a standard provider for dApp connectivity</li>
+          <li>Present signing/transaction UI and refresh data</li>
+          <li>
+            Schedule auto-lock/cache maintenance and run compliant background
+            tasks
+          </li>
+        </ul>
+        <p>We do not execute remotely hosted code.</p>
+      </section>
+
+      <section class="space-y-4 mb-10">
+        <h2 class="text-2xl font-semibold">Changes to This Policy</h2>
+        <p>
+          We may update this policy. Changes will be posted at
+          <a
+            class="underline hover:text-white"
+            href="https://purro.xyz/privacy"
+            target="_blank"
+            rel="noopener">https://purro.xyz/privacy</a
+          >
+          with an updated “Effective date.”
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-2xl font-semibold">Contact Us</h2>
+        <ul class="space-y-1">
+          <li>Data controller: Terran Thai</li>
+          <li>Email: terrancrypt@gmail.com</li>
+          <li>Address: Ho Chi Minh City, Vietnam</li>
+        </ul>
+        <p class="mt-4 text-[#b1cac4]">
+          Notes: Blockchain data is public and cannot be altered or erased.
+          Share your wallet address and sign transactions only with trusted
+          parties.
+        </p>
+      </section>
+    </main>
+  </div>
+</Layout>
