@@ -22,7 +22,7 @@ import ToasterWrapper from "../components/ToasterWrapper";
     /></head
   >
 
-  <body class="font-figtree scroll-snap-container">
+  <body class="font-figtree">
     <slot />
     <ToasterWrapper client:load />
 
@@ -112,14 +112,6 @@ import ToasterWrapper from "../components/ToasterWrapper";
       scroll-behavior: smooth;
     }
 
-    /* Scroll Snap Container */
-    .scroll-snap-container {
-      height: 100vh;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-    }
-
     /* Scroll Snap Sections */
     .scroll-snap-section {
       min-height: 100vh;
@@ -140,10 +132,6 @@ import ToasterWrapper from "../components/ToasterWrapper";
 
     /* Mobile scroll snap adjustments */
     @media (max-width: 768px) {
-      .scroll-snap-container {
-        scroll-snap-type: y proximity;
-      }
-
       .scroll-snap-section {
         scroll-snap-align: start;
         scroll-snap-stop: normal;
@@ -157,10 +145,6 @@ import ToasterWrapper from "../components/ToasterWrapper";
 
     /* Very small screens - disable scroll snap for better UX */
     @media (max-width: 480px) {
-      .scroll-snap-container {
-        scroll-snap-type: none;
-      }
-
       .scroll-snap-section {
         scroll-snap-align: none;
         scroll-snap-stop: normal;
