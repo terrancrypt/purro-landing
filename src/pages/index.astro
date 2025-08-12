@@ -6,25 +6,42 @@ import Layout from "../layouts/Layout.astro";
 import NFTSection from "../components/NFTSections.astro";
 import Footer from "../components/Footer.astro";
 import Team from "../components/Team.astro";
+import CircularGallery from "@/components/CircularGallery";
 ---
 
 <Layout>
-  <section class="scroll-snap-section">
-    <Hero />
-  </section>
-  <section class="scroll-snap-section">
-    <MeowFeatures />
-  </section>
-  <section class="scroll-snap-section">
-    <ScreenFeatures />
-  </section>
-  <section class="scroll-snap-section">
-    <NFTSection />
-  </section>
-  <section class="scroll-snap-section">
-    <Team />
-  </section>
-  <section class="footer-section">
-    <Footer />
-  </section>
+  <Hero />
 </Layout>
+<MeowFeatures />
+<ScreenFeatures />
+<!-- <NFTSection /> -->
+<div
+  style={{ height: "600px", position: "relative" }}
+  class="bg-black py-24 md:py-32"
+>
+  <div class="scroll-animate max-w-7xl px-4 mx-auto">
+    <h2
+      class="text-3xl md:text-5xl text-center text-white whitespace-nowrap font-semibold"
+    >
+      Limited NFT Collection
+    </h2>
+    <p class="mt-2 text-sm md:text-lg text-center text-white">
+      Claim your 1st NFT and join the exclusive community of Purro pioneers.
+      Each NFT grants special privileges and early access to premium features.
+      (soon)
+    </p>
+  </div>
+  <CircularGallery
+    client:load
+    bend={3}
+    textColor="#ffffff"
+    borderRadius={0.05}
+    scrollEase={0.02}
+    scrollSpeed={0.5}
+  />
+</div>
+<Team />
+
+<section class="footer-section">
+  <Footer />
+</section>
