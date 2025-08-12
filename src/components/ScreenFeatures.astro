@@ -1,13 +1,16 @@
 ---
-import leftHand from "@/assets/left-hand.svg";
-import rightHand from "@/assets/right-hand.svg";
 import hyperliquid from "@/assets/hyperliquid-logo-green.svg";
-import sui from "@/assets/sui-logo-white.png";
-import wallet1 from "@/assets/wallet1.jpg";
+import Carousel from "./Carousel";
+import screenshot1 from "@/assets/screenshots/1.png";
+import screenshot2 from "@/assets/screenshots/2.png";
+import screenshot3 from "@/assets/screenshots/3.png";
+import screenshot4 from "@/assets/screenshots/4.png";
+import screenshot5 from "@/assets/screenshots/5.png";
+import screenshot6 from "@/assets/screenshots/6.png";
 ---
 
 <div
-  class="min-h-screen bg-gradient-to-b from-[#005b4a] via-[#03503c] to-[#033b32] relative overflow-hidden"
+  class="min-h-screen bg-gradient-to-b from-[#005b4a] via-[#03503c] to-[#033b32] relative overflow-hidden py-32"
 >
   <div
     class="container max-w-7xl mx-auto py-20 px-4 flex flex-col md:flex-row items-center min-h-screen overflow-hidden"
@@ -15,7 +18,7 @@ import wallet1 from "@/assets/wallet1.jpg";
     <div class="w-full md:w-1/2 flex flex-col justify-center">
       <div class="scroll-animate-left mb-15 md:mb-90">
         <h2
-          class="text-3xl md:text-5xl text-center md:text-left text-white whitespace-nowrap"
+          class="text-3xl md:text-5xl text-center md:text-left text-white whitespace-nowrap font-semibold"
         >
           Trade smarter, not harder.
         </h2>
@@ -40,11 +43,22 @@ import wallet1 from "@/assets/wallet1.jpg";
     <div
       class="w-full md:w-1/2 flex justify-center md:justify-end items-center mt-10"
     >
-      <div class="scroll-animate-right delay-100">
-        <img
-          src={wallet1.src}
-          alt="wallet"
-          class="w-full md:w-[75%] lg:w-[90%] xl:w-full object-contain"
+      <div class="scroll-animate-right delay-100 scale-">
+        <Carousel
+          images={[
+            { src: screenshot1.src, alt: "Login" },
+            { src: screenshot2.src, alt: "Another" },
+            { src: screenshot3.src, alt: "Another" },
+            { src: screenshot4.src, alt: "Another" },
+            { src: screenshot5.src, alt: "Another" },
+            { src: screenshot6.src, alt: "Another" },
+          ]}
+          baseWidth={375}
+          height={550}
+          fit="contain"
+          autoplay
+          loop
+          client:load
         />
       </div>
     </div>
