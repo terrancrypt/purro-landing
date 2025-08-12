@@ -1,0 +1,90 @@
+---
+import ChromaGrid from "./ChromaGrid";
+import terran from "@/assets/terrannft.png";
+import baovy from "@/assets/baovy.jpg";
+import thuongdc from "@/assets/thuongdc.jpg";
+import hightran from "@/assets/haitran.jpeg";
+import boji from "@/assets/0xboji.jpeg";
+
+const teamItems = [
+  {
+    image: terran.src,
+    title: "Terran",
+    subtitle: "Founder",
+    handle: "@terrancrypt",
+    borderColor: "rgba(2, 241, 220, 0.5)",
+    gradient:
+      "linear-gradient(170deg, rgba(2,241,220,0.18), rgba(8,25,25,0.6) 40%, rgba(0,0,0,0.9) 100%)",
+    url: "https://terrancrypt.com",
+  },
+  {
+    image: thuongdc.src,
+    title: "Thwg DC",
+    subtitle: "Designer",
+    handle: "@thwgdc",
+    borderColor: "rgba(177, 202, 196, 0.6)",
+    gradient:
+      "linear-gradient(210deg, rgba(2,241,220,0.12), rgba(2,25,25,0.7) 45%, rgba(0,0,0,0.95) 100%)",
+  },
+  {
+    image: baovy.src,
+    title: "Phoebe Duong",
+    subtitle: "Marketer",
+    handle: "@baovyduong",
+    borderColor: "rgba(2, 241, 220, 0.5)",
+    gradient:
+      "linear-gradient(165deg, rgba(2,241,220,0.16), rgba(8,25,25,0.65) 40%, rgba(0,0,0,0.92) 100%)",
+    url: "https://www.linkedin.com/in/baovyduong",
+  },
+  {
+    image: hightran.src,
+    title: "HighTran",
+    subtitle: "Developer",
+    handle: "@tranvanhai0504",
+    borderColor: "rgba(2, 241, 220, 0.5)",
+    gradient:
+      "linear-gradient(165deg, rgba(2,241,220,0.16), rgba(8,25,25,0.65) 40%, rgba(0,0,0,0.92) 100%)",
+    url: "https://github.com/tranvanhai0504",
+  },
+  {
+    image: boji.src,
+    title: "0xboji",
+    subtitle: "Developer",
+    handle: "@0xboji",
+    borderColor: "rgba(2, 241, 220, 0.5)",
+    gradient:
+      "linear-gradient(165deg, rgba(2,241,220,0.16), rgba(8,25,25,0.65) 40%, rgba(0,0,0,0.92) 100%)",
+    url: "https://github.com/0xBoji",
+  },
+];
+---
+
+<div
+  class="min-h-screen bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-32"
+>
+  <div
+    class="container max-w-7xl mx-auto py-20 px-4 flex flex-col items-center justify-center min-h-[70vh]"
+  >
+    <div class="w-full flex flex-col items-center text-center">
+      <div class="scroll-animate">
+        <h2 class="text-3xl md:text-5xl text-center text-white font-semibold">
+          Meet the team
+        </h2>
+        <p class="mt-2 text-sm md:text-lg text-center text-white">
+          Builders, designers, and degens behind Purro.
+        </p>
+      </div>
+
+      <div class="scroll-animate delay-200 mt-16 w-full flex justify-center">
+        <div class="w-full max-w-[1100px]">
+          <ChromaGrid
+            client:load
+            items={teamItems}
+            className="justify-center"
+            radius={280}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
