@@ -1,58 +1,37 @@
 ---
-import HoverCard from "./HoverCard";
-import purroIcon from "@/assets/purro-icon.png";
+import BentoCardGroup from "./BentoCardGroup";
 import Body from "@/assets/Body.png";
 ---
 
 <div
-  class="min-h-screen bg-gradient-to-b from-[#021919] via-[#163737] to-[#005b4a] relative overflow-hidden"
+  class="min-h-screen bg-gradient-to-b from-[#021919] via-[#163737] to-[#005b4a] relative py-32"
 >
   <div
-    class="container max-w-7xl mx-auto py-20 px-4 flex flex-col md:flex-row items-center min-h-screen overflow-hidden"
+    class="container max-w-7xl mx-auto py-20 px-4 flex flex-col items-center justify-center min-h-screen"
   >
-    <div class="w-full md:w-1/2">
+    <div class="w-full flex flex-col items-center text-center">
       <div class="scroll-animate">
         <h2
-          class="text-3xl md:text-5xl text-center md:text-left text-white whitespace-nowrap"
+          class="text-3xl md:text-5xl text-center text-white whitespace-nowrap font-semibold"
         >
           The purr-fect crypto companion <br /> for smart traders
         </h2>
-        <p class="mt-2 text-sm md:text-lg text-center md:text-left text-white">
+        <p class="mt-2 text-sm md:text-lg text-center text-white">
           Cat hate complexity. You to doo. Purro gets it.
         </p>
       </div>
 
-      <div class="scroll-animate delay-200 mt-22">
-        <div class="flex gap-10 justify-start mt-10 md:mt-0">
-          <HoverCard
-            content="One wallet for Hyperliquid & HyperEVM"
-            client:load
-          />
-          <HoverCard
-            content="Get 40% of your swap fees back in Purro tokens"
-            client:load
-          />
-        </div>
-        <div class="flex gap-10 justify-start mt-10">
-          <HoverCard content="Swap, stake, bridge in one place" client:load />
-          <HoverCard
-            content="Send with Hyperliquid @names not addresses"
-            client:load
-          />
-        </div>
-        <div class="flex gap-10 justify-start mt-10">
-          <HoverCard
-            content="Dev-ready SDKs for Hyperliquid apps"
-            client:load
-          />
-          <HoverCard content="Support Multi-chain" client:load />
-        </div>
+      <div class="scroll-animate delay-200 mt-22 w-full flex justify-center">
+        <BentoCardGroup client:load />
       </div>
     </div>
 
-    <div class="w-full md:w-1/2 flex justify-center items-end mt-30 md:mt-15">
+    <div
+      class="pointer-events-none absolute right-0 top-48 w-[25%] md:w-[30%] lg:w-[22%] flex justify-center items-end"
+      style="z-index: 2;"
+    >
       <div
-        class="relative w-full max-w-[14rem] md:max-w-[14rem] lg:max-w-[22rem] xl:max-w-[28rem]"
+        class="relative w-full max-w-[10rem] md:max-w-[10rem] lg:max-w-[14rem] xl:max-w-[18rem]"
       >
         <img
           id="purro-body"
