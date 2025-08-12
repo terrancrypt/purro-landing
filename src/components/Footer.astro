@@ -1,57 +1,94 @@
 ---
-import logo from "@/assets/purro-logo.png";
+import logo from "@/assets/Purro_Logotype_White.png";
 import twitter from "@/assets/xIcon.svg";
 import telegram from "@/assets/teleIcon.svg";
 import discord from "@/assets/discordIcon.svg";
 ---
 
 <div class="relative bg-gradient-to-b from-[#021919] to-[#081919]">
-  <div class="container max-w-7xl mx-auto text-white py-20 px-4 h-full">
-    <div class="flex flex-col md:flex-row justify-between scroll-animate">
+  <div
+    class="container max-w-7xl mx-auto text-white py-12 sm:py-16 md:py-20 px-4 h-full"
+  >
+    <div
+      class="flex flex-col md:flex-row justify-between items-start scroll-animate"
+    >
       <img
-        src={logo.src}
+        src="/Purro_Logotype_White.png"
         alt="logo"
-        class="w-fit h-7 scroll-animate-left delay-200 mb-10 md:mb-0"
+        class="h-8 sm:h-10 md:h-12 w-auto scroll-animate-left delay-200 mb-10 md:mb-0"
       />
-      <div class="space-y-6 scroll-animate-right delay-300">
-        <p>
-          Follow us for the lastest airdrops, updates, Web3 drama, spicy
-          memes... and the occasional cat pic.
+      <div class="space-y-4 sm:space-y-6 scroll-animate-right delay-300">
+        <p class="text-sm sm:text-base leading-relaxed max-w-md">
+          Follow us for the latest airdrops, updates, Web3 drama, spicy memes...
+          and the occasional cat pic.
         </p>
-        <div class="flex items-center">
-          <a href="https://x.com/purro_xyz" target="_blank">
+        <div class="flex items-center flex-wrap gap-y-2">
+          <a
+            href="https://x.com/purro_xyz"
+            aria-label="Purro on X (Twitter)"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={twitter.src}
-              alt="twitter"
-              class="h-5 md:h-7 pr-4 border-r border-white"
+              alt="X (Twitter)"
+              class="h-5 md:h-7 pr-4 border-r border-white opacity-90 hover:opacity-100 transition-opacity"
             />
           </a>
-          <a href="https://x.com/purro_xyz" target="_blank">
+          <a
+            href="https://t.me/purro_xyz"
+            aria-label="Purro on Telegram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={telegram.src}
-              alt="twitter"
-              class="h-5 md:h-7 px-4 border-r border-white"
+              alt="Telegram"
+              class="h-5 md:h-7 px-4 border-r border-white opacity-90 hover:opacity-100 transition-opacity"
             />
           </a>
-          <a href="https://x.com/purro_xyz" target="_blank">
+          <a
+            href="https://discord.gg/TxvDwvfMTv"
+            aria-label="Purro on Discord"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img
               src={discord.src}
-              alt="twitter"
-              class="h-5 md:h-7 px-4 border-r border-white"
+              alt="Discord"
+              class="h-5 md:h-7 px-4 border-r border-white opacity-90 hover:opacity-100 transition-opacity"
             />
           </a>
           <a
             href="https://docs.purro.xyz"
             target="_blank"
-            class="h-5 md:h-7 px-4"
+            rel="noopener noreferrer"
+            class="h-5 md:h-7 px-4 tracking-wide hover:text-[#02f1dc] transition-colors"
           >
             DOCUMENTATION
           </a>
         </div>
       </div>
     </div>
-    <div class="text-left mt-28 scroll-animate delay-400">
-      © {new Date().getFullYear()} Purro. All rights reserved.
+    <div
+      class="mt-16 sm:mt-20 md:mt-28 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 scroll-animate delay-400"
+    >
+      <div class="text-sm sm:text-base">
+        © {new Date().getFullYear()} Purro. All rights reserved.
+      </div>
+      <nav
+        class="flex items-center gap-4 sm:gap-6 text-[#b1cac4] text-sm sm:text-base"
+      >
+        <a
+          href="/terms"
+          class="hover:text-white underline-offset-4 hover:underline">Terms</a
+        >
+        <span class="opacity-30">|</span>
+        <a
+          href="/privacy"
+          class="hover:text-white underline-offset-4 hover:underline">Privacy</a
+        >
+      </nav>
     </div>
   </div>
 </div>
