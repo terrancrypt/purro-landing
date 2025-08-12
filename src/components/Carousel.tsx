@@ -44,7 +44,7 @@ export default function Carousel({
   aspectRatio,
   autoplay = false,
   autoplayDelay = 3000,
-  pauseOnHover = false,
+  pauseOnHover = true,
   loop = false,
   round = false,
   fit = "cover",

@@ -1,13 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Layout>
-  <div class="min-h-screen bg-[#081919] text-white">
+  <div class="min-h-screen bg-[rgb(8,25,25)]">
     <Header />
 
-    <main class="container mx-auto px-4 pt-28 pb-16 max-w-3xl">
+    <main class="container mx-auto px-4 pt-28 pb-16 max-w-3xl text-white">
       <h1 class="text-3xl md:text-4xl font-bold text-[#02f1dc] mb-6">
         Purro Wallet Privacy Policy
       </h1>
@@ -222,5 +223,7 @@ import Header from "../components/Header.astro";
         </p>
       </section>
     </main>
+
+    <Footer />
   </div>
 </Layout>
