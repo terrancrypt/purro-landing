@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
+import hlNames from "@/assets/hyperliquid-names.svg";
 
 export interface BentoCardProps {
   color?: string;
@@ -8,6 +9,8 @@ export interface BentoCardProps {
   label?: string;
   textAutoHide?: boolean;
   disableAnimations?: boolean;
+  icon?: string;
+  href?: string;
 }
 
 export interface BentoProps {
@@ -50,9 +53,11 @@ const cardData: BentoCardProps[] = [
   },
   {
     color: "#06211d",
-    title: "Send with @names, not addresses",
-    description: "Hyperliquid @names for easy transfers",
+    title: "Send with .hl name, not addresses",
+    description: "Hyperliquid names for easy transfers",
     label: "Send",
+    icon: hlNames.src,
+    href: "https://hlnames.xyz",
   },
   {
     color: "#06211d",
@@ -122,6 +127,7 @@ const ParticleCard: React.FC<{
   enableTilt?: boolean;
   clickEffect?: boolean;
   enableMagnetism?: boolean;
+  href?: string;
 }> = ({
   children,
   className = "",
@@ -132,6 +138,7 @@ const ParticleCard: React.FC<{
   enableTilt = true,
   clickEffect = false,
   enableMagnetism = false,
+  href,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLDivElement[]>([]);
@@ -367,8 +374,15 @@ const ParticleCard: React.FC<{
   return (
     <div
       ref={cardRef}
-      className={`${className} relative overflow-hidden`}
+      className={`${className} relative overflow-hidden ${
+        href ? "cursor-pointer" : ""
+      }`}
       style={{ ...style, position: "relative", overflow: "hidden" }}
+      onClick={() => {
+        if (href) {
+          window.open(href, "_blank");
+        }
+      }}
     >
       {children}
     </div>
@@ -737,9 +751,13 @@ const MagicBento: React.FC<BentoProps> = ({
                   enableTilt={enableTilt}
                   clickEffect={clickEffect}
                   enableMagnetism={enableMagnetism}
+                  href={card.href}
                 >
                   <div className="card__header flex justify-between gap-3 relative text-white">
                     <span className="card__label text-base">{card.label}</span>
+                    {card.icon && (
+                      <img src={card.icon} alt={card.label} className="h-8" />
+                    )}
                   </div>
                   <div className="card__content flex flex-col relative text-white">
                     <h3
