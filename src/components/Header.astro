@@ -3,19 +3,27 @@ import xIcon from "../assets/xIcon.svg";
 import discordIcon from "../assets/discordIcon.svg";
 import telegramIcon from "../assets/teleIcon.svg";
 import Button from "./Button";
+import { BookTextIcon } from "@lucide/astro";
 
 const socials = [
   {
     icon: xIcon.src,
     url: "https://x.com/purro_xyz",
+    isFileIcon: false,
   },
   {
     icon: discordIcon.src,
     url: "https://discord.gg/purro",
+    isFileIcon: false,
   },
   {
     icon: telegramIcon.src,
     url: "https://t.me/purro_xyz",
+    isFileIcon: false,
+  },
+  {
+    url: "https://docs.purro.xyz",
+    isFileIcon: true,
   },
 ];
 ---
@@ -38,7 +46,11 @@ const socials = [
               target="_blank"
               class="hover:bg-white/10 p-2 rounded-full transition-all duration-300"
             >
-              <img src={social.icon} alt={social.icon} class="h-6" />
+              {social.isFileIcon ? (
+                <BookTextIcon class="h-6 w-6 text-white" />
+              ) : (
+                <img src={social.icon} alt="social icon" class="h-6" />
+              )}
             </a>
           ))
         }
