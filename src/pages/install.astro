@@ -1,0 +1,351 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Button from "../components/Button";
+import chrome from "../assets/chrome.png";
+import { DownloadIcon, ClockIcon, InfoIcon } from "@lucide/astro";
+
+// Constants for easy customization
+const EXTENSION_ZIP_URL = "/purro-v0.6.3.zip";
+const CHROME_STORE_URL = "https://chromewebstore.google.com/";
+const EXTENSION_VERSION = "v0.6.3 (Beta)";
+const RELEASE_DATE = "Upload for Review";
+---
+
+<Layout>
+  <Header />
+
+  <main
+    class="min-h-screen bg-gradient-to-br from-[#081919] via-[#0e2a2a] to-[#081919] pt-32 pb-16"
+  >
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Hero Section -->
+      <div class="text-center mb-16 scroll-animate">
+        <img
+          src="/Purro_Logotype_White.png"
+          alt="Purro Logo"
+          class="h-16 mx-auto mb-6"
+        />
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+          Install Extension
+        </h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+          Get started with Purro - the purr-fect Web3 wallet extension. Choose
+          your preferred installation method below.
+        </p>
+      </div>
+
+      <!-- Installation Options -->
+      <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <!-- Option 1: ZIP Download -->
+        <div
+          class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10 scroll-animate-left"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-3 bg-[#02f1dc]/20 rounded-full">
+              <DownloadIcon class="h-6 w-6 text-[#02f1dc]" />
+            </div>
+            <h2 class="text-2xl font-semibold text-white">
+              Manual Installation
+            </h2>
+          </div>
+
+          <p class="text-gray-300 mb-6">
+            Download the latest beta version as a ZIP file and install it
+            manually in Chrome. Get early access to new features before the
+            official release.
+          </p>
+
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-3 text-sm text-gray-400">
+              <InfoIcon class="h-4 w-4 text-[#02f1dc]" />
+              <span>Version: {EXTENSION_VERSION}</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm text-gray-400">
+              <ClockIcon class="h-4 w-4 text-[#02f1dc]" />
+              <span>Ready to download (~10MB)</span>
+            </div>
+          </div>
+
+          <a
+            href={EXTENSION_ZIP_URL}
+            download="purro-v0.6.3.zip"
+            class="w-full bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold py-3 px-6 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-2 no-underline"
+          >
+            <DownloadIcon class="h-5 w-5" />
+            Download ZIP
+          </a>
+
+          <!-- Installation Steps -->
+          <div class="mt-8 p-4 bg-white/5 rounded-lg border border-white/10">
+            <h3 class="text-lg font-semibold text-white mb-3">
+              Installation Steps:
+            </h3>
+            <ol class="text-sm text-gray-300 space-y-2">
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc] font-semibold">1.</span>
+                Download and extract the ZIP file
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc] font-semibold">2.</span>
+                Open Chrome and go to chrome://extensions/
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc] font-semibold">3.</span>
+                Enable "Developer mode" in the top right
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc] font-semibold">4.</span>
+                Click "Load unpacked" and select the extracted folder
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc] font-semibold">5.</span>
+                Pin the extension to your toolbar for easy access
+              </li>
+            </ol>
+            <div class="mt-4 p-3 bg-blue-500/10 rounded-lg">
+              <p class="text-xs text-gray-300">
+                💡 <strong>Tip:</strong> Always backup your wallet before updating
+                extensions
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Option 2: Chrome Store -->
+        <div
+          class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10 scroll-animate-right"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-3 bg-[#02f1dc]/20 rounded-full">
+              <img src={chrome.src} alt="chrome" class="h-6 w-6" />
+            </div>
+            <h2 class="text-2xl font-semibold text-white">Chrome Web Store</h2>
+          </div>
+
+          <p class="text-gray-300 mb-6">
+            We've submitted the extension to Chrome Web Store for review. Follow
+            us on X for updates on the approval process.
+          </p>
+
+          <div class="space-y-4 mb-8">
+            <div class="flex items-center gap-3 text-sm text-gray-400">
+              <InfoIcon class="h-4 w-4 text-[#02f1dc]" />
+              <span>Official release</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm text-gray-400">
+              <ClockIcon class="h-4 w-4 text-[#02f1dc]" />
+              <span>Status: {RELEASE_DATE}</span>
+            </div>
+          </div>
+
+          <a
+            href="https://x.com/purro_xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold py-3 px-6 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-2 no-underline"
+          >
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              ></path>
+            </svg>
+            Follow on X
+          </a>
+
+          <!-- Benefits -->
+          <div class="mt-8 p-4 bg-white/5 rounded-lg border border-white/10">
+            <h3 class="text-lg font-semibold text-white mb-3">Benefits:</h3>
+            <ul class="text-sm text-gray-300 space-y-2">
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc]">•</span>
+                Automatic updates
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc]">•</span>
+                One-click installation
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc]">•</span>
+                Enhanced security
+              </li>
+              <li class="flex gap-2">
+                <span class="text-[#02f1dc]">•</span>
+                Seamless Chrome integration
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Requirements -->
+      <div
+        class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10 scroll-animate"
+      >
+        <h2 class="text-2xl font-semibold text-white mb-6 text-center">
+          System Requirements
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6 text-center">
+          <div>
+            <img src={chrome.src} alt="chrome" class="h-8 w-8 mx-auto mb-3" />
+            <h3 class="text-lg font-semibold text-white mb-2">
+              Chrome Browser
+            </h3>
+            <p class="text-gray-300 text-sm">Version 88 or higher</p>
+          </div>
+          <div>
+            <svg
+              class="h-8 w-8 text-[#02f1dc] mx-auto mb-3"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+              ></path>
+            </svg>
+            <h3 class="text-lg font-semibold text-white mb-2">
+              Operating System
+            </h3>
+            <p class="text-gray-300 text-sm">Windows, macOS, or Linux</p>
+          </div>
+          <div>
+            <svg
+              class="h-8 w-8 text-[#02f1dc] mx-auto mb-3"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <h3 class="text-lg font-semibold text-white mb-2">
+              Developer Mode
+            </h3>
+            <p class="text-gray-300 text-sm">Required for ZIP installation</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="mt-16 scroll-animate">
+        <h2 class="text-3xl font-semibold text-white text-center mb-12">
+          Frequently Asked Questions
+        </h2>
+        <div class="space-y-6">
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10"
+          >
+            <h3 class="text-xl font-semibold text-white mb-3">
+              Which installation method should I choose?
+            </h3>
+            <p class="text-gray-300">
+              If you want to try Purro immediately, download the beta ZIP
+              version. For the most seamless experience with automatic updates,
+              wait for the Chrome Web Store approval (currently under review).
+            </p>
+          </div>
+
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10"
+          >
+            <h3 class="text-xl font-semibold text-white mb-3">
+              Is the ZIP version safe to install?
+            </h3>
+            <p class="text-gray-300">
+              Yes! The ZIP version is the same extension that will be published
+              to the Chrome Web Store. We provide it for early access while
+              waiting for Chrome's review process.
+            </p>
+          </div>
+
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-white/10"
+          >
+            <h3 class="text-xl font-semibold text-white mb-3">
+              Will I get updates with the ZIP version?
+            </h3>
+            <p class="text-gray-300">
+              The ZIP version requires manual updates. Once the Chrome Web Store
+              version is available, we recommend switching to it for automatic
+              updates.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="text-center mt-16 scroll-animate">
+        <h2 class="text-2xl font-semibold text-white mb-4">Need Help?</h2>
+        <p class="text-gray-300 mb-6">
+          Join our community for support and updates about Purro extension.
+        </p>
+        <div class="flex justify-center gap-4">
+          <a
+            href="https://discord.gg/TxvDwvfMTv"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold px-6 py-3 rounded-full transition-all duration-300 no-underline"
+          >
+            Join Discord
+          </a>
+          <a
+            href="https://docs.purro.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-[#06211d] hover:bg-[#06211d]/80 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold px-6 py-3 rounded-full transition-all duration-300 no-underline"
+          >
+            Read Docs
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+
+  <style>
+    /* Additional styles for install page */
+    .installation-card {
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .installation-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(2, 241, 220, 0.1);
+    }
+
+    /* Enhanced card hover effects */
+    .bg-\[#06211d\]\/60:hover {
+      background-color: rgba(6, 33, 29, 0.8);
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+
+    /* Glow effect for accent elements */
+    .text-\[#02f1dc\] {
+      text-shadow: 0 0 10px rgba(2, 241, 220, 0.3);
+    }
+
+    /* Custom scrollbar for consistency */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 25, 25, 0.3);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(2, 241, 220, 0.5);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(2, 241, 220, 0.8);
+    }
+  </style>
+</Layout>

@@ -38,15 +38,12 @@ import AuroraBg from "./AuroraBg";
         class="absolute bottom-12 flex flex-col items-center scroll-animate delay-500"
       >
         <div class="scroll-animate delay-300">
-          <Button
-            isToast={true}
-            toastMessage="Coming soon"
-            client:load
-            className="bg-white hover:bg-white/80"
-          >
-            <img src={chrome.src} alt="chrome" class="h-8 md:h-10" />
-            <span>Download for Chrome</span>
-          </Button>
+          <a href="/install">
+            <Button isToast={true} className="bg-white hover:bg-white/80">
+              <img src={chrome.src} alt="chrome" class="h-8 md:h-10" />
+              <span>Download for Chrome</span>
+            </Button>
+          </a>
         </div>
 
         <!-- <p
