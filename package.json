@@ -24,5 +24,8 @@
     "sonner": "^2.0.6",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@astrojs/netlify": "^6.5.7"
   }
 }
