@@ -18,13 +18,18 @@ import screenshot11 from "../assets/full-screenshots/11.png";
 import screenshot12 from "../assets/full-screenshots/12.png";
 import importScreenshot from "../assets/full-screenshots/import-screenshot.png";
 import onboardingScreenshot from "../assets/full-screenshots/onboarding-screenshot.png";
-import { DownloadIcon, ClockIcon, InfoIcon } from "@lucide/astro";
+import {
+  ExternalLinkIcon,
+  ClockIcon,
+  InfoIcon,
+  GithubIcon,
+} from "@lucide/astro";
 
 // Constants for easy customization
-const EXTENSION_ZIP_URL = "/purro-v0.6.9.zip";
-const CHROME_STORE_URL = "https://chromewebstore.google.com/";
-const EXTENSION_VERSION = "v0.6.9 (Beta)";
-const RELEASE_DATE = "Upload for Review";
+const CHROME_STORE_URL =
+  "https://chromewebstore.google.com/detail/purro-beta/ehfplamebglaemcflkgjlomdbbpmehof";
+const GITHUB_RELEASES_URL =
+  "https://github.com/terrancrypt/purro-extension/releases";
 ---
 
 <Layout>
@@ -47,93 +52,15 @@ const RELEASE_DATE = "Upload for Review";
         <p
           class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
         >
-          Get started with Purro - the purr-fect Web3 wallet extension. Choose
-          your preferred installation method below.
+          Get started with Purro - the purr-fect Web3 wallet extension.
+          Available now on the Chrome Web Store.
         </p>
       </div>
 
-      <!-- Installation Options (Main Focus) -->
-      <div class="grid md:grid-cols-2 gap-12 mb-32">
-        <!-- Option 1: ZIP Download -->
+      <!-- Chrome Web Store Installation (Main Focus) -->
+      <div class="max-w-2xl mx-auto mb-32">
         <div
-          class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate-left hover:border-[#02f1dc]/30 transition-all duration-300"
-        >
-          <div class="flex items-center gap-4 mb-8">
-            <div class="p-4 bg-[#02f1dc]/20 rounded-full">
-              <DownloadIcon class="h-8 w-8 text-[#02f1dc]" />
-            </div>
-            <h2 class="text-2xl font-semibold text-white">
-              Manual Installation
-            </h2>
-          </div>
-
-          <p class="text-gray-300 mb-8 leading-relaxed">
-            Download the latest beta version as a ZIP file and install it
-            manually in Chrome. Get early access to new features before the
-            official release.
-          </p>
-
-          <div class="space-y-4 mb-10">
-            <div class="flex items-center gap-3 text-gray-400">
-              <InfoIcon class="h-5 w-5 text-[#02f1dc]" />
-              <span>Version: {EXTENSION_VERSION}</span>
-            </div>
-            <div class="flex items-center gap-3 text-gray-400">
-              <ClockIcon class="h-5 w-5 text-[#02f1dc]" />
-              <span>Ready to download (~10MB)</span>
-            </div>
-          </div>
-
-          <a
-            href={EXTENSION_ZIP_URL}
-            download="purro-v0.6.9.zip"
-            class="w-full bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-bold py-4 px-8 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-3 no-underline mb-8"
-          >
-            <DownloadIcon class="h-6 w-6" />
-            Download ZIP
-          </a>
-
-          <!-- Installation Steps -->
-          <div class="p-6 bg-white/5 rounded-2xl border border-white/10">
-            <h3 class="text-xl font-semibold text-white mb-4">
-              Installation Steps:
-            </h3>
-            <ol class="text-gray-300 space-y-3">
-              <li class="flex gap-3">
-                <span class="text-[#02f1dc] font-bold text-lg">1.</span>
-                <span>Download and extract the ZIP file</span>
-              </li>
-              <li class="flex gap-3">
-                <span class="text-[#02f1dc] font-bold text-lg">2.</span>
-                <span>Open Chrome and go to chrome://extensions/</span>
-              </li>
-              <li class="flex gap-3">
-                <span class="text-[#02f1dc] font-bold text-lg">3.</span>
-                <span>Enable "Developer mode" in the top right</span>
-              </li>
-              <li class="flex gap-3">
-                <span class="text-[#02f1dc] font-bold text-lg">4.</span>
-                <span
-                  >Click "Load unpacked" and select the extracted folder</span
-                >
-              </li>
-              <li class="flex gap-3">
-                <span class="text-[#02f1dc] font-bold text-lg">5.</span>
-                <span>Pin the extension to your toolbar for easy access</span>
-              </li>
-            </ol>
-            <div class="mt-6 p-4 bg-blue-500/10 rounded-lg">
-              <p class="text-sm text-gray-300">
-                💡 <strong>Tip:</strong> Always backup your wallet before updating
-                extensions
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Option 2: Chrome Store -->
-        <div
-          class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate-right hover:border-[#02f1dc]/30 transition-all duration-300"
+          class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate hover:border-[#02f1dc]/30 transition-all duration-300"
         >
           <div class="flex items-center gap-4 mb-8">
             <div class="p-4 bg-[#02f1dc]/20 rounded-full">
@@ -143,34 +70,19 @@ const RELEASE_DATE = "Upload for Review";
           </div>
 
           <p class="text-gray-300 mb-8 leading-relaxed">
-            We've submitted the extension to Chrome Web Store for review. Get
-            automatic updates and seamless experience once approved. Follow us
-            on X for updates.
+            Purro is now available on the Chrome Web Store! Get automatic
+            updates, enhanced security, and seamless Chrome integration with
+            one-click installation.
           </p>
 
-          <div class="space-y-4 mb-10">
-            <div class="flex items-center gap-3 text-gray-400">
-              <InfoIcon class="h-5 w-5 text-[#02f1dc]" />
-              <span>Official release</span>
-            </div>
-            <div class="flex items-center gap-3 text-gray-400">
-              <ClockIcon class="h-5 w-5 text-[#02f1dc]" />
-              <span>Status: {RELEASE_DATE}</span>
-            </div>
-          </div>
-
           <a
-            href="https://x.com/purro_xyz"
+            href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             class="w-full bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-bold py-4 px-8 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-3 no-underline mb-8"
           >
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-              ></path>
-            </svg>
-            Follow on X
+            <ExternalLinkIcon class="h-6 w-6" />
+            Install from Chrome Web Store
           </a>
 
           <!-- Benefits -->
@@ -193,7 +105,52 @@ const RELEASE_DATE = "Upload for Review";
                 <span class="text-[#02f1dc] text-xl">•</span>
                 Seamless Chrome integration
               </li>
+              <li class="flex items-center gap-3">
+                <span class="text-[#02f1dc] text-xl">•</span>
+                Official Chrome Web Store verification
+              </li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Release Notes Section -->
+      <div class="mb-24 scroll-animate">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-semibold text-white mb-6">
+            Stay Updated
+          </h2>
+          <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+            Check out the latest features, bug fixes, and improvements in our
+            release notes.
+          </p>
+        </div>
+
+        <div class="max-w-2xl mx-auto">
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 hover:border-[#02f1dc]/30 transition-all duration-300"
+          >
+            <div class="flex items-center gap-4 mb-8">
+              <div class="p-4 bg-[#02f1dc]/20 rounded-full">
+                <GithubIcon class="h-8 w-8 text-[#02f1dc]" />
+              </div>
+              <h3 class="text-2xl font-semibold text-white">Release Notes</h3>
+            </div>
+
+            <p class="text-gray-300 mb-8 leading-relaxed">
+              View detailed release notes, changelog, and technical
+              documentation for all Purro extension versions.
+            </p>
+
+            <a
+              href={GITHUB_RELEASES_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full bg-black/30 hover:bg-black/50 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold py-4 px-8 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-3 no-underline"
+            >
+              <GithubIcon class="h-6 w-6" />
+              View Release Notes
+            </a>
           </div>
         </div>
       </div>
@@ -594,13 +551,13 @@ const RELEASE_DATE = "Upload for Review";
             >
               <path
                 fill-rule="evenodd"
-                d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
                 clip-rule="evenodd"></path>
             </svg>
             <h3 class="text-xl font-semibold text-white mb-3">
-              Developer Mode
+              Internet Connection
             </h3>
-            <p class="text-gray-300">Required for ZIP installation</p>
+            <p class="text-gray-300">Required for installation</p>
           </div>
         </div>
       </div>
@@ -615,12 +572,13 @@ const RELEASE_DATE = "Upload for Review";
             class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h3 class="text-2xl font-semibold text-white mb-4">
-              Which installation method should I choose?
+              How do I install Purro extension?
             </h3>
             <p class="text-gray-300 text-lg leading-relaxed">
-              If you want to try Purro immediately, download the beta ZIP
-              version. For the most seamless experience with automatic updates,
-              wait for the Chrome Web Store approval (currently under review).
+              Simply click the "Install from Chrome Web Store" button above.
+              This will take you to the official Chrome Web Store where you can
+              install Purro with one click. The extension will be automatically
+              updated when new versions are released.
             </p>
           </div>
 
@@ -628,12 +586,13 @@ const RELEASE_DATE = "Upload for Review";
             class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h3 class="text-2xl font-semibold text-white mb-4">
-              Is the ZIP version safe to install?
+              Is Purro safe to install from Chrome Web Store?
             </h3>
             <p class="text-gray-300 text-lg leading-relaxed">
-              Yes! The ZIP version is the same extension that will be published
-              to the Chrome Web Store. We provide it for early access while
-              waiting for Chrome's review process.
+              Yes! Purro is officially verified by Google and available on the
+              Chrome Web Store. This means it has passed Google's security
+              review process and is safe to install. The extension is also open
+              source, so you can review the code on GitHub.
             </p>
           </div>
 
@@ -641,12 +600,26 @@ const RELEASE_DATE = "Upload for Review";
             class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
             <h3 class="text-2xl font-semibold text-white mb-4">
-              Will I get updates with the ZIP version?
+              How do I get updates for Purro?
             </h3>
             <p class="text-gray-300 text-lg leading-relaxed">
-              The ZIP version requires manual updates. Once the Chrome Web Store
-              version is available, we recommend switching to it for automatic
-              updates.
+              When installed from the Chrome Web Store, Purro will automatically
+              update to the latest version. You can also manually check for
+              updates by going to chrome://extensions/ and clicking the refresh
+              icon on the Purro extension card.
+            </p>
+          </div>
+
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+          >
+            <h3 class="text-2xl font-semibold text-white mb-4">
+              What browsers are supported?
+            </h3>
+            <p class="text-gray-300 text-lg leading-relaxed">
+              Currently, Purro is available for Chrome and other Chromium-based
+              browsers (like Edge, Brave, and Opera). We're working on support
+              for Firefox and other browsers in future releases.
             </p>
           </div>
         </div>
