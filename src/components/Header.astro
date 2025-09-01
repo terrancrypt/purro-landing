@@ -3,7 +3,7 @@ import xIcon from "../assets/xIcon.svg";
 import discordIcon from "../assets/discordIcon.svg";
 import telegramIcon from "../assets/teleIcon.svg";
 import Button from "./Button";
-import { BookTextIcon } from "@lucide/astro";
+import { BookTextIcon, Trophy } from "@lucide/astro";
 
 const socials = [
   {
@@ -38,29 +38,20 @@ const socials = [
       <img src="/Purro_Icon_Dark.png" alt="logo" class="h-10 rounded-full" />
     </a>
     <div class="flex items-center gap-2">
-      <div class="items-center flex">
-        {
-          socials.map((social) => (
-            <a
-              href={social.url}
-              target="_blank"
-              class="hover:bg-white/10 p-2 rounded-full transition-all duration-300"
-            >
-              {social.isFileIcon ? (
-                <BookTextIcon class="h-6 w-6 text-white" />
-              ) : (
-                <img src={social.icon} alt="social icon" class="h-6" />
-              )}
-            </a>
-          ))
-        }
-      </div>
-
       <a
         href="/leaderboard"
-        class="text-white hover:text-cyan-400 transition-colors px-4 py-2 rounded-lg hover:bg-white/10"
+        class="hover:underline p-2 rounded-full transition-all duration-300 text-white"
+        title="Leaderboard"
       >
         Leaderboard
+      </a>
+      <a
+        href="docs.purro.xyz"
+        target="_blank"
+        class="hover:underline p-2 rounded-full transition-all duration-300 text-white"
+        title="Documentation"
+      >
+        Docs
       </a>
       <a href="/install">
         <Button client:load> Install </Button>
