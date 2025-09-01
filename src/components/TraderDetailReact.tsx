@@ -110,24 +110,55 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative pt-20">
-        <div className="container max-w-6xl mx-auto px-4 py-12">
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500"></div>
-            <span className="ml-4 text-gray-300">
-              Loading trader details...
-            </span>
-          </div>
+  // Skeleton components
+  const SkeletonCard = () => (
+    <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+      <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+        <div className="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div className="text-center md:text-left">
+          <div className="h-6 bg-gray-700 rounded w-32 animate-pulse mb-2"></div>
+          <div className="h-4 bg-gray-700 rounded w-48 animate-pulse"></div>
         </div>
       </div>
-    );
-  }
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="text-center">
+            <div className="h-8 bg-gray-700 rounded w-16 animate-pulse mb-2 mx-auto"></div>
+            <div className="h-4 bg-gray-700 rounded w-12 animate-pulse mx-auto"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const SkeletonActivity = () => (
+    <div className="bg-gray-800/50 rounded-lg p-6">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+        <div className="flex items-center gap-3 mb-2 md:mb-0">
+          <div className="h-6 bg-gray-700 rounded w-16 animate-pulse"></div>
+          <div className="h-4 bg-gray-700 rounded w-20 animate-pulse"></div>
+        </div>
+        <div className="h-4 bg-gray-700 rounded w-16 animate-pulse"></div>
+      </div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-5 bg-gray-700 rounded w-20 animate-pulse"></div>
+        <div className="h-4 bg-gray-700 rounded w-4 animate-pulse"></div>
+        <div className="flex items-center gap-2">
+          <div className="h-6 bg-gray-700 rounded w-12 animate-pulse"></div>
+          <div className="h-4 bg-gray-700 rounded w-4 animate-pulse"></div>
+          <div className="h-6 bg-gray-700 rounded w-12 animate-pulse"></div>
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+        <div className="h-4 bg-gray-700 rounded w-24 animate-pulse"></div>
+        <div className="h-4 bg-gray-700 rounded w-32 animate-pulse"></div>
+      </div>
+    </div>
+  );
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative pt-20">
+      <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
         <div className="container max-w-6xl mx-auto px-4 py-12">
           <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-8 text-center">
             <div className="text-red-400 text-lg mb-2">
@@ -159,7 +190,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative pt-20">
+    <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
       <div className="container max-w-6xl mx-auto px-4 py-12">
         {/* Breadcrumb */}
         <div className="mb-8">
@@ -194,171 +225,193 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
         {/* Content */}
         <div className="scroll-animate delay-200">
           <div className="space-y-8">
-            {/* Trader Overview */}
-            <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
-              <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
-                <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">
-                    {address.slice(2, 4).toUpperCase()}
-                  </span>
-                </div>
-                <div className="text-center md:text-left">
-                  <h2 className="text-2xl font-semibold text-white mb-2">
-                    {formatAddress(address)}
-                  </h2>
-                  <p className="text-gray-400 font-mono text-sm break-all">
-                    {address}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">
-                    #{traderData.rank}
+            {loading ? (
+              // Show skeleton when loading
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                  <div className="h-6 bg-gray-700 rounded w-32 animate-pulse mb-6"></div>
+                  <div className="space-y-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <SkeletonActivity key={index} />
+                    ))}
                   </div>
-                  <div className="text-gray-400 text-sm">Rank</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-400 mb-2">
-                    {traderData.points.toLocaleString()}
-                  </div>
-                  <div className="text-gray-400 text-sm">Points</div>
+                  <div className="h-10 bg-gray-700 rounded w-40 animate-pulse mx-auto"></div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400 mb-2">
-                    {formatVolume(traderData.volume_usd)}
-                  </div>
-                  <div className="text-gray-400 text-sm">Volume</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-400 mb-2">
-                    {traderData.transactions}
-                  </div>
-                  <div className="text-gray-400 text-sm">Transactions</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Point Breakdown */}
-            <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
-              <h3 className="text-2xl font-semibold text-white mb-6">
-                Point Breakdown
-              </h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-300 text-lg">From Volume</span>
-                  <span className="text-blue-400 font-semibold text-lg">
-                    {traderData.point_breakdown.from_volume}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-300 text-lg">
-                    From Transactions
-                  </span>
-                  <span className="text-green-400 font-semibold text-lg">
-                    {traderData.point_breakdown.from_transactions}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                  <span className="text-gray-300 text-lg">
-                    From Unique Tokens
-                  </span>
-                  <span className="text-purple-400 font-semibold text-lg">
-                    {traderData.point_breakdown.from_unique_tokens}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-4 bg-gray-800/30 rounded-lg px-4">
-                  <span className="text-white font-semibold text-xl">
-                    Total
-                  </span>
-                  <span className="text-cyan-400 font-bold text-2xl">
-                    {traderData.point_breakdown.total}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
-              <h3 className="text-2xl font-semibold text-white mb-6">
-                Recent Activity
-              </h3>
-              {traderData.recent_activity &&
-              traderData.recent_activity.length > 0 ? (
-                <div className="space-y-4">
-                  {traderData.recent_activity.map((activity) => (
-                    <div
-                      key={activity.hash}
-                      className="bg-gray-800/50 rounded-lg p-6 hover:bg-gray-800/70 transition-colors"
-                    >
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                        <div className="flex items-center gap-3 mb-2 md:mb-0">
-                          <span className="text-cyan-400 font-mono text-sm bg-gray-700 px-2 py-1 rounded">
-                            {activity.hash.slice(0, 8)}...
-                          </span>
-                          <span className="text-gray-400 text-sm">
-                            Block {activity.block_number}
-                          </span>
-                        </div>
-                        <span className="text-gray-400 text-sm">
-                          {formatTimeAgo(activity.timestamp)}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="text-white font-semibold text-lg">
-                          {activity.dex_name}
-                        </span>
-                        <span className="text-gray-400">•</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
-                            {activity.token_in_symbol}
-                          </span>
-                          <span className="text-gray-400">→</span>
-                          <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
-                            {activity.token_out_symbol}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                        <div className="text-gray-400 text-sm">
-                          Volume:{" "}
-                          <span className="text-green-400 font-semibold">
-                            {formatVolume(activity.volume_usd)}
-                          </span>
-                        </div>
-                        <a
-                          href={`https://explorer.sui.io/txblock/${activity.hash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
-                        >
-                          View on Sui Explorer →
-                        </a>
-                      </div>
+              </>
+            ) : traderData ? (
+              // Show actual data when loaded
+              <>
+                {/* Trader Overview */}
+                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                  <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+                    <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-2xl font-bold">
+                        {address.slice(2, 4).toUpperCase()}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-400 text-lg">
-                    No recent activity found
-                  </p>
-                </div>
-              )}
-            </div>
+                    <div className="text-center md:text-left">
+                      <h2 className="text-2xl font-semibold text-white mb-2">
+                        {formatAddress(address)}
+                      </h2>
+                      <p className="text-gray-400 font-mono text-sm break-all">
+                        {address}
+                      </p>
+                    </div>
+                  </div>
 
-            {/* Back Button */}
-            <div className="text-center">
-              <a
-                href="/leaderboard"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors font-medium"
-              >
-                ← Back to Leaderboard
-              </a>
-            </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-cyan-400 mb-2">
+                        #{traderData.rank}
+                      </div>
+                      <div className="text-gray-400 text-sm">Rank</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-green-400 mb-2">
+                        {traderData.points.toLocaleString()}
+                      </div>
+                      <div className="text-gray-400 text-sm">Points</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-yellow-400 mb-2">
+                        {formatVolume(traderData.volume_usd)}
+                      </div>
+                      <div className="text-gray-400 text-sm">Volume</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-purple-400 mb-2">
+                        {traderData.transactions}
+                      </div>
+                      <div className="text-gray-400 text-sm">Transactions</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Point Breakdown */}
+                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                  <h3 className="text-2xl font-semibold text-white mb-6">
+                    Point Breakdown
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                      <span className="text-gray-300 text-lg">From Volume</span>
+                      <span className="text-blue-400 font-semibold text-lg">
+                        {traderData.point_breakdown.from_volume}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                      <span className="text-gray-300 text-lg">
+                        From Transactions
+                      </span>
+                      <span className="text-green-400 font-semibold text-lg">
+                        {traderData.point_breakdown.from_transactions}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                      <span className="text-gray-300 text-lg">
+                        From Unique Tokens
+                      </span>
+                      <span className="text-purple-400 font-semibold text-lg">
+                        {traderData.point_breakdown.from_unique_tokens}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-4 bg-gray-800/30 rounded-lg px-4">
+                      <span className="text-white font-semibold text-xl">
+                        Total
+                      </span>
+                      <span className="text-cyan-400 font-bold text-2xl">
+                        {traderData.point_breakdown.total}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                  <h3 className="text-2xl font-semibold text-white mb-6">
+                    Recent Activity
+                  </h3>
+                  {traderData.recent_activity &&
+                  traderData.recent_activity.length > 0 ? (
+                    <div className="space-y-4">
+                      {traderData.recent_activity.map((activity) => (
+                        <div
+                          key={activity.hash}
+                          className="bg-gray-800/50 rounded-lg p-6 hover:bg-gray-800/70 transition-colors"
+                        >
+                          <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                            <div className="flex items-center gap-3 mb-2 md:mb-0">
+                              <span className="text-cyan-400 font-mono text-sm bg-gray-700 px-2 py-1 rounded">
+                                {activity.hash.slice(0, 8)}...
+                              </span>
+                              <span className="text-gray-400 text-sm">
+                                Block {activity.block_number}
+                              </span>
+                            </div>
+                            <span className="text-gray-400 text-sm">
+                              {formatTimeAgo(activity.timestamp)}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-3 mb-4">
+                            <span className="text-white font-semibold text-lg">
+                              {activity.dex_name}
+                            </span>
+                            <span className="text-gray-400">•</span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
+                                {activity.token_in_symbol}
+                              </span>
+                              <span className="text-gray-400">→</span>
+                              <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
+                                {activity.token_out_symbol}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                            <div className="text-gray-400 text-sm">
+                              Volume:{" "}
+                              <span className="text-green-400 font-semibold">
+                                {formatVolume(activity.volume_usd)}
+                              </span>
+                            </div>
+                            <a
+                              href={`https://explorer.sui.io/txblock/${activity.hash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
+                            >
+                              View on Sui Explorer →
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <p className="text-gray-400 text-lg">
+                        No recent activity found
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Back Button */}
+                <div className="text-center">
+                  <a
+                    href="/leaderboard"
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors font-medium"
+                  >
+                    ← Back to Leaderboard
+                  </a>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       </div>
