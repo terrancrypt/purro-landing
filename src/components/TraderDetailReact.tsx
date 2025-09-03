@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 interface PointBreakdown {
   from_volume: number;
@@ -43,41 +43,58 @@ interface TraderDetailReactProps {
   address: string;
 }
 
+type TimeframeOption = "1d" | "7d" | "30d" | "all";
+
 const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
   const [traderData, setTraderData] = useState<TraderData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [timeframe, setTimeframe] = useState<TimeframeOption>("7d");
+
+  const fetchTraderData = useCallback(
+    async (selectedTimeframe: TimeframeOption = timeframe) => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const params = new URLSearchParams({
+          timeframe: selectedTimeframe,
+        });
+
+        const response = await fetch(
+          `https://api.purro.xyz/api/v1/leaderboard/trader/${address}?${params}`
+        );
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Trader not found in the leaderboard");
+          }
+          throw new Error(`API request failed with status: ${response.status}`);
+        }
+
+        const result: TraderResponse = await response.json();
+
+        if (result.success) {
+          setTraderData(result.data);
+        } else {
+          throw new Error("Failed to fetch trader data");
+        }
+      } catch (err) {
+        console.error("Trader fetch error:", err);
+        setError(err instanceof Error ? err.message : "Network error occurred");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [address, timeframe]
+  );
 
   useEffect(() => {
-    fetchTraderData();
-  }, [address]);
+    fetchTraderData(timeframe);
+  }, [fetchTraderData, timeframe]);
 
-  const fetchTraderData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(
-        `https://api.purro.xyz/leaderboard/trader/${address}?timeframe=7d`
-      );
-
-      if (!response.ok) {
-        throw new Error(`API request failed with status: ${response.status}`);
-      }
-
-      const result: TraderResponse = await response.json();
-
-      if (result.success) {
-        setTraderData(result.data);
-      } else {
-        throw new Error("Failed to fetch trader data");
-      }
-    } catch (err) {
-      console.error("Trader fetch error:", err);
-      setError(err instanceof Error ? err.message : "Network error occurred");
-    } finally {
-      setLoading(false);
-    }
+  const handleTimeframeChange = (newTimeframe: TimeframeOption) => {
+    setTimeframe(newTimeframe);
   };
 
   const formatAddress = (address: string) => {
@@ -110,9 +127,29 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     }
   };
 
+  const formatAmount = (amount: string, decimals: number = 6) => {
+    const num = parseFloat(amount);
+    if (isNaN(num)) return amount;
+
+    if (num >= 1000000) {
+      return `${(num / 1000000).toFixed(2)}M`;
+    } else if (num >= 1000) {
+      return `${(num / 1000).toFixed(2)}K`;
+    } else {
+      return num.toFixed(decimals);
+    }
+  };
+
+  const getRankStyle = (rank: number) => {
+    if (rank <= 3) return "bg-yellow-500 text-black";
+    if (rank <= 10) return "bg-purple-600 text-white";
+    if (rank <= 50) return "bg-blue-600 text-white";
+    return "bg-gray-600 text-white";
+  };
+
   // Skeleton components
   const SkeletonCard = () => (
-    <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+    <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
       <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
         <div className="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
         <div className="text-center md:text-left">
@@ -132,7 +169,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
   );
 
   const SkeletonActivity = () => (
-    <div className="bg-gray-800/50 rounded-lg p-6">
+    <div className="bg-gray-800/20 rounded-lg p-6">
       <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
         <div className="flex items-center gap-3 mb-2 md:mb-0">
           <div className="h-6 bg-gray-700 rounded w-16 animate-pulse"></div>
@@ -160,21 +197,21 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     return (
       <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
         <div className="container max-w-6xl mx-auto px-4 py-12">
-          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-8 text-center">
-            <div className="text-red-400 text-lg mb-2">
-              ⚠️ Error Loading Trader Data
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-8 text-center">
+            <div className="text-red-400 text-xl mb-2">
+              Error Loading Trader Data
             </div>
-            <p className="text-red-300 mb-4">{error}</p>
+            <p className="text-red-300 mb-6 text-lg">{error}</p>
             <div className="flex gap-4 justify-center">
               <button
-                onClick={fetchTraderData}
-                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                onClick={() => fetchTraderData(timeframe)}
+                className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
               >
-                Retry
+                Try Again
               </button>
               <a
                 href="/leaderboard"
-                className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
               >
                 Back to Leaderboard
               </a>
@@ -185,23 +222,19 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     );
   }
 
-  if (!traderData) {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
       <div className="container max-w-6xl mx-auto px-4 py-12">
         {/* Breadcrumb */}
         <div className="mb-8">
           <nav className="flex items-center gap-2 text-sm text-gray-400">
-            <a href="/" className="hover:text-cyan-400 transition-colors">
+            <a href="/" className="hover:text-white transition-colors">
               Home
             </a>
             <span>/</span>
             <a
               href="/leaderboard"
-              className="hover:text-cyan-400 transition-colors"
+              className="hover:text-white transition-colors"
             >
               Leaderboard
             </a>
@@ -213,12 +246,47 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="scroll-animate">
-            <h1 className="text-4xl md:text-6xl text-white font-semibold mb-4">
-              Trader Details
+            <h1 className="text-4xl md:text-6xl text-white font-semibold mb-4 font-figtree">
+              Trader Profile
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-6">
-              Detailed performance and activity for {formatAddress(address)}
+            <p className="text-lg md:text-xl text-gray-300 mb-6 font-figtree">
+              Performance analytics for {formatAddress(address)}
             </p>
+          </div>
+        </div>
+
+        {/* Timeframe Filter */}
+        <div className="scroll-animate delay-100 mb-8">
+          <div className="bg-black/10 border border-gray-700/30 rounded-xl p-6">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+              <div className="flex flex-wrap gap-2 items-center">
+                {(["1d", "7d", "30d", "all"] as TimeframeOption[]).map(
+                  (option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleTimeframeChange(option)}
+                      className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                        timeframe === option
+                          ? "bg-white text-black"
+                          : "bg-gray-700/30 text-gray-300 hover:bg-gray-600/30"
+                      }`}
+                    >
+                      {option === "all" ? "All Time" : option.toUpperCase()}
+                    </button>
+                  )
+                )}
+              </div>
+
+              <div className="flex gap-3 items-center">
+                <button
+                  onClick={() => fetchTraderData(timeframe)}
+                  disabled={loading}
+                  className="px-4 py-2 bg-gray-700/30 hover:bg-gray-600/30 text-gray-300 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {loading ? "Loading..." : "Refresh"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -226,11 +294,10 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
         <div className="scroll-animate delay-200">
           <div className="space-y-8">
             {loading ? (
-              // Show skeleton when loading
               <>
                 <SkeletonCard />
                 <SkeletonCard />
-                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
                   <div className="h-6 bg-gray-700 rounded w-32 animate-pulse mb-6"></div>
                   <div className="space-y-4">
                     {Array.from({ length: 3 }).map((_, index) => (
@@ -238,53 +305,76 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                     ))}
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="h-10 bg-gray-700 rounded w-40 animate-pulse mx-auto"></div>
-                </div>
               </>
             ) : traderData ? (
-              // Show actual data when loaded
               <>
                 {/* Trader Overview */}
-                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
                   <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
-                    <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-white text-2xl font-bold">
-                        {address.slice(2, 4).toUpperCase()}
-                      </span>
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-gray-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-2xl font-bold">
+                          {address.slice(2, 4).toUpperCase()}
+                        </span>
+                      </div>
+                      <div
+                        className={`absolute -top-2 -right-2 w-8 h-8 ${getRankStyle(
+                          traderData.rank
+                        )} rounded-full flex items-center justify-center text-sm font-semibold`}
+                      >
+                        #{traderData.rank}
+                      </div>
                     </div>
                     <div className="text-center md:text-left">
                       <h2 className="text-2xl font-semibold text-white mb-2">
                         {formatAddress(address)}
                       </h2>
-                      <p className="text-gray-400 font-mono text-sm break-all">
+                      <p className="text-gray-400 font-mono text-sm break-all mb-2">
                         {address}
                       </p>
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <button
+                          onClick={() => navigator.clipboard.writeText(address)}
+                          className="hover:text-white transition-colors"
+                          title="Copy address"
+                        >
+                          Copy
+                        </button>
+                        <span>•</span>
+                        <a
+                          href={`https://explorer.sui.io/address/${address}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-white transition-colors"
+                        >
+                          Explorer
+                        </a>
+                      </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-cyan-400 mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
+                      <div className="text-3xl font-bold text-white mb-2">
                         #{traderData.rank}
                       </div>
-                      <div className="text-gray-400 text-sm">Rank</div>
+                      <div className="text-gray-400 text-sm">Global Rank</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-green-400 mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
+                      <div className="text-3xl font-bold text-white mb-2">
                         {traderData.points.toLocaleString()}
                       </div>
-                      <div className="text-gray-400 text-sm">Points</div>
+                      <div className="text-gray-400 text-sm">Total Points</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-yellow-400 mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
+                      <div className="text-3xl font-bold text-white mb-2">
                         {formatVolume(traderData.volume_usd)}
                       </div>
-                      <div className="text-gray-400 text-sm">Volume</div>
+                      <div className="text-gray-400 text-sm">Volume Traded</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-purple-400 mb-2">
-                        {traderData.transactions}
+                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
+                      <div className="text-3xl font-bold text-white mb-2">
+                        {traderData.transactions.toLocaleString()}
                       </div>
                       <div className="text-gray-400 text-sm">Transactions</div>
                     </div>
@@ -292,64 +382,85 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 </div>
 
                 {/* Point Breakdown */}
-                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
                   <h3 className="text-2xl font-semibold text-white mb-6">
                     Point Breakdown
+                    <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
+                      {timeframe === "all"
+                        ? "All Time"
+                        : timeframe.toUpperCase()}
+                    </span>
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
-                      <span className="text-gray-300 text-lg">From Volume</span>
-                      <span className="text-blue-400 font-semibold text-lg">
-                        {traderData.point_breakdown.from_volume}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
                       <span className="text-gray-300 text-lg">
-                        From Transactions
+                        Volume Points
                       </span>
-                      <span className="text-green-400 font-semibold text-lg">
-                        {traderData.point_breakdown.from_transactions}
+                      <span className="text-white font-semibold text-lg">
+                        {traderData.point_breakdown.from_volume.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-700">
+                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
                       <span className="text-gray-300 text-lg">
-                        From Unique Tokens
+                        Transaction Points
                       </span>
-                      <span className="text-purple-400 font-semibold text-lg">
-                        {traderData.point_breakdown.from_unique_tokens}
+                      <span className="text-white font-semibold text-lg">
+                        {traderData.point_breakdown.from_transactions.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-4 bg-gray-800/30 rounded-lg px-4">
+                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
+                      <span className="text-gray-300 text-lg">
+                        Diversity Points
+                      </span>
+                      <span className="text-white font-semibold text-lg">
+                        {traderData.point_breakdown.from_unique_tokens.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-4 bg-gray-800/20 rounded-lg px-4">
                       <span className="text-white font-semibold text-xl">
-                        Total
+                        Total Points
                       </span>
-                      <span className="text-cyan-400 font-bold text-2xl">
-                        {traderData.point_breakdown.total}
+                      <span className="text-white font-bold text-2xl">
+                        {traderData.point_breakdown.total.toLocaleString()}
                       </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-black/40 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
                   <h3 className="text-2xl font-semibold text-white mb-6">
                     Recent Activity
+                    {traderData.recent_activity &&
+                      traderData.recent_activity.length > 0 && (
+                        <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
+                          {traderData.recent_activity.length} transactions
+                        </span>
+                      )}
                   </h3>
                   {traderData.recent_activity &&
                   traderData.recent_activity.length > 0 ? (
                     <div className="space-y-4">
-                      {traderData.recent_activity.map((activity) => (
+                      {traderData.recent_activity.map((activity, index) => (
                         <div
                           key={activity.hash}
-                          className="bg-gray-800/50 rounded-lg p-6 hover:bg-gray-800/70 transition-colors"
+                          className="bg-gray-800/20 rounded-lg p-6 hover:bg-gray-800/30 transition-all duration-200 border-l-4 border-gray-600/30"
                         >
                           <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                             <div className="flex items-center gap-3 mb-2 md:mb-0">
-                              <span className="text-cyan-400 font-mono text-sm bg-gray-700 px-2 py-1 rounded">
-                                {activity.hash.slice(0, 8)}...
+                              <span className="text-gray-400 font-mono text-sm bg-gray-700/30 px-3 py-1 rounded-full">
+                                #{index + 1}
                               </span>
+                              <a
+                                href={`https://explorer.sui.io/txblock/${activity.hash}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white hover:text-gray-300 font-mono text-sm bg-gray-700/30 px-3 py-1 rounded-full transition-colors"
+                              >
+                                {activity.hash.slice(0, 8)}...
+                              </a>
                               <span className="text-gray-400 text-sm">
-                                Block {activity.block_number}
+                                Block {activity.block_number.toLocaleString()}
                               </span>
                             </div>
                             <span className="text-gray-400 text-sm">
@@ -358,44 +469,59 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                           </div>
 
                           <div className="flex items-center gap-3 mb-4">
-                            <span className="text-white font-semibold text-lg">
+                            <span className="text-white font-semibold text-lg bg-gray-700/30 px-3 py-1 rounded">
                               {activity.dex_name}
                             </span>
                             <span className="text-gray-400">•</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
+                              <span className="text-gray-300 bg-gray-700/30 px-3 py-1 rounded text-sm font-medium">
                                 {activity.token_in_symbol}
                               </span>
-                              <span className="text-gray-400">→</span>
-                              <span className="text-gray-300 bg-gray-700 px-2 py-1 rounded text-sm">
+                              <span className="text-gray-400 text-lg">→</span>
+                              <span className="text-gray-300 bg-gray-700/30 px-3 py-1 rounded text-sm font-medium">
                                 {activity.token_out_symbol}
                               </span>
                             </div>
                           </div>
 
-                          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                            <div className="text-gray-400 text-sm">
-                              Volume:{" "}
-                              <span className="text-green-400 font-semibold">
-                                {formatVolume(activity.volume_usd)}
-                              </span>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="bg-gray-700/20 rounded-lg p-3">
+                              <div className="text-gray-400 text-xs mb-1">
+                                Amount In
+                              </div>
+                              <div className="text-white font-semibold">
+                                {formatAmount(activity.amount_in)}{" "}
+                                {activity.token_in_symbol}
+                              </div>
                             </div>
-                            <a
-                              href={`https://explorer.sui.io/txblock/${activity.hash}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors"
-                            >
-                              View on Sui Explorer →
-                            </a>
+                            <div className="bg-gray-700/20 rounded-lg p-3">
+                              <div className="text-gray-400 text-xs mb-1">
+                                Amount Out
+                              </div>
+                              <div className="text-white font-semibold">
+                                {formatAmount(activity.amount_out)}{" "}
+                                {activity.token_out_symbol}
+                              </div>
+                            </div>
+                            <div className="bg-gray-700/20 rounded-lg p-3">
+                              <div className="text-gray-400 text-xs mb-1">
+                                USD Volume
+                              </div>
+                              <div className="text-white font-semibold">
+                                {formatVolume(activity.volume_usd)}
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <p className="text-gray-400 text-lg">
+                      <p className="text-gray-400 text-lg mb-2">
                         No recent activity found
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        This trader might be inactive in the selected timeframe
                       </p>
                     </div>
                   )}
@@ -405,9 +531,9 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 <div className="text-center">
                   <a
                     href="/leaderboard"
-                    className="inline-flex items-center gap-2 px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors font-medium"
+                    className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black rounded-lg transition-colors font-medium hover:bg-gray-100"
                   >
-                    ← Back to Leaderboard
+                    Back to Leaderboard
                   </a>
                 </div>
               </>
