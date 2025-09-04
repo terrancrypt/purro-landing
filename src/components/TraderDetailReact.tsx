@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { truncateAddress } from "../lib/utils";
 
 interface PointBreakdown {
   from_volume: number;
@@ -19,8 +20,12 @@ interface RecentActivity {
   token_out_symbol: string;
   amount_in: string;
   amount_out: string;
+  amount_in_decimal: number;
+  amount_out_decimal: number;
+  token_in_price_usd: number;
+  token_out_price_usd: number;
   volume_usd: number;
-  timestamp: string;
+  timestamp: number;
 }
 
 interface TraderData {
@@ -32,6 +37,8 @@ interface TraderData {
   tokens: number;
   point_breakdown: PointBreakdown;
   recent_activity: RecentActivity[];
+  start_time: number;
+  end_time: number;
 }
 
 interface TraderResponse {
@@ -111,8 +118,8 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     }
   };
 
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatTimeAgo = (timestamp: number) => {
+    const date = new Date(timestamp * 1000); // Convert Unix timestamp to milliseconds
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -342,7 +349,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                         </button>
                         <span>•</span>
                         <a
-                          href={`https://explorer.sui.io/address/${address}`}
+                          href={`https://hyperevmscan.io/address/${address}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="hover:text-white transition-colors"
@@ -382,15 +389,13 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 </div>
 
                 {/* Point Breakdown */}
+                <h3 className="text-2xl font-semibold text-white mb-6">
+                  Point Breakdown
+                  <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
+                    {timeframe === "all" ? "All Time" : timeframe.toUpperCase()}
+                  </span>
+                </h3>
                 <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
-                  <h3 className="text-2xl font-semibold text-white mb-6">
-                    Point Breakdown
-                    <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
-                      {timeframe === "all"
-                        ? "All Time"
-                        : timeframe.toUpperCase()}
-                    </span>
-                  </h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
                       <span className="text-gray-300 text-lg">
@@ -428,7 +433,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
+                <div className="">
                   <h3 className="text-2xl font-semibold text-white mb-6">
                     Recent Activity
                     {traderData.recent_activity &&
@@ -444,7 +449,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                       {traderData.recent_activity.map((activity, index) => (
                         <div
                           key={activity.hash}
-                          className="bg-gray-800/20 rounded-lg p-6 hover:bg-gray-800/30 transition-all duration-200 border-l-4 border-gray-600/30"
+                          className="bg-gray-800/20 rounded-lg p-6 hover:bg-gray-800/30 transition-all duration-200"
                         >
                           <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
                             <div className="flex items-center gap-3 mb-2 md:mb-0">
@@ -452,12 +457,12 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                                 #{index + 1}
                               </span>
                               <a
-                                href={`https://explorer.sui.io/txblock/${activity.hash}`}
+                                href={`https://hyperevmscan.io/tx/${activity.hash}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-white hover:text-gray-300 font-mono text-sm bg-gray-700/30 px-3 py-1 rounded-full transition-colors"
                               >
-                                {activity.hash.slice(0, 8)}...
+                                {truncateAddress(activity.hash, { length: 8 })}
                               </a>
                               <span className="text-gray-400 text-sm">
                                 Block {activity.block_number.toLocaleString()}
@@ -469,10 +474,6 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                           </div>
 
                           <div className="flex items-center gap-3 mb-4">
-                            <span className="text-white font-semibold text-lg bg-gray-700/30 px-3 py-1 rounded">
-                              {activity.dex_name}
-                            </span>
-                            <span className="text-gray-400">•</span>
                             <div className="flex items-center gap-2">
                               <span className="text-gray-300 bg-gray-700/30 px-3 py-1 rounded text-sm font-medium">
                                 {activity.token_in_symbol}
@@ -484,14 +485,17 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div className="bg-gray-700/20 rounded-lg p-3">
                               <div className="text-gray-400 text-xs mb-1">
                                 Amount In
                               </div>
                               <div className="text-white font-semibold">
-                                {formatAmount(activity.amount_in)}{" "}
+                                {activity.amount_in_decimal.toFixed(6)}{" "}
                                 {activity.token_in_symbol}
+                              </div>
+                              <div className="text-gray-400 text-xs">
+                                ${activity.token_in_price_usd.toFixed(4)}
                               </div>
                             </div>
                             <div className="bg-gray-700/20 rounded-lg p-3">
@@ -499,8 +503,11 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                                 Amount Out
                               </div>
                               <div className="text-white font-semibold">
-                                {formatAmount(activity.amount_out)}{" "}
+                                {activity.amount_out_decimal.toFixed(6)}{" "}
                                 {activity.token_out_symbol}
+                              </div>
+                              <div className="text-gray-400 text-xs">
+                                ${activity.token_out_price_usd.toFixed(4)}
                               </div>
                             </div>
                             <div className="bg-gray-700/20 rounded-lg p-3">
@@ -509,6 +516,19 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                               </div>
                               <div className="text-white font-semibold">
                                 {formatVolume(activity.volume_usd)}
+                              </div>
+                            </div>
+                            <div className="bg-gray-700/20 rounded-lg p-3">
+                              <div className="text-gray-400 text-xs mb-1">
+                                Exchange Rate
+                              </div>
+                              <div className="text-white font-semibold text-sm">
+                                1 {activity.token_in_symbol} ={" "}
+                                {(
+                                  activity.amount_out_decimal /
+                                  activity.amount_in_decimal
+                                ).toFixed(6)}{" "}
+                                {activity.token_out_symbol}
                               </div>
                             </div>
                           </div>
