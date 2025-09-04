@@ -370,5 +370,39 @@ import ToasterWrapper from "../components/ToasterWrapper";
     .delay-600 {
       transition-delay: 0.6s;
     }
+
+    /* Fixed header adjustments for homepage only */
+    body:has(.fixed) {
+      padding-top: 0;
+    }
+
+    /* Ensure content doesn't get hidden behind fixed header */
+    .fixed + * {
+      margin-top: 0;
+    }
+
+    /* Smooth transitions for fixed header */
+    .fixed {
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Mobile-specific fixed header adjustments */
+    @media (max-width: 768px) {
+      .fixed {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 1rem);
+        max-width: calc(100vw - 1rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .fixed {
+        width: calc(100% - 0.5rem);
+        max-width: calc(100vw - 0.5rem);
+      }
+    }
   </style>
 </html>

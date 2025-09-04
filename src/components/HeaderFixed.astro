@@ -29,10 +29,10 @@ const socials = [
 ---
 
 <header
-  class="absolute top-0 left-1/2 max-w-6xl transform -translate-x-1/2 w-full container mx-auto mt-6 px-2 z-50 header-animate"
+  class="fixed top-0 left-1/2 max-w-6xl transform -translate-x-1/2 w-full container mx-auto mt-6 px-2 z-50 header-animate"
 >
   <div
-    class="p-3 flex justify-between items-center bg-[#b1cac4]/30 rounded-full"
+    class="p-3 flex justify-between items-center bg-[#b1cac4]/30 rounded-full backdrop-blur-sm"
   >
     <a href="/">
       <img src="/Purro_Icon_Dark.png" alt="logo" class="h-10 rounded-full" />
@@ -59,3 +59,42 @@ const socials = [
     </div>
   </div>
 </header>
+
+<style>
+  /* Fixed header specific styles */
+  .fixed {
+    position: fixed;
+  }
+
+  /* Backdrop blur for better visibility */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Ensure header stays on top */
+  .z-50 {
+    z-index: 50;
+  }
+
+  /* Mobile adjustments for fixed header */
+  @media (max-width: 768px) {
+    header {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .container {
+      max-width: 100%;
+    }
+  }
+
+  /* Very small screens */
+  @media (max-width: 480px) {
+    header {
+      margin-top: 0.5rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  }
+</style>
