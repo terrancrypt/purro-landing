@@ -252,44 +252,62 @@ const LeaderboardReact: React.FC = () => {
     <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
       <div className="container max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="scroll-animate">
-            <h1 className="text-4xl md:text-6xl text-white font-semibold mb-4 font-figtree">
-              Leaderboard
-            </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-6 font-figtree">
-              Top traders and users on Purro
-            </p>
-            {leaderboardData && (
-              <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      leaderboardData.sync_info.sync_in_progress
-                        ? "bg-yellow-500 animate-pulse"
-                        : "bg-green-500"
-                    }`}
-                  ></div>
-                  <span>
-                    Last sync:{" "}
-                    {formatTimeAgo(leaderboardData.sync_info.last_sync_time)}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span>
-                    Block:{" "}
-                    {leaderboardData.sync_info.current_block.toLocaleString()}
-                  </span>
-                </div>
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-5xl text-white font-bold mb-3">
+            Leaderboard
+          </h1>
+          <p className="text-base md:text-lg text-gray-300 mb-4">
+            Top traders and users on Purro
+          </p>
+          {leaderboardData && (
+            <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-400">
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    leaderboardData.sync_info.sync_in_progress
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+                  }`}
+                ></div>
+                <span>
+                  Last sync:{" "}
+                  {formatTimeAgo(leaderboardData.sync_info.last_sync_time)}
+                </span>
               </div>
-            )}
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>
+                  Block:{" "}
+                  {leaderboardData.sync_info.current_block.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Point System Description */}
+        <div className="mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-4">
+            <div className="flex flex-wrap justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-[#02f1dc] font-medium">0.1 pts</span>
+                <span className="text-gray-400">per $1 volume</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#02f1dc] font-medium">100 pts</span>
+                <span className="text-gray-400">per transaction</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#02f1dc] font-medium">25 pts</span>
+                <span className="text-gray-400">per unique token</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Simple Controls */}
-        <div className="scroll-animate delay-100 mb-8">
-          <div className="bg-black/10 border border-gray-700/30 rounded-xl p-6">
+        <div className="mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-5">
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               {/* Timeframe Filter */}
               <div className="flex flex-wrap gap-2">
@@ -298,7 +316,7 @@ const LeaderboardReact: React.FC = () => {
                     <button
                       key={option}
                       onClick={() => handleTimeframeChange(option)}
-                      className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                      className={`px-3 py-2 rounded-md transition-colors text-sm font-medium ${
                         timeframe === option
                           ? "bg-white text-black"
                           : "bg-gray-700/30 text-gray-300 hover:bg-gray-600/30"
@@ -317,11 +335,11 @@ const LeaderboardReact: React.FC = () => {
                   placeholder="Search address..."
                   value={searchAddress}
                   onChange={(e) => setSearchAddress(e.target.value)}
-                  className="px-4 py-2 bg-gray-800/50 border border-gray-600/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-white/50"
+                  className="px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-white/50"
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-white text-black rounded-lg transition-colors hover:bg-gray-100"
+                  className="px-3 py-2 bg-white text-black rounded-md transition-colors hover:bg-gray-100 text-sm font-medium"
                 >
                   Search
                 </button>
@@ -331,28 +349,28 @@ const LeaderboardReact: React.FC = () => {
         </div>
 
         {/* Leaderboard Table */}
-        <div className="scroll-animate delay-200">
-          <div className="bg-black/10 backdrop-blur-sm border border-gray-700/30 rounded-xl overflow-hidden">
+        <div>
+          <div className="bg-black/10 backdrop-blur-sm border border-gray-700/30 rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-800/20">
                   <tr>
-                    <th className="px-6 py-4 text-left text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-left text-gray-300 text-sm font-medium">
                       Rank
                     </th>
-                    <th className="px-6 py-4 text-left text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-left text-gray-300 text-sm font-medium">
                       Address
                     </th>
-                    <th className="px-6 py-4 text-right text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
                       Points
                     </th>
-                    <th className="px-6 py-4 text-right text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
                       Volume
                     </th>
-                    <th className="px-6 py-4 text-right text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
                       Txs
                     </th>
-                    <th className="px-6 py-4 text-right text-gray-300 font-medium">
+                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
                       Tokens
                     </th>
                   </tr>
@@ -368,52 +386,54 @@ const LeaderboardReact: React.FC = () => {
                           key={user.address}
                           className="border-t border-gray-700/20 hover:bg-gray-800/10 transition-colors"
                         >
-                          <td className="px-6 py-4">
+                          <td className="px-4 py-3">
                             <div
-                              className={`w-8 h-8 ${getRankStyle(
+                              className={`w-7 h-7 ${getRankStyle(
                                 user.rank
-                              )} rounded-full flex items-center justify-center font-semibold text-sm`}
+                              )} rounded-full flex items-center justify-center font-medium text-xs`}
                             >
                               {user.rank}
                             </div>
                           </td>
-                          <td className="px-4 py-4">
+                          <td className="px-4 py-3">
                             <a
                               href={`/leaderboard/${user.address}`}
-                              className="flex items-center gap-3 hover:bg-gray-800/20 p-2 rounded-lg transition-colors w-full text-left group"
+                              className="flex items-center gap-2 hover:bg-gray-800/20 p-2 rounded-md transition-colors w-full text-left group"
                             >
                               <div>
                                 <div className="text-white font-mono text-sm group-hover:text-gray-200 transition-colors">
                                   {getDisplayName(user.address)}
                                   {hlNames.has(user.address.toLowerCase()) && (
-                                    <span className="ml-2 text-xs text-[#02f1dc] bg-[#02f1dc]/10 px-2 py-1 rounded">
+                                    <span className="ml-2 text-xs text-[#02f1dc] bg-[#02f1dc]/10 px-1.5 py-0.5 rounded">
                                       HL
                                     </span>
                                   )}
                                 </div>
                                 <div className="text-gray-400 text-xs">
-                                  Click to view details
+                                  View details
                                 </div>
                               </div>
                             </a>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-white font-semibold">
+                          <td className="px-4 py-3 text-right">
+                            <span className="text-white font-medium text-sm">
                               {user.points.toLocaleString()}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-gray-300">
+                          <td className="px-4 py-3 text-right">
+                            <span className="text-gray-300 text-sm">
                               {formatVolume(user.volume_usd)}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-gray-300">
+                          <td className="px-4 py-3 text-right">
+                            <span className="text-gray-300 text-sm">
                               {user.transactions.toLocaleString()}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-gray-300">{user.tokens}</span>
+                          <td className="px-4 py-3 text-right">
+                            <span className="text-gray-300 text-sm">
+                              {user.tokens}
+                            </span>
                           </td>
                         </tr>
                       ))
@@ -426,29 +446,29 @@ const LeaderboardReact: React.FC = () => {
 
         {/* Simple Pagination */}
         {!loading && leaderboardData?.pagination && (
-          <div className="mt-6 flex justify-center">
+          <div className="mt-5 flex justify-center">
             <div className="flex gap-2 items-center">
               <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="px-3 py-2 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-lg transition-colors text-sm"
+                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
                 First
               </button>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!leaderboardData.pagination.has_prev}
-                className="px-4 py-2 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
                 Previous
               </button>
-              <span className="px-4 py-2 bg-white text-black rounded-lg font-medium">
+              <span className="px-3 py-1.5 bg-white text-black rounded-md font-medium text-xs">
                 {currentPage}
               </span>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={!leaderboardData.pagination.has_next}
-                className="px-4 py-2 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
                 Next
               </button>
@@ -459,7 +479,7 @@ const LeaderboardReact: React.FC = () => {
                 disabled={
                   currentPage === leaderboardData.pagination.total_pages
                 }
-                className="px-3 py-2 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-lg transition-colors text-sm"
+                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
                 Last
               </button>

@@ -251,20 +251,18 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
         </div>
 
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="scroll-animate">
-            <h1 className="text-4xl md:text-6xl text-white font-semibold mb-4 font-figtree">
-              Trader Profile
-            </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-6 font-figtree">
-              Performance analytics for {formatAddress(address)}
-            </p>
-          </div>
+        <div className="text-center mb-10">
+          <h1 className="text-3xl md:text-5xl text-white font-bold mb-3">
+            Trader Profile
+          </h1>
+          <p className="text-base md:text-lg text-gray-300 mb-4">
+            Performance analytics for {formatAddress(address)}
+          </p>
         </div>
 
         {/* Timeframe Filter */}
-        <div className="scroll-animate delay-100 mb-8">
-          <div className="bg-black/10 border border-gray-700/30 rounded-xl p-6">
+        <div className="mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-5">
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               <div className="flex flex-wrap gap-2 items-center">
                 {(["1d", "7d", "30d", "all"] as TimeframeOption[]).map(
@@ -272,7 +270,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                     <button
                       key={option}
                       onClick={() => handleTimeframeChange(option)}
-                      className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                      className={`px-3 py-2 rounded-md transition-colors text-sm font-medium ${
                         timeframe === option
                           ? "bg-white text-black"
                           : "bg-gray-700/30 text-gray-300 hover:bg-gray-600/30"
@@ -288,7 +286,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 <button
                   onClick={() => fetchTraderData(timeframe)}
                   disabled={loading}
-                  className="px-4 py-2 bg-gray-700/30 hover:bg-gray-600/30 text-gray-300 rounded-lg transition-colors disabled:opacity-50"
+                  className="px-3 py-2 bg-gray-700/30 hover:bg-gray-600/30 text-gray-300 rounded-md transition-colors disabled:opacity-50 text-sm font-medium"
                 >
                   {loading ? "Loading..." : "Refresh"}
                 </button>
@@ -298,8 +296,8 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
         </div>
 
         {/* Content */}
-        <div className="scroll-animate delay-200">
-          <div className="space-y-8">
+        <div>
+          <div className="space-y-6">
             {loading ? (
               <>
                 <SkeletonCard />
@@ -316,30 +314,30 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
             ) : traderData ? (
               <>
                 {/* Trader Overview */}
-                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
-                  <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+                <div className="bg-black/10 border border-gray-700/30 rounded-lg p-6">
+                  <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
                     <div className="relative">
-                      <div className="w-24 h-24 bg-gray-600 rounded-full flex items-center justify-center">
-                        <span className="text-white text-2xl font-bold">
+                      <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xl font-bold">
                           {address.slice(2, 4).toUpperCase()}
                         </span>
                       </div>
                       <div
-                        className={`absolute -top-2 -right-2 w-8 h-8 ${getRankStyle(
+                        className={`absolute -top-1 -right-1 w-6 h-6 ${getRankStyle(
                           traderData.rank
-                        )} rounded-full flex items-center justify-center text-sm font-semibold`}
+                        )} rounded-full flex items-center justify-center text-xs font-medium`}
                       >
                         #{traderData.rank}
                       </div>
                     </div>
                     <div className="text-center md:text-left">
-                      <h2 className="text-2xl font-semibold text-white mb-2">
+                      <h2 className="text-xl font-semibold text-white mb-1">
                         {formatAddress(address)}
                       </h2>
-                      <p className="text-gray-400 font-mono text-sm break-all mb-2">
+                      <p className="text-gray-400 font-mono text-xs break-all mb-2">
                         {address}
                       </p>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
                         <button
                           onClick={() => navigator.clipboard.writeText(address)}
                           className="hover:text-white transition-colors"
@@ -360,72 +358,72 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
-                      <div className="text-3xl font-bold text-white mb-2">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-white mb-1">
                         #{traderData.rank}
                       </div>
-                      <div className="text-gray-400 text-sm">Global Rank</div>
+                      <div className="text-gray-400 text-xs">Global Rank</div>
                     </div>
-                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
-                      <div className="text-3xl font-bold text-white mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-white mb-1">
                         {traderData.points.toLocaleString()}
                       </div>
-                      <div className="text-gray-400 text-sm">Total Points</div>
+                      <div className="text-gray-400 text-xs">Total Points</div>
                     </div>
-                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
-                      <div className="text-3xl font-bold text-white mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-white mb-1">
                         {formatVolume(traderData.volume_usd)}
                       </div>
-                      <div className="text-gray-400 text-sm">Volume Traded</div>
+                      <div className="text-gray-400 text-xs">Volume Traded</div>
                     </div>
-                    <div className="text-center bg-gray-800/20 rounded-lg p-4">
-                      <div className="text-3xl font-bold text-white mb-2">
+                    <div className="text-center bg-gray-800/20 rounded-lg p-3">
+                      <div className="text-2xl font-bold text-white mb-1">
                         {traderData.transactions.toLocaleString()}
                       </div>
-                      <div className="text-gray-400 text-sm">Transactions</div>
+                      <div className="text-gray-400 text-xs">Transactions</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Point Breakdown */}
-                <h3 className="text-2xl font-semibold text-white mb-6">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   Point Breakdown
-                  <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
+                  <span className="text-xs bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
                     {timeframe === "all" ? "All Time" : timeframe.toUpperCase()}
                   </span>
                 </h3>
-                <div className="bg-black/10 border border-gray-700/30 rounded-xl p-8">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
-                      <span className="text-gray-300 text-lg">
+                <div className="bg-black/10 border border-gray-700/30 rounded-lg p-6">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700/30">
+                      <span className="text-gray-300 text-sm">
                         Volume Points
                       </span>
-                      <span className="text-white font-semibold text-lg">
+                      <span className="text-white font-medium text-sm">
                         {traderData.point_breakdown.from_volume.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
-                      <span className="text-gray-300 text-lg">
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700/30">
+                      <span className="text-gray-300 text-sm">
                         Transaction Points
                       </span>
-                      <span className="text-white font-semibold text-lg">
+                      <span className="text-white font-medium text-sm">
                         {traderData.point_breakdown.from_transactions.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-4 border-b border-gray-700/30">
-                      <span className="text-gray-300 text-lg">
+                    <div className="flex justify-between items-center py-3 border-b border-gray-700/30">
+                      <span className="text-gray-300 text-sm">
                         Diversity Points
                       </span>
-                      <span className="text-white font-semibold text-lg">
+                      <span className="text-white font-medium text-sm">
                         {traderData.point_breakdown.from_unique_tokens.toLocaleString()}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center py-4 bg-gray-800/20 rounded-lg px-4">
-                      <span className="text-white font-semibold text-xl">
+                    <div className="flex justify-between items-center py-3 bg-gray-800/20 rounded-lg px-3">
+                      <span className="text-white font-semibold text-base">
                         Total Points
                       </span>
-                      <span className="text-white font-bold text-2xl">
+                      <span className="text-white font-bold text-lg">
                         {traderData.point_breakdown.total.toLocaleString()}
                       </span>
                     </div>
@@ -433,64 +431,64 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 </div>
 
                 {/* Recent Activity */}
-                <div className="">
-                  <h3 className="text-2xl font-semibold text-white mb-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-4">
                     Recent Activity
                     {traderData.recent_activity &&
                       traderData.recent_activity.length > 0 && (
-                        <span className="text-sm bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
+                        <span className="text-xs bg-gray-700/30 text-gray-300 px-2 py-1 rounded ml-2">
                           {traderData.recent_activity.length} transactions
                         </span>
                       )}
                   </h3>
                   {traderData.recent_activity &&
                   traderData.recent_activity.length > 0 ? (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {traderData.recent_activity.map((activity, index) => (
                         <div
                           key={activity.hash}
-                          className="bg-gray-800/20 rounded-lg p-6 hover:bg-gray-800/30 transition-all duration-200"
+                          className="bg-gray-800/20 rounded-lg p-4 hover:bg-gray-800/30 transition-all duration-200"
                         >
-                          <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                            <div className="flex items-center gap-3 mb-2 md:mb-0">
-                              <span className="text-gray-400 font-mono text-sm bg-gray-700/30 px-3 py-1 rounded-full">
+                          <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
+                            <div className="flex items-center gap-2 mb-2 md:mb-0">
+                              <span className="text-gray-400 font-mono text-xs bg-gray-700/30 px-2 py-1 rounded">
                                 #{index + 1}
                               </span>
                               <a
                                 href={`https://hyperevmscan.io/tx/${activity.hash}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-white hover:text-gray-300 font-mono text-sm bg-gray-700/30 px-3 py-1 rounded-full transition-colors"
+                                className="text-white hover:text-gray-300 font-mono text-xs bg-gray-700/30 px-2 py-1 rounded transition-colors"
                               >
                                 {truncateAddress(activity.hash, { length: 8 })}
                               </a>
-                              <span className="text-gray-400 text-sm">
+                              <span className="text-gray-400 text-xs">
                                 Block {activity.block_number.toLocaleString()}
                               </span>
                             </div>
-                            <span className="text-gray-400 text-sm">
+                            <span className="text-gray-400 text-xs">
                               {formatTimeAgo(activity.timestamp)}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-3 mb-4">
+                          <div className="flex items-center gap-2 mb-3">
                             <div className="flex items-center gap-2">
-                              <span className="text-gray-300 bg-gray-700/30 px-3 py-1 rounded text-sm font-medium">
+                              <span className="text-gray-300 bg-gray-700/30 px-2 py-1 rounded text-xs font-medium">
                                 {activity.token_in_symbol}
                               </span>
-                              <span className="text-gray-400 text-lg">→</span>
-                              <span className="text-gray-300 bg-gray-700/30 px-3 py-1 rounded text-sm font-medium">
+                              <span className="text-gray-400 text-sm">→</span>
+                              <span className="text-gray-300 bg-gray-700/30 px-2 py-1 rounded text-xs font-medium">
                                 {activity.token_out_symbol}
                               </span>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <div className="bg-gray-700/20 rounded-lg p-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                            <div className="bg-gray-700/20 rounded-lg p-2">
                               <div className="text-gray-400 text-xs mb-1">
                                 Amount In
                               </div>
-                              <div className="text-white font-semibold">
+                              <div className="text-white font-medium text-sm">
                                 {activity.amount_in_decimal.toFixed(6)}{" "}
                                 {activity.token_in_symbol}
                               </div>
@@ -498,11 +496,11 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                                 ${activity.token_in_price_usd.toFixed(4)}
                               </div>
                             </div>
-                            <div className="bg-gray-700/20 rounded-lg p-3">
+                            <div className="bg-gray-700/20 rounded-lg p-2">
                               <div className="text-gray-400 text-xs mb-1">
                                 Amount Out
                               </div>
-                              <div className="text-white font-semibold">
+                              <div className="text-white font-medium text-sm">
                                 {activity.amount_out_decimal.toFixed(6)}{" "}
                                 {activity.token_out_symbol}
                               </div>
@@ -510,19 +508,19 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                                 ${activity.token_out_price_usd.toFixed(4)}
                               </div>
                             </div>
-                            <div className="bg-gray-700/20 rounded-lg p-3">
+                            <div className="bg-gray-700/20 rounded-lg p-2">
                               <div className="text-gray-400 text-xs mb-1">
                                 USD Volume
                               </div>
-                              <div className="text-white font-semibold">
+                              <div className="text-white font-medium text-sm">
                                 {formatVolume(activity.volume_usd)}
                               </div>
                             </div>
-                            <div className="bg-gray-700/20 rounded-lg p-3">
+                            <div className="bg-gray-700/20 rounded-lg p-2">
                               <div className="text-gray-400 text-xs mb-1">
                                 Exchange Rate
                               </div>
-                              <div className="text-white font-semibold text-sm">
+                              <div className="text-white font-medium text-xs">
                                 1 {activity.token_in_symbol} ={" "}
                                 {(
                                   activity.amount_out_decimal /
@@ -551,7 +549,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                 <div className="text-center">
                   <a
                     href="/leaderboard"
-                    className="inline-flex items-center gap-2 px-8 py-3 bg-white text-black rounded-lg transition-colors font-medium hover:bg-gray-100"
+                    className="inline-flex items-center gap-2 px-6 py-2 bg-white text-black rounded-md transition-colors font-medium hover:bg-gray-100 text-sm"
                   >
                     Back to Leaderboard
                   </a>
