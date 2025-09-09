@@ -20,13 +20,15 @@ import AuroraBg from "./AuroraBg";
   <div class="container mx-auto relative">
     <div class="flex flex-col items-center justify-center h-screen">
       <div class="scroll-animate text-center">
-        <img
-          src="/Purro_Logotype_White.png"
-          alt="logo"
-          class="hero-logo mx-auto"
-        />
+        <div class="hero-logo-container">
+          <img
+            src="/Purro_Logotype_White.png"
+            alt="logo"
+            class="w-4/5 max-w-xl md:w-full md:max-w-2xl mx-auto hero-logo"
+          />
+        </div>
         <p
-          class="font-figtree font-medium text-white text-xl sm:text-3xl md:text-5xl leading-tight md:leading-tight"
+          class="font-figtree font-medium text-white text-xl sm:text-3xl md:text-5xl leading-tight md:leading-tight hero-tagline"
         >
           Built to chill&nbsp;&mdash;&nbsp;Ready to win
         </p>
@@ -54,3 +56,67 @@ import AuroraBg from "./AuroraBg";
     </div>
   </div>
 </div>
+
+<style>
+  .hero-logo-container {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    animation: heroLogoEnter 1.2s ease-out 0.3s forwards;
+  }
+
+  .hero-tagline {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: heroTaglineEnter 1s ease-out 0.8s forwards;
+  }
+
+  @keyframes heroLogoEnter {
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes heroTaglineEnter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Prevent flash of large logo on initial load */
+  .hero-logo {
+    max-height: 0;
+    overflow: hidden;
+    animation: logoReveal 0.6s ease-out 0.5s forwards;
+  }
+
+  @keyframes logoReveal {
+    to {
+      max-height: 200px; /* Adjust based on your logo size */
+    }
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .hero-logo-container {
+      animation-duration: 1s;
+      animation-delay: 0.2s;
+    }
+
+    .hero-tagline {
+      animation-duration: 0.8s;
+      animation-delay: 0.6s;
+    }
+
+    .hero-logo {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes logoReveal {
+      to {
+        max-height: 150px; /* Smaller on mobile */
+      }
+    }
+  }
+</style>

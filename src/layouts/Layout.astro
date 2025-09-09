@@ -48,6 +48,7 @@ import ToasterWrapper from "../components/ToasterWrapper";
       content="Purro, Web3 wallet, Hyperliquid, HyperEVM, crypto trading, DeFi, blockchain wallet, crypto companion, smart trading"
     />
     <meta name="author" content="Purro Team" />
+    <meta name="theme-color" content="#081919" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,14 +60,67 @@ import ToasterWrapper from "../components/ToasterWrapper";
     /></head
   >
 
-  <body class="font-figtree">
-    <slot />
+  <body class="font-figtree bg-[#081919]">
+    <!-- Loading overlay -->
+    <div
+      id="loading-overlay"
+      class="fixed inset-0 bg-[#081919] z-[100] flex items-center justify-center transition-opacity duration-500"
+    >
+      <div class="flex flex-col items-center">
+        <img
+          src="/Purro_Icon_Dark.png"
+          alt="Loading..."
+          class="w-16 h-16 animate-pulse rounded-full"
+        />
+        <div class="mt-4 w-8 h-1 bg-white/30 rounded-full overflow-hidden">
+          <div class="h-full bg-white rounded-full animate-loading-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="main-content"
+      class="opacity-0 transition-opacity duration-500 bg-[#081919]"
+    >
+      <slot />
+    </div>
     <ToasterWrapper client:load />
 
     <script is:inline>
+      // Handle loading state
+      function hideLoadingOverlay() {
+        const loadingOverlay = document.getElementById("loading-overlay");
+        const mainContent = document.getElementById("main-content");
+
+        if (loadingOverlay && mainContent) {
+          // Fade out loading overlay
+          loadingOverlay.style.opacity = "0";
+
+          // Show main content
+          setTimeout(() => {
+            mainContent.style.opacity = "1";
+            loadingOverlay.style.display = "none";
+          }, 300);
+        }
+      }
+
       // Wait for DOM to be ready
       document.addEventListener("DOMContentLoaded", function () {
         console.log("DOM loaded, initializing scroll animations...");
+
+        // Check if page is already loaded
+        if (document.readyState === "complete") {
+          // If already loaded, hide immediately
+          setTimeout(hideLoadingOverlay, 300);
+        } else {
+          // Wait for page to fully load including images
+          window.addEventListener("load", () => {
+            setTimeout(hideLoadingOverlay, 500);
+          });
+
+          // Fallback timeout to prevent infinite loading
+          setTimeout(hideLoadingOverlay, 2000);
+        }
 
         // Check for reduced motion preference
         const prefersReducedMotion = window.matchMedia(
@@ -93,14 +147,14 @@ import ToasterWrapper from "../components/ToasterWrapper";
 
         // Intersection Observer for scroll animations
         const observerOptions = {
-          threshold: 0.1,
-          rootMargin: "50px 0px 0px 0px", // Start animation earlier
+          threshold: 0.05,
+          rootMargin: "0px 0px -20px 0px",
         };
 
         // Mobile-specific observer options
         if (window.innerWidth <= 768) {
-          observerOptions.threshold = 0.05;
-          observerOptions.rootMargin = "30px 0px 0px 0px";
+          observerOptions.threshold = 0.02;
+          observerOptions.rootMargin = "0px 0px -10px 0px";
         }
 
         const observer = new IntersectionObserver((entries) => {
@@ -133,15 +187,6 @@ import ToasterWrapper from "../components/ToasterWrapper";
         console.log("Found animated elements:", animatedElements.length);
 
         animatedElements.forEach((el) => {
-          // Check if element is already in viewport (like hero section)
-          const rect = el.getBoundingClientRect();
-          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-
-          if (isInViewport) {
-            // Immediately animate elements that are already visible
-            setTimeout(() => el.classList.add("animate-in"), 100);
-          }
-
           observer.observe(el);
         });
       });
@@ -156,6 +201,7 @@ import ToasterWrapper from "../components/ToasterWrapper";
       height: 100%;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      background-color: #081919;
     }
 
     /* Scroll Snap Sections */
@@ -211,6 +257,27 @@ import ToasterWrapper from "../components/ToasterWrapper";
       }
     }
 
+    /* Header specific animations */
+    .header-animate {
+      opacity: 0;
+      transform: translateY(-20px);
+      transition:
+        opacity 0.8s ease-out,
+        transform 0.8s ease-out;
+      animation: headerSlideIn 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes headerSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Scroll Animation Styles */
     .scroll-animate {
       opacity: 0;
@@ -218,36 +285,11 @@ import ToasterWrapper from "../components/ToasterWrapper";
       transition:
         opacity 0.8s ease-out,
         transform 0.8s ease-out;
-      /* Prevent layout shift by maintaining space */
-      will-change: transform, opacity;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
     }
 
     .scroll-animate.animate-in {
       opacity: 1;
       transform: translateY(0);
-    }
-
-    /* Hero logo specific styles to prevent oversized display */
-    .hero-logo {
-      max-width: 400px !important;
-      height: auto !important;
-      max-height: 120px !important;
-    }
-
-    @media (max-width: 768px) {
-      .hero-logo {
-        max-width: 300px !important;
-        max-height: 90px !important;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-logo {
-        max-width: 250px !important;
-        max-height: 75px !important;
-      }
     }
 
     .scroll-animate-left {
@@ -416,6 +458,26 @@ import ToasterWrapper from "../components/ToasterWrapper";
         width: calc(100% - 0.5rem);
         max-width: calc(100vw - 0.5rem);
       }
+    }
+
+    /* Loading animation */
+    @keyframes loading-bar {
+      0% {
+        width: 0%;
+        transform: translateX(-100%);
+      }
+      50% {
+        width: 100%;
+        transform: translateX(0%);
+      }
+      100% {
+        width: 100%;
+        transform: translateX(100%);
+      }
+    }
+
+    .animate-loading-bar {
+      animation: loading-bar 1.5s ease-in-out infinite;
     }
   </style>
 </html>
