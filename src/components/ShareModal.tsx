@@ -1,57 +1,66 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import { toPng } from "html-to-image";
+import type { ShareModalProps } from "../types/template";
+import { templates, getTemplate } from "../config/templates";
+import TemplateManager from "./TemplateManager";
+import Button from "./Button";
 
-interface ShareModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  traderData: {
-    address: string;
-    rank: number;
-    points: number;
-    volume_usd: number;
-    transactions: number;
-    tokens: number;
-  };
-  timeframe: string;
-}
+const formatAddress = (address: string) => {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
+const formatVolume = (volume: number) => {
+  if (volume >= 1000000000) {
+    return `$${(volume / 1000000000).toFixed(1)}B`;
+  } else if (volume >= 1000000) {
+    return `$${(volume / 1000000).toFixed(1)}M`;
+  } else if (volume >= 1000) {
+    return `$${(volume / 1000).toFixed(1)}K`;
+  } else {
+    return `$${volume.toFixed(2)}`;
+  }
+};
+
+const formatNumber = (num: number) => {
+  if (num >= 1000000000) {
+    return `${(num / 1000000000).toFixed(1)}B`;
+  } else if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1)}M`;
+  } else if (num >= 1000) {
+    return `${(num / 1000).toFixed(1)}K`;
+  } else {
+    return num.toLocaleString();
+  }
+};
+
+const getRankStyle = (rank: number) => {
+  if (rank <= 3) return "bg-yellow-500 text-black";
+  if (rank <= 10) return "bg-purple-600 text-white";
+  if (rank <= 50) return "bg-blue-600 text-white";
+  return "bg-gray-600 text-white";
+};
+
+const getRankEmoji = (rank: number) => {
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (rank === 3) return "🥉";
+  if (rank <= 10) return "💎";
+  if (rank <= 50) return "🚀";
+  return "⭐";
+};
+
+// Template list is now imported from config/templates.ts
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
   traderData,
   timeframe,
+  hlName,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
-
-  const formatVolume = (volume: number) => {
-    if (volume >= 1000000) {
-      return `$${(volume / 1000000).toFixed(2)}M`;
-    } else if (volume >= 1000) {
-      return `$${(volume / 1000).toFixed(2)}K`;
-    } else {
-      return `$${volume.toFixed(2)}`;
-    }
-  };
-
-  const getRankStyle = (rank: number) => {
-    if (rank <= 3) return "bg-yellow-500 text-black";
-    if (rank <= 10) return "bg-purple-600 text-white";
-    if (rank <= 50) return "bg-blue-600 text-white";
-    return "bg-gray-600 text-white";
-  };
-
-  const getRankEmoji = (rank: number) => {
-    if (rank === 1) return "🥇";
-    if (rank === 2) return "🥈";
-    if (rank === 3) return "🥉";
-    if (rank <= 10) return "💎";
-    if (rank <= 50) return "🚀";
-    return "⭐";
-  };
+  const [templateId, setTemplateId] = useState<string>("template1");
+  const [generatedTime] = useState<Date>(() => new Date());
 
   const downloadImage = useCallback(async () => {
     if (cardRef.current === null) {
@@ -59,32 +68,59 @@ const ShareModal: React.FC<ShareModalProps> = ({
     }
 
     try {
+      // Get current dimensions
+      const currentWidth = cardRef.current.offsetWidth;
+      const currentHeight = cardRef.current.offsetHeight;
+
+      // Target dimensions for consistent output (16:9 aspect ratio)
+      const targetWidth = 1600;
+      const targetHeight = 900;
+
+      // Calculate scale to maintain aspect ratio and fit target dimensions
+      const scaleX = targetWidth / currentWidth;
+      const scaleY = targetHeight / currentHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      // Calculate actual output dimensions to maintain aspect ratio
+      const outputWidth = Math.round(currentWidth * scale);
+      const outputHeight = Math.round(currentHeight * scale);
+
       const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
         pixelRatio: 2,
-        width: 800,
-        height: 600,
+        width: outputWidth,
+        height: outputHeight,
         style: {
-          transform: "scale(1)",
+          transform: `scale(${scale})`,
           transformOrigin: "top left",
+          width: `${currentWidth}px`,
+          height: `${currentHeight}px`,
         },
+        backgroundColor: "transparent",
+        quality: 1.0,
       });
 
       const link = document.createElement("a");
-      link.download = `purro-leaderboard-${formatAddress(
-        traderData.address
-      )}.png`;
+      const displayName = hlName || formatAddress(traderData.address);
+      const timestamp = generatedTime
+        .toISOString()
+        .slice(0, 16)
+        .replace(/[-:T]/g, "");
+      link.download = `purro-leaderboard-${displayName.replace(
+        /[^a-zA-Z0-9]/g,
+        "_"
+      )}-${timestamp}.png`;
       link.href = dataUrl;
       link.click();
     } catch (err) {
       console.error("Error generating image:", err);
     }
-  }, [traderData.address]);
+  }, [traderData.address, hlName, generatedTime]);
 
   const shareOnX = useCallback(() => {
     const text = `${getRankEmoji(traderData.rank)} Just hit rank #${
       traderData.rank
-    } on @PurroHQ leaderboard! 
+    } on @purro_xyz leaderboard! 
 
 📊 ${traderData.points.toLocaleString()} points
 💰 ${formatVolume(traderData.volume_usd)} volume
@@ -100,22 +136,34 @@ Ready to climb the ranks? 🐱
     window.open(url, "_blank");
   }, [traderData]);
 
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#021919] border border-gray-700/30 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4"
+      onClick={handleOverlayClick}
+    >
+      <div className="bg-[#021919] border border-gray-700/30 rounded-xl w-full max-w-2xl max-h-[95vh] sm:max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700/30">
-          <h2 className="text-xl font-bold text-white">
+        <div className="flex items-center justify-between py-2 px-4 border-b border-gray-700/30 flex-shrink-0">
+          <h2 className="text-lg sm:text-xl font-bold text-white">
             Share Your Achievement
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors p-2"
+            className="text-gray-400 hover:text-white transition-colors p-2 touch-manipulation"
           >
             <svg
-              className="w-6 h-6"
+              className="w-5 h-5 sm:w-6 sm:h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -130,106 +178,296 @@ Ready to climb the ranks? 🐱
           </button>
         </div>
 
-        {/* Preview Card */}
-        <div className="p-6">
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-white mb-2">Preview</h3>
-            <p className="text-gray-400 text-sm">
-              This is how your leaderboard card will look when shared
-            </p>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          {/* Preview Card */}
+          <div className="p-4">
+            <div className="mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-white">
+                Preview
+              </h3>
+              <p className="text-gray-400 text-xs sm:text-sm">
+                This is how your leaderboard card will look when shared
+              </p>
+            </div>
+
+            {/* Shareable Card */}
+            <div className="overflow-hidden rounded-lg border border-gray-600/20">
+              <div
+                ref={cardRef}
+                className="border border-gray-700/50 rounded-xl p-4 sm:p-6 lg:p-8 relative overflow-hidden w-full transition-all duration-300 flex justify-center items-center"
+                style={{
+                  aspectRatio: "16/9",
+                  minHeight: "200px",
+                }}
+              >
+                {/* Background Pattern */}
+                <div className="absolute inset-0">
+                  {(() => {
+                    const selectedTemplate = getTemplate(templateId);
+                    if (selectedTemplate) {
+                      return (
+                        <img
+                          src={selectedTemplate.img}
+                          alt={selectedTemplate.name}
+                          className="w-full h-full object-cover transition-all duration-500"
+                        />
+                      );
+                    }
+                    return <div className="w-full h-full bg-gray-800"></div>;
+                  })()}
+                </div>
+
+                {/* Main Content */}
+                <div className="relative z-10 text-center w-full">
+                  {/* Overlay for better text readability */}
+                  <div className="absolute inset-0 rounded-xl"></div>
+                  <div className="relative z-10">
+                    {/* Rank Badge */}
+                    <div className="flex items-center justify-center mb-2">
+                      <div className="relative">
+                        <div
+                          className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full backdrop-blur-sm border"
+                          style={{
+                            backgroundColor:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "rgba(255, 255, 255, 0.9)"
+                                : "rgba(0, 0, 0, 0.6)",
+                            borderColor:
+                              getTemplate(templateId)?.colors.primary + "40",
+                            boxShadow: `0 4px 12px ${
+                              getTemplate(templateId)?.colors.primary
+                            }20`,
+                          }}
+                        >
+                          <div
+                            className="text-sm sm:text-lg font-bold"
+                            style={{
+                              color: getTemplate(templateId)?.colors.primary,
+                            }}
+                          >
+                            #{traderData.rank}
+                          </div>
+                          <div className="text-base sm:text-xl">
+                            {getRankEmoji(traderData.rank)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Address/Name */}
+                    <div className="mb-3 sm:mb-4">
+                      <div
+                        className="text-base sm:text-xl font-bold mb-2"
+                        style={{
+                          color:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "#2C3E50"
+                              : "#FFFFFF",
+                        }}
+                      >
+                        {hlName || formatAddress(traderData.address)}
+                      </div>
+                      <div className="flex items-center justify-center gap-1 sm:gap-2 flex-wrap">
+                        <div
+                          className="text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full"
+                          style={{
+                            backgroundColor:
+                              getTemplate(templateId)?.colors.primary + "20",
+                            color: getTemplate(templateId)?.colors.primary,
+                          }}
+                        >
+                          Purro Leaderboard
+                        </div>
+                        <div
+                          className="text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full"
+                          style={{
+                            backgroundColor:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "rgba(0, 0, 0, 0.1)"
+                                : "rgba(255, 255, 255, 0.1)",
+                            color:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "#666666"
+                                : "#CCCCCC",
+                          }}
+                        >
+                          {timeframe === "all"
+                            ? "All Time"
+                            : timeframe.toUpperCase()}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-3 gap-1 sm:gap-2 mb-4 sm:mb-6">
+                      <div
+                        className="rounded-lg sm:rounded-xl p-1.5 sm:p-3 backdrop-blur-sm text-center min-w-0"
+                        style={{
+                          backgroundColor:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "rgba(255, 255, 255, 0.8)"
+                              : "rgba(0, 0, 0, 0.4)",
+                          border: `1px solid ${
+                            getTemplate(templateId)?.colors.primary
+                          }30`,
+                          boxShadow: `0 2px 8px ${
+                            getTemplate(templateId)?.colors.primary
+                          }10`,
+                        }}
+                      >
+                        <div
+                          className="text-sm sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate"
+                          style={{
+                            color: getTemplate(templateId)?.colors.primary,
+                          }}
+                          title={traderData.points.toLocaleString()}
+                        >
+                          {traderData.points.toLocaleString()}
+                        </div>
+                        <div
+                          className="text-xs font-medium uppercase tracking-wider truncate"
+                          style={{
+                            color:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "#666666"
+                                : "#CCCCCC",
+                          }}
+                        >
+                          Points
+                        </div>
+                      </div>
+                      <div
+                        className="rounded-lg sm:rounded-xl p-1.5 sm:p-3 backdrop-blur-sm text-center min-w-0"
+                        style={{
+                          backgroundColor:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "rgba(255, 255, 255, 0.8)"
+                              : "rgba(0, 0, 0, 0.4)",
+                          border: `1px solid ${
+                            getTemplate(templateId)?.colors.primary
+                          }30`,
+                          boxShadow: `0 2px 8px ${
+                            getTemplate(templateId)?.colors.primary
+                          }10`,
+                        }}
+                      >
+                        <div
+                          className="text-sm sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate"
+                          style={{
+                            color: getTemplate(templateId)?.colors.primary,
+                          }}
+                          title={formatVolume(traderData.volume_usd)}
+                        >
+                          {formatVolume(traderData.volume_usd)}
+                        </div>
+                        <div
+                          className="text-xs font-medium uppercase tracking-wider truncate"
+                          style={{
+                            color:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "#666666"
+                                : "#CCCCCC",
+                          }}
+                        >
+                          Volume
+                        </div>
+                      </div>
+                      <div
+                        className="rounded-lg sm:rounded-xl p-1.5 sm:p-3 backdrop-blur-sm text-center min-w-0"
+                        style={{
+                          backgroundColor:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "rgba(255, 255, 255, 0.8)"
+                              : "rgba(0, 0, 0, 0.4)",
+                          border: `1px solid ${
+                            getTemplate(templateId)?.colors.primary
+                          }30`,
+                          boxShadow: `0 2px 8px ${
+                            getTemplate(templateId)?.colors.primary
+                          }10`,
+                        }}
+                      >
+                        <div
+                          className="text-sm sm:text-lg lg:text-xl font-bold mb-0.5 sm:mb-1 truncate"
+                          style={{
+                            color: getTemplate(templateId)?.colors.primary,
+                          }}
+                          title={traderData.transactions.toLocaleString()}
+                        >
+                          {traderData.transactions.toLocaleString()}
+                        </div>
+                        <div
+                          className="text-xs font-medium uppercase tracking-wider truncate"
+                          style={{
+                            color:
+                              getTemplate(templateId)?.mode === "light"
+                                ? "#666666"
+                                : "#CCCCCC",
+                          }}
+                        >
+                          Trades
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="text-center">
+                      <div
+                        className="text-xs sm:text-sm font-medium mb-1"
+                        style={{
+                          color:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "#2C3E50"
+                              : "#FFFFFF",
+                        }}
+                      >
+                        purro.xyz • The Purr-fect Web3 Wallet
+                      </div>
+                      <div
+                        className="text-xs opacity-70"
+                        style={{
+                          color:
+                            getTemplate(templateId)?.mode === "light"
+                              ? "#666666"
+                              : "#CCCCCC",
+                        }}
+                      >
+                        Generated on{" "}
+                        {generatedTime.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Shareable Card */}
-          <div
-            ref={cardRef}
-            className="bg-gradient-to-br from-[#021919] via-[#0e2a2a] to-[#081919] border border-gray-700/50 rounded-xl p-8 relative overflow-hidden"
-            style={{
-              width: "800px",
-              height: "600px",
-              margin: "0 auto",
-              transform: "scale(0.6)",
-              transformOrigin: "top center",
-            }}
-          >
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-xl"></div>
-              <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-white/3 rounded-full blur-2xl"></div>
-            </div>
-
-            {/* Logo */}
-            <div className="relative z-10 flex items-center justify-center mb-8">
-              <div className="text-3xl font-bold text-white">PURRO</div>
-              <div className="ml-2 text-2xl">🐱</div>
-            </div>
-
-            {/* Main Content */}
-            <div className="relative z-10 text-center">
-              {/* Rank Badge */}
-              <div className="flex items-center justify-center mb-6">
-                <div
-                  className={`${getRankStyle(
-                    traderData.rank
-                  )} px-6 py-3 rounded-full text-2xl font-bold`}
-                >
-                  #{traderData.rank}
-                </div>
-                <div className="ml-3 text-4xl">
-                  {getRankEmoji(traderData.rank)}
-                </div>
-              </div>
-
-              {/* Address */}
-              <div className="mb-8">
-                <div className="text-2xl font-bold text-white mb-2">
-                  {formatAddress(traderData.address)}
-                </div>
-                <div className="text-gray-400 text-lg">
-                  Purro Leaderboard{" "}
-                  {timeframe === "all" ? "All Time" : timeframe.toUpperCase()}
-                </div>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-6 mb-8">
-                <div className="bg-black/20 border border-gray-700/30 rounded-lg p-6">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {traderData.points.toLocaleString()}
-                  </div>
-                  <div className="text-gray-400 text-lg">Points</div>
-                </div>
-                <div className="bg-black/20 border border-gray-700/30 rounded-lg p-6">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {formatVolume(traderData.volume_usd)}
-                  </div>
-                  <div className="text-gray-400 text-lg">Volume</div>
-                </div>
-                <div className="bg-black/20 border border-gray-700/30 rounded-lg p-6">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {traderData.transactions.toLocaleString()}
-                  </div>
-                  <div className="text-gray-400 text-lg">Trades</div>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="text-gray-500 text-lg">
-                purro.xyz • Hyperliquid Trading Leaderboard
-              </div>
-            </div>
+          {/* Template Selector */}
+          <div className="p-4 border-t border-gray-700/30">
+            <TemplateManager
+              templates={templates}
+              selectedTemplateId={templateId}
+              onTemplateSelect={setTemplateId}
+            />
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="p-6 border-t border-gray-700/30">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
+        {/* Fixed Action Buttons */}
+        <div className="px-4 py-2 border-t border-gray-700/30 flex-shrink-0 bg-[#021919]">
+          <div className="flex gap-3">
+            <Button
               onClick={downloadImage}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-700/30 hover:bg-gray-600/30 text-white rounded-lg transition-colors font-medium"
+              className="flex-1 bg-gray-800/40 hover:bg-gray-700/40 border border-gray-600/30 hover:border-gray-500/30 text-white transition-all touch-manipulation min-h-[44px]"
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 sm:w-5 sm:h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -241,20 +479,24 @@ Ready to climb the ranks? 🐱
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              Download Image
-            </button>
-            <button
+              <span className="text-sm sm:text-base">Download</span>
+            </Button>
+            <Button
               onClick={shareOnX}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+              className="flex-1 touch-manipulation min-h-[44px]"
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
-              Share on X
-            </button>
+              <span className="text-sm sm:text-base">Share on X</span>
+            </Button>
           </div>
-          <p className="text-gray-500 text-sm mt-3 text-center">
-            Show off your trading achievements to the community! 🚀
+          <p className="text-gray-400 text-xs sm:text-sm mt-3 sm:mt-4 text-center">
+            💡 Share your trading achievements and inspire others! 🐱
           </p>
         </div>
       </div>

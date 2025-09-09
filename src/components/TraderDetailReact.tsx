@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { truncateAddress } from "../lib/utils";
 import ShareModal from "./ShareModal";
+import Button from "./Button";
+
+interface HLName {
+  address: string;
+  primaryName: string;
+  namehash: string;
+  tokenid: string;
+}
 
 interface PointBreakdown {
   from_volume: number;
@@ -59,6 +67,37 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<TimeframeOption>("7d");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [hlNames, setHlNames] = useState<Map<string, string>>(new Map());
+
+  const fetchHLNames = useCallback(async () => {
+    try {
+      const response = await fetch(
+        "https://api.hlnames.xyz/utils/all_primary_names",
+        {
+          headers: {
+            accept: "application/json",
+            "X-API-Key": "CPEPKMI-HUSUX6I-SE2DHEA-YYWFG5Y",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        console.warn("Failed to fetch HL Names:", response.status);
+        return;
+      }
+
+      const hlNamesData: HLName[] = await response.json();
+      const namesMap = new Map<string, string>();
+
+      hlNamesData.forEach((item) => {
+        namesMap.set(item.address.toLowerCase(), item.primaryName);
+      });
+
+      setHlNames(namesMap);
+    } catch (err) {
+      console.warn("Error fetching HL Names:", err);
+    }
+  }, []);
 
   const fetchTraderData = useCallback(
     async (selectedTimeframe: TimeframeOption = timeframe) => {
@@ -97,6 +136,18 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
     },
     [address, timeframe]
   );
+
+  const getDisplayName = useCallback(
+    (address: string) => {
+      const hlName = hlNames.get(address.toLowerCase());
+      return hlName || formatAddress(address);
+    },
+    [hlNames]
+  );
+
+  useEffect(() => {
+    fetchHLNames();
+  }, [fetchHLNames]);
 
   useEffect(() => {
     fetchTraderData(timeframe);
@@ -248,7 +299,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
               Leaderboard
             </a>
             <span>/</span>
-            <span className="text-white">{formatAddress(address)}</span>
+            <span className="text-white">{getDisplayName(address)}</span>
           </nav>
         </div>
 
@@ -258,7 +309,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
             Trader Profile
           </h1>
           <p className="text-base md:text-lg text-gray-300 mb-4">
-            Performance analytics for {formatAddress(address)}
+            Performance analytics for {getDisplayName(address)}
           </p>
         </div>
 
@@ -316,8 +367,25 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
             ) : traderData ? (
               <>
                 {/* Trader Overview */}
-                <div className="bg-black/10 border border-gray-700/30 rounded-lg p-6">
-                  <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+                <div className="bg-black/10 border border-gray-700/30 rounded-lg p-6 relative">
+                  {/* Share Button - Top Right */}
+                  <div className="absolute top-4 right-4">
+                    <Button
+                      onClick={() => setIsShareModalOpen(true)}
+                      className="flex items-center gap-2 px-3 py-2 bg-white hover:bg-white/80 text-black transition-colors text-sm font-medium"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                      <span className="hidden sm:inline">Share</span>
+                    </Button>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row items-center gap-4 mb-6 pr-20">
                     <div className="relative">
                       <div className="w-20 h-20 bg-gray-600 rounded-full flex items-center justify-center">
                         <span className="text-white text-xl font-bold">
@@ -334,7 +402,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                     </div>
                     <div className="text-center md:text-left">
                       <h2 className="text-xl font-semibold text-white mb-1">
-                        {formatAddress(address)}
+                        {getDisplayName(address)}
                       </h2>
                       <p className="text-gray-400 font-mono text-xs break-all mb-2">
                         {address}
@@ -356,14 +424,6 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                         >
                           Explorer
                         </a>
-                        <span>•</span>
-                        <button
-                          onClick={() => setIsShareModalOpen(true)}
-                          className="hover:text-white transition-colors"
-                          title="Share achievement"
-                        >
-                          Share
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -393,23 +453,6 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                       </div>
                       <div className="text-gray-400 text-xs">Transactions</div>
                     </div>
-                  </div>
-
-                  {/* Share Achievement Button */}
-                  <div className="text-center">
-                    <button
-                      onClick={() => setIsShareModalOpen(true)}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                      Share Achievement
-                    </button>
                   </div>
                 </div>
 
@@ -594,6 +637,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
           onClose={() => setIsShareModalOpen(false)}
           traderData={traderData}
           timeframe={timeframe}
+          hlName={hlNames.get(address.toLowerCase())}
         />
       )}
     </div>
