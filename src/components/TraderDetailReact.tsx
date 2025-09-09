@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { truncateAddress } from "../lib/utils";
+import ShareModal from "./ShareModal";
 
 interface PointBreakdown {
   from_volume: number;
@@ -57,6 +58,7 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState<TimeframeOption>("7d");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const fetchTraderData = useCallback(
     async (selectedTimeframe: TimeframeOption = timeframe) => {
@@ -354,11 +356,19 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                         >
                           Explorer
                         </a>
+                        <span>•</span>
+                        <button
+                          onClick={() => setIsShareModalOpen(true)}
+                          className="hover:text-white transition-colors"
+                          title="Share achievement"
+                        >
+                          Share
+                        </button>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div className="text-center bg-gray-800/20 rounded-lg p-3">
                       <div className="text-2xl font-bold text-white mb-1">
                         #{traderData.rank}
@@ -383,6 +393,23 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
                       </div>
                       <div className="text-gray-400 text-xs">Transactions</div>
                     </div>
+                  </div>
+
+                  {/* Share Achievement Button */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => setIsShareModalOpen(true)}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                      Share Achievement
+                    </button>
                   </div>
                 </div>
 
@@ -559,6 +586,16 @@ const TraderDetailReact: React.FC<TraderDetailReactProps> = ({ address }) => {
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {traderData && (
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          traderData={traderData}
+          timeframe={timeframe}
+        />
+      )}
     </div>
   );
 };
