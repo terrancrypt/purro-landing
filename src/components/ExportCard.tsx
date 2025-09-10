@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { getTemplate } from "../config/templates";
 
 interface ExportCardProps {
@@ -7,6 +7,7 @@ interface ExportCardProps {
   hlName?: string;
   timeframe: string;
   generatedTime: Date;
+  onImageLoaded?: () => void;
 }
 
 const ExportCard: React.FC<ExportCardProps> = ({
@@ -15,7 +16,9 @@ const ExportCard: React.FC<ExportCardProps> = ({
   hlName,
   timeframe,
   generatedTime,
+  onImageLoaded,
 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
@@ -43,6 +46,28 @@ const ExportCard: React.FC<ExportCardProps> = ({
 
   const template = getTemplate(templateId);
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    if (onImageLoaded) {
+      onImageLoaded();
+    }
+  };
+
+  useEffect(() => {
+    if (template?.img) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = handleImageLoad;
+      img.onerror = handleImageLoad; // Still proceed even if image fails to load
+      img.src = template.img;
+    } else {
+      setImageLoaded(true);
+      if (onImageLoaded) {
+        onImageLoaded();
+      }
+    }
+  }, [template?.img, onImageLoaded]);
+
   return (
     <div
       className="relative overflow-hidden flex justify-center items-center"
@@ -59,6 +84,12 @@ const ExportCard: React.FC<ExportCardProps> = ({
             src={template.img}
             alt={template.name}
             className="w-full h-full object-cover"
+            style={{
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+            onLoad={handleImageLoad}
+            crossOrigin="anonymous"
           />
         )}
       </div>

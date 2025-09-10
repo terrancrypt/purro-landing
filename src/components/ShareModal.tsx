@@ -47,13 +47,21 @@ const ShareModal: React.FC<ShareModalProps> = ({
 
   const downloadImage = useCallback(async () => {
     try {
-      // Create the export card with fixed dimensions
+      let imageLoadedResolve: () => void;
+      const imageLoadedPromise = new Promise<void>((resolve) => {
+        imageLoadedResolve = resolve;
+      });
+
+      // Create the export card with fixed dimensions and image load callback
       const exportCardElement = React.createElement(ExportCard, {
         traderData,
         templateId,
         hlName,
         timeframe,
         generatedTime,
+        onImageLoaded: () => {
+          imageLoadedResolve();
+        },
       });
 
       // Create a temporary container
@@ -73,15 +81,18 @@ const ShareModal: React.FC<ShareModalProps> = ({
       const root = ReactDOM.createRoot(reactContainer);
       root.render(exportCardElement);
 
-      // Wait for rendering
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Wait for image to load completely
+      await imageLoadedPromise;
+
+      // Additional wait for rendering to complete
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const dataUrl = await toPng(reactContainer.firstChild as HTMLElement, {
         cacheBust: true,
-        pixelRatio: 1,
+        pixelRatio: 2,
         width: 1600,
         height: 900,
-        backgroundColor: "transparent",
+        backgroundColor: "#ffffff",
         quality: 1.0,
       });
 
