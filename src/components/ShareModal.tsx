@@ -44,8 +44,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [templateId, setTemplateId] = useState<string>("template1");
   const [generatedTime] = useState<Date>(() => new Date());
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const downloadImage = useCallback(async () => {
+    if (isGenerating) return; // Prevent multiple simultaneous downloads
+
+    setIsGenerating(true);
     try {
       // Step 1: Preload background image first
       const selectedTemplate = getTemplate(templateId);
@@ -102,15 +106,19 @@ const ShareModal: React.FC<ShareModalProps> = ({
       const root = ReactDOM.createRoot(reactContainer);
       root.render(exportCardElement);
 
-      // Step 6: Wait for component image loading
+      // Step 6: Wait for React component to mount and render
+      console.log("Waiting for React component to mount...");
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Step 7: Wait for component image loading
       console.log("Waiting for component image to load...");
       await imageLoadedPromise;
 
-      // Step 7: Additional wait for DOM rendering
+      // Step 8: Additional wait for DOM rendering and layout
       console.log("Waiting for DOM rendering to complete...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Step 8: Verify image is actually visible before generating PNG
+      // Step 9: Verify image is actually visible and rendered
       const imgElement = reactContainer.querySelector("img");
       if (imgElement) {
         console.log(
@@ -120,11 +128,18 @@ const ShareModal: React.FC<ShareModalProps> = ({
         );
         if (!imgElement.complete || imgElement.naturalWidth === 0) {
           console.log("Image not fully loaded, waiting additional time...");
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1500));
         }
       }
 
-      // Step 9: Generate PNG
+      // Step 10: Final verification - check if all elements are properly rendered
+      const allElements = reactContainer.querySelectorAll("*");
+      console.log(`Total elements rendered: ${allElements.length}`);
+
+      // Wait a bit more to ensure everything is stable
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      // Step 11: Generate PNG
       console.log("Generating PNG...");
       const dataUrl = await toPng(reactContainer.firstChild as HTMLElement, {
         cacheBust: true,
@@ -135,11 +150,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
         quality: 1.0,
       });
 
-      // Step 10: Cleanup
+      // Step 12: Cleanup
       root.unmount();
       document.body.removeChild(tempContainer);
 
-      // Step 11: Download
+      // Step 13: Download
       const link = document.createElement("a");
       const displayName = hlName || formatAddress(traderData.address);
       const timestamp = generatedTime
@@ -156,8 +171,10 @@ const ShareModal: React.FC<ShareModalProps> = ({
       console.log("Image download initiated successfully");
     } catch (err) {
       console.error("Error generating image:", err);
+    } finally {
+      setIsGenerating(false);
     }
-  }, [traderData, templateId, hlName, timeframe, generatedTime]);
+  }, [traderData, templateId, hlName, timeframe, generatedTime, isGenerating]);
 
   const shareOnX = useCallback(() => {
     const text = `${getRankEmoji(traderData.rank)} Just hit rank #${
@@ -494,22 +511,44 @@ Ready to climb the ranks? 🐱
           <div className="flex gap-3">
             <Button
               onClick={downloadImage}
-              className="flex-1 bg-gray-800/40 hover:bg-gray-700/40 border border-gray-600/30 hover:border-gray-500/30 text-white transition-all touch-manipulation min-h-[44px]"
+              disabled={isGenerating}
+              className="flex-1 bg-gray-800/40 hover:bg-gray-700/40 border border-gray-600/30 hover:border-gray-500/30 text-white transition-all touch-manipulation min-h-[44px] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span className="text-sm sm:text-base">Download</span>
+              {isGenerating ? (
+                <>
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5 animate-spin"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span className="text-sm sm:text-base">Preparing...</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <span className="text-sm sm:text-base">Download</span>
+                </>
+              )}
             </Button>
             <Button
               onClick={shareOnX}
