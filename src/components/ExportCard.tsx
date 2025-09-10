@@ -55,12 +55,30 @@ const ExportCard: React.FC<ExportCardProps> = ({
 
   useEffect(() => {
     if (template?.img) {
+      console.log(
+        "ExportCard: Starting to load background image:",
+        template.img
+      );
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.onload = handleImageLoad;
-      img.onerror = handleImageLoad; // Still proceed even if image fails to load
+      img.onload = () => {
+        console.log("ExportCard: Background image loaded successfully");
+        // Additional check to ensure image is fully loaded
+        if (img.complete && img.naturalWidth > 0) {
+          handleImageLoad();
+        } else {
+          console.log("ExportCard: Image loaded but not complete, waiting...");
+          setTimeout(() => handleImageLoad(), 100);
+        }
+      };
+      img.onerror = (error) => {
+        console.warn("ExportCard: Failed to load background image:", error);
+        // Still proceed even if image fails to load
+        handleImageLoad();
+      };
       img.src = template.img;
     } else {
+      console.log("ExportCard: No template image, setting loaded immediately");
       setImageLoaded(true);
       if (onImageLoaded) {
         onImageLoaded();
@@ -75,22 +93,50 @@ const ExportCard: React.FC<ExportCardProps> = ({
         width: "1600px",
         height: "900px",
         fontFamily: "Inter, system-ui, sans-serif",
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
+        textRendering: "optimizeLegibility",
       }}
     >
       {/* Background */}
       <div className="absolute inset-0">
         {template && (
-          <img
-            src={template.img}
-            alt={template.name}
-            className="w-full h-full object-cover"
-            style={{
-              opacity: imageLoaded ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-            onLoad={handleImageLoad}
-            crossOrigin="anonymous"
-          />
+          <>
+            {/* Fallback background color */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundColor: template.colors.primary + "10",
+              }}
+            />
+            {/* Background image */}
+            <img
+              src={template.img}
+              alt={template.name}
+              className="w-full h-full object-cover"
+              style={{
+                opacity: imageLoaded ? 1 : 0,
+                transition: "opacity 0.3s ease",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+              }}
+              onLoad={(e) => {
+                console.log("ExportCard img element onLoad triggered");
+                const img = e.target as HTMLImageElement;
+                if (img.complete && img.naturalWidth > 0) {
+                  handleImageLoad();
+                }
+              }}
+              onError={(e) => {
+                console.warn("ExportCard img element failed to load:", e);
+                handleImageLoad(); // Still proceed
+              }}
+              crossOrigin="anonymous"
+            />
+          </>
         )}
       </div>
 
@@ -106,7 +152,6 @@ const ExportCard: React.FC<ExportCardProps> = ({
                   ? "rgba(255, 255, 255, 0.9)"
                   : "rgba(0, 0, 0, 0.6)",
               borderColor: template?.colors.primary + "40",
-              boxShadow: `0 12px 32px ${template?.colors.primary}20`,
               padding: "20px 40px",
               fontSize: "52px",
               fontWeight: "bold",
@@ -175,7 +220,6 @@ const ExportCard: React.FC<ExportCardProps> = ({
                   ? "rgba(255, 255, 255, 0.8)"
                   : "rgba(0, 0, 0, 0.4)",
               border: `2px solid ${template?.colors.primary}30`,
-              boxShadow: `0 8px 24px ${template?.colors.primary}10`,
               textAlign: "center",
             }}
           >
@@ -210,7 +254,6 @@ const ExportCard: React.FC<ExportCardProps> = ({
                   ? "rgba(255, 255, 255, 0.8)"
                   : "rgba(0, 0, 0, 0.4)",
               border: `2px solid ${template?.colors.primary}30`,
-              boxShadow: `0 8px 24px ${template?.colors.primary}10`,
               textAlign: "center",
             }}
           >
@@ -245,7 +288,6 @@ const ExportCard: React.FC<ExportCardProps> = ({
                   ? "rgba(255, 255, 255, 0.8)"
                   : "rgba(0, 0, 0, 0.4)",
               border: `2px solid ${template?.colors.primary}30`,
-              boxShadow: `0 8px 24px ${template?.colors.primary}10`,
               textAlign: "center",
             }}
           >

@@ -47,12 +47,32 @@ const ShareModal: React.FC<ShareModalProps> = ({
 
   const downloadImage = useCallback(async () => {
     try {
+      // Step 1: Preload background image first
+      const selectedTemplate = getTemplate(templateId);
+      if (selectedTemplate?.img) {
+        console.log("Preloading background image:", selectedTemplate.img);
+        await new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            console.log("Background image preloaded successfully");
+            resolve();
+          };
+          img.onerror = (error) => {
+            console.warn("Failed to preload background image:", error);
+            resolve(); // Continue even if preload fails
+          };
+          img.src = selectedTemplate.img;
+        });
+      }
+
+      // Step 2: Create promise for component image loading
       let imageLoadedResolve: () => void;
       const imageLoadedPromise = new Promise<void>((resolve) => {
         imageLoadedResolve = resolve;
       });
 
-      // Create the export card with fixed dimensions and image load callback
+      // Step 3: Create the export card with image load callback
       const exportCardElement = React.createElement(ExportCard, {
         traderData,
         templateId,
@@ -60,33 +80,52 @@ const ShareModal: React.FC<ShareModalProps> = ({
         timeframe,
         generatedTime,
         onImageLoaded: () => {
+          console.log("ExportCard image loaded callback triggered");
           imageLoadedResolve();
         },
       });
 
-      // Create a temporary container
+      // Step 4: Create temporary container
       const tempContainer = document.createElement("div");
       tempContainer.style.position = "absolute";
       tempContainer.style.top = "-9999px";
       tempContainer.style.left = "-9999px";
       tempContainer.style.width = "1600px";
       tempContainer.style.height = "900px";
+      tempContainer.style.backgroundColor = "#ffffff";
 
-      // Create a div to hold the React element
+      // Step 5: Create React container and render
       const reactContainer = document.createElement("div");
       document.body.appendChild(tempContainer);
       tempContainer.appendChild(reactContainer);
 
-      // Render the React component
       const root = ReactDOM.createRoot(reactContainer);
       root.render(exportCardElement);
 
-      // Wait for image to load completely
+      // Step 6: Wait for component image loading
+      console.log("Waiting for component image to load...");
       await imageLoadedPromise;
 
-      // Additional wait for rendering to complete
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Step 7: Additional wait for DOM rendering
+      console.log("Waiting for DOM rendering to complete...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
+      // Step 8: Verify image is actually visible before generating PNG
+      const imgElement = reactContainer.querySelector("img");
+      if (imgElement) {
+        console.log(
+          "Image element found, checking if loaded:",
+          imgElement.complete,
+          imgElement.naturalWidth
+        );
+        if (!imgElement.complete || imgElement.naturalWidth === 0) {
+          console.log("Image not fully loaded, waiting additional time...");
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      // Step 9: Generate PNG
+      console.log("Generating PNG...");
       const dataUrl = await toPng(reactContainer.firstChild as HTMLElement, {
         cacheBust: true,
         pixelRatio: 2,
@@ -96,11 +135,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
         quality: 1.0,
       });
 
-      // Cleanup
+      // Step 10: Cleanup
       root.unmount();
       document.body.removeChild(tempContainer);
 
-      // Download
+      // Step 11: Download
       const link = document.createElement("a");
       const displayName = hlName || formatAddress(traderData.address);
       const timestamp = generatedTime
@@ -113,6 +152,8 @@ const ShareModal: React.FC<ShareModalProps> = ({
       )}-${timestamp}.png`;
       link.href = dataUrl;
       link.click();
+
+      console.log("Image download initiated successfully");
     } catch (err) {
       console.error("Error generating image:", err);
     }
@@ -236,9 +277,6 @@ Ready to climb the ranks? 🐱
                                 : "rgba(0, 0, 0, 0.6)",
                             borderColor:
                               getTemplate(templateId)?.colors.primary + "40",
-                            boxShadow: `0 4px 12px ${
-                              getTemplate(templateId)?.colors.primary
-                            }20`,
                           }}
                         >
                           <div
@@ -312,9 +350,6 @@ Ready to climb the ranks? 🐱
                           border: `1px solid ${
                             getTemplate(templateId)?.colors.primary
                           }30`,
-                          boxShadow: `0 2px 8px ${
-                            getTemplate(templateId)?.colors.primary
-                          }10`,
                         }}
                       >
                         <div
@@ -348,9 +383,6 @@ Ready to climb the ranks? 🐱
                           border: `1px solid ${
                             getTemplate(templateId)?.colors.primary
                           }30`,
-                          boxShadow: `0 2px 8px ${
-                            getTemplate(templateId)?.colors.primary
-                          }10`,
                         }}
                       >
                         <div
@@ -384,9 +416,6 @@ Ready to climb the ranks? 🐱
                           border: `1px solid ${
                             getTemplate(templateId)?.colors.primary
                           }30`,
-                          boxShadow: `0 2px 8px ${
-                            getTemplate(templateId)?.colors.primary
-                          }10`,
                         }}
                       >
                         <div
