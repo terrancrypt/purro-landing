@@ -1,13 +1,11 @@
 import type { Template, TemplateConfig } from "../types/template";
-import template1 from "../assets/leaderboard/template1.png";
-import template2 from "../assets/leaderboard/template2.png";
 
 export const templates: Template[] = [
     {
         id: "template1",
         name: "Ocean Breeze",
         description: "Clean and modern light theme with ocean-inspired colors",
-        img: template1.src,
+        img: "/leaderboard/template1.png",
         mode: "light",
         category: "default",
         colors: {
@@ -22,7 +20,7 @@ export const templates: Template[] = [
         id: "template2",
         name: "Dark Ocean",
         description: "Sleek dark theme perfect for night traders",
-        img: template2.src,
+        img: "/leaderboard/template2.png",
         mode: "dark",
         category: "default",
         colors: {
