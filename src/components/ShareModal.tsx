@@ -4,6 +4,8 @@ import type { ShareModalProps } from "../types/template";
 import { templates, getTemplate } from "../config/templates";
 import TemplateManager from "./TemplateManager";
 import Button from "./Button";
+import ExportCard from "./ExportCard";
+import ReactDOM from "react-dom/client";
 
 const formatAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -19,25 +21,6 @@ const formatVolume = (volume: number) => {
   } else {
     return `$${volume.toFixed(2)}`;
   }
-};
-
-const formatNumber = (num: number) => {
-  if (num >= 1000000000) {
-    return `${(num / 1000000000).toFixed(1)}B`;
-  } else if (num >= 1000000) {
-    return `${(num / 1000000).toFixed(1)}M`;
-  } else if (num >= 1000) {
-    return `${(num / 1000).toFixed(1)}K`;
-  } else {
-    return num.toLocaleString();
-  }
-};
-
-const getRankStyle = (rank: number) => {
-  if (rank <= 3) return "bg-yellow-500 text-black";
-  if (rank <= 10) return "bg-purple-600 text-white";
-  if (rank <= 50) return "bg-blue-600 text-white";
-  return "bg-gray-600 text-white";
 };
 
 const getRankEmoji = (rank: number) => {
@@ -63,43 +46,50 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const [generatedTime] = useState<Date>(() => new Date());
 
   const downloadImage = useCallback(async () => {
-    if (cardRef.current === null) {
-      return;
-    }
-
     try {
-      // Get current dimensions
-      const currentWidth = cardRef.current.offsetWidth;
-      const currentHeight = cardRef.current.offsetHeight;
+      // Create the export card with fixed dimensions
+      const exportCardElement = React.createElement(ExportCard, {
+        traderData,
+        templateId,
+        hlName,
+        timeframe,
+        generatedTime,
+      });
 
-      // Target dimensions for consistent output (16:9 aspect ratio)
-      const targetWidth = 1600;
-      const targetHeight = 900;
+      // Create a temporary container
+      const tempContainer = document.createElement("div");
+      tempContainer.style.position = "absolute";
+      tempContainer.style.top = "-9999px";
+      tempContainer.style.left = "-9999px";
+      tempContainer.style.width = "1600px";
+      tempContainer.style.height = "900px";
 
-      // Calculate scale to maintain aspect ratio and fit target dimensions
-      const scaleX = targetWidth / currentWidth;
-      const scaleY = targetHeight / currentHeight;
-      const scale = Math.min(scaleX, scaleY);
+      // Create a div to hold the React element
+      const reactContainer = document.createElement("div");
+      document.body.appendChild(tempContainer);
+      tempContainer.appendChild(reactContainer);
 
-      // Calculate actual output dimensions to maintain aspect ratio
-      const outputWidth = Math.round(currentWidth * scale);
-      const outputHeight = Math.round(currentHeight * scale);
+      // Render the React component
+      const root = ReactDOM.createRoot(reactContainer);
+      root.render(exportCardElement);
 
-      const dataUrl = await toPng(cardRef.current, {
+      // Wait for rendering
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const dataUrl = await toPng(reactContainer.firstChild as HTMLElement, {
         cacheBust: true,
-        pixelRatio: 2,
-        width: outputWidth,
-        height: outputHeight,
-        style: {
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
-          width: `${currentWidth}px`,
-          height: `${currentHeight}px`,
-        },
+        pixelRatio: 1,
+        width: 1600,
+        height: 900,
         backgroundColor: "transparent",
         quality: 1.0,
       });
 
+      // Cleanup
+      root.unmount();
+      document.body.removeChild(tempContainer);
+
+      // Download
       const link = document.createElement("a");
       const displayName = hlName || formatAddress(traderData.address);
       const timestamp = generatedTime
@@ -115,7 +105,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
     } catch (err) {
       console.error("Error generating image:", err);
     }
-  }, [traderData.address, hlName, generatedTime]);
+  }, [traderData, templateId, hlName, timeframe, generatedTime]);
 
   const shareOnX = useCallback(() => {
     const text = `${getRankEmoji(traderData.rank)} Just hit rank #${
