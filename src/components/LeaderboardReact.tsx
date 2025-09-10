@@ -200,45 +200,48 @@ const LeaderboardReact: React.FC = () => {
   // Skeleton component for table rows
   const SkeletonRow = () => (
     <tr className="border-t border-gray-700/30">
-      <td className="px-6 py-4">
-        <div className="w-8 h-8 bg-gray-700 rounded-full animate-pulse"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4">
+        <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gray-700 rounded-full animate-pulse"></div>
       </td>
-      <td className="px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gray-700 rounded-full animate-pulse"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gray-700 rounded-full animate-pulse"></div>
           <div>
-            <div className="h-4 bg-gray-700 rounded w-20 animate-pulse mb-1"></div>
-            <div className="h-3 bg-gray-700 rounded w-24 animate-pulse"></div>
+            <div className="h-3 sm:h-4 bg-gray-700 rounded w-16 sm:w-20 animate-pulse mb-1"></div>
+            <div className="h-2 sm:h-3 bg-gray-700 rounded w-20 sm:w-24 animate-pulse"></div>
           </div>
         </div>
       </td>
-      <td className="px-6 py-4 text-right">
-        <div className="h-4 bg-gray-700 rounded w-16 animate-pulse ml-auto"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4 text-right">
+        <div className="h-3 sm:h-4 bg-gray-700 rounded w-12 sm:w-16 animate-pulse ml-auto"></div>
       </td>
-      <td className="px-6 py-4 text-right">
-        <div className="h-4 bg-gray-700 rounded w-12 animate-pulse ml-auto"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4 text-right hidden sm:table-cell">
+        <div className="h-3 sm:h-4 bg-gray-700 rounded w-10 sm:w-12 animate-pulse ml-auto"></div>
       </td>
-      <td className="px-6 py-4 text-right">
-        <div className="h-4 bg-gray-700 rounded w-8 animate-pulse ml-auto"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4 text-right hidden sm:table-cell">
+        <div className="h-3 sm:h-4 bg-gray-700 rounded w-6 sm:w-8 animate-pulse ml-auto"></div>
       </td>
-      <td className="px-6 py-4 text-right">
-        <div className="h-4 bg-gray-700 rounded w-8 animate-pulse ml-auto"></div>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4 text-right hidden lg:table-cell">
+        <div className="h-3 sm:h-4 bg-gray-700 rounded w-6 sm:w-8 animate-pulse ml-auto"></div>
+      </td>
+      <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 lg:py-4 text-center">
+        <div className="h-6 sm:h-7 bg-gray-700 rounded w-16 sm:w-20 animate-pulse mx-auto"></div>
       </td>
     </tr>
   );
 
   if (error) {
     return (
-      <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-8 text-center">
-            <div className="text-red-400 text-lg mb-2">
+      <div className="min-h-screen pt-20 sm:pt-24 lg:pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
+        <div className="container max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 sm:p-6 lg:p-8 text-center">
+            <div className="text-red-400 text-base sm:text-lg mb-2">
               Error Loading Leaderboard
             </div>
-            <p className="text-red-300 mb-4">{error}</p>
+            <p className="text-red-300 mb-3 sm:mb-4 px-2">{error}</p>
             <button
               onClick={() => fetchLeaderboardData(currentPage, timeframe)}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+              className="px-4 sm:px-6 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm sm:text-base"
             >
               Retry
             </button>
@@ -249,19 +252,19 @@ const LeaderboardReact: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
-      <div className="container max-w-6xl mx-auto px-4">
+    <div className="min-h-screen pt-24 lg:pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
+      <div className="container max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-5xl text-white font-bold mb-3">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl text-white font-bold mb-2 sm:mb-3">
             Leaderboard
           </h1>
-          <p className="text-base md:text-lg text-gray-300 mb-4">
+          <p className="text-sm sm:text-base lg:text-lg text-gray-300 mb-3 sm:mb-4 px-2">
             Top traders and users on Purro
           </p>
           {leaderboardData && (
-            <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-400">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 lg:gap-4 text-xs text-gray-400">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <div
                   className={`w-2 h-2 rounded-full ${
                     leaderboardData.sync_info.sync_in_progress
@@ -274,7 +277,7 @@ const LeaderboardReact: React.FC = () => {
                   {formatTimeAgo(leaderboardData.sync_info.last_sync_time)}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <span>
                   Block:{" "}
@@ -286,18 +289,18 @@ const LeaderboardReact: React.FC = () => {
         </div>
 
         {/* Point System Description */}
-        <div className="mb-6">
-          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-4">
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
+        <div className="mb-4 sm:mb-5 lg:mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-3 sm:p-4">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="text-[#02f1dc] font-medium">0.1 pts</span>
                 <span className="text-gray-400">per $1 volume</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="text-[#02f1dc] font-medium">100 pts</span>
                 <span className="text-gray-400">per transaction</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="text-[#02f1dc] font-medium">25 pts</span>
                 <span className="text-gray-400">per unique token</span>
               </div>
@@ -306,17 +309,17 @@ const LeaderboardReact: React.FC = () => {
         </div>
 
         {/* Simple Controls */}
-        <div className="mb-6">
-          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-5">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="mb-4 sm:mb-5 lg:mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg p-3 sm:p-4 lg:p-5">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-between">
               {/* Timeframe Filter */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center sm:justify-start">
                 {(["1d", "7d", "30d", "all"] as TimeframeOption[]).map(
                   (option) => (
                     <button
                       key={option}
                       onClick={() => handleTimeframeChange(option)}
-                      className={`px-3 py-2 rounded-md transition-colors text-sm font-medium ${
+                      className={`px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md transition-colors text-xs sm:text-sm font-medium ${
                         timeframe === option
                           ? "bg-white text-black"
                           : "bg-gray-700/30 text-gray-300 hover:bg-gray-600/30"
@@ -329,17 +332,20 @@ const LeaderboardReact: React.FC = () => {
               </div>
 
               {/* Search */}
-              <form onSubmit={handleSearch} className="flex gap-2">
+              <form
+                onSubmit={handleSearch}
+                className="flex gap-1.5 sm:gap-2 w-full sm:w-auto"
+              >
                 <input
                   type="text"
                   placeholder="Search address..."
                   value={searchAddress}
                   onChange={(e) => setSearchAddress(e.target.value)}
-                  className="px-3 py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-sm text-white placeholder-gray-400 focus:outline-none focus:border-white/50"
+                  className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-gray-800/50 border border-gray-600/30 rounded-md text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none focus:border-white/50 flex-1 sm:flex-none sm:w-40 lg:w-48"
                 />
                 <button
                   type="submit"
-                  className="px-3 py-2 bg-white text-black rounded-md transition-colors hover:bg-gray-100 text-sm font-medium"
+                  className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white text-black rounded-md transition-colors hover:bg-gray-100 text-xs sm:text-sm font-medium"
                 >
                   Search
                 </button>
@@ -355,23 +361,26 @@ const LeaderboardReact: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-800/20">
                   <tr>
-                    <th className="px-4 py-3 text-left text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-left text-gray-300 text-xs sm:text-sm font-medium">
                       Rank
                     </th>
-                    <th className="px-4 py-3 text-left text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-left text-gray-300 text-xs sm:text-sm font-medium">
                       Address
                     </th>
-                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-right text-gray-300 text-xs sm:text-sm font-medium">
                       Points
                     </th>
-                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-right text-gray-300 text-xs sm:text-sm font-medium hidden sm:table-cell">
                       Volume
                     </th>
-                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-right text-gray-300 text-xs sm:text-sm font-medium hidden sm:table-cell">
                       Txs
                     </th>
-                    <th className="px-4 py-3 text-right text-gray-300 text-sm font-medium">
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-right text-gray-300 text-xs sm:text-sm font-medium hidden lg:table-cell">
                       Tokens
+                    </th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 lg:py-3 text-right text-gray-300 text-xs sm:text-sm font-medium">
+                      Action
                     </th>
                   </tr>
                 </thead>
@@ -386,54 +395,73 @@ const LeaderboardReact: React.FC = () => {
                           key={user.address}
                           className="border-t border-gray-700/20 hover:bg-gray-800/10 transition-colors"
                         >
-                          <td className="px-4 py-3">
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3">
                             <div
-                              className={`w-7 h-7 ${getRankStyle(
+                              className={`w-6 h-6 sm:w-7 sm:h-7 ${getRankStyle(
                                 user.rank
                               )} rounded-full flex items-center justify-center font-medium text-xs`}
                             >
                               {user.rank}
                             </div>
                           </td>
-                          <td className="px-4 py-3">
-                            <a
-                              href={`/leaderboard/${user.address}`}
-                              className="flex items-center gap-2 hover:bg-gray-800/20 p-2 rounded-md transition-colors w-full text-left group"
-                            >
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
                               <div>
-                                <div className="text-white font-mono text-sm group-hover:text-gray-200 transition-colors">
+                                <div className="text-white font-mono text-xs sm:text-sm">
                                   {getDisplayName(user.address)}
                                   {hlNames.has(user.address.toLowerCase()) && (
-                                    <span className="ml-2 text-xs text-[#02f1dc] bg-[#02f1dc]/10 px-1.5 py-0.5 rounded">
+                                    <span className="ml-1 sm:ml-2 text-xs text-[#02f1dc] bg-[#02f1dc]/10 px-1 sm:px-1.5 py-0.5 rounded">
                                       HL
                                     </span>
                                   )}
                                 </div>
-                                <div className="text-gray-400 text-xs">
-                                  View details
+                                <div className="text-gray-400 text-xs hidden sm:block">
+                                  {user.address.slice(0, 6)}...
+                                  {user.address.slice(-4)}
                                 </div>
                               </div>
-                            </a>
+                            </div>
                           </td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="text-white font-medium text-sm">
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 text-right">
+                            <span className="text-white font-medium text-xs sm:text-sm">
                               {user.points.toLocaleString()}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="text-gray-300 text-sm">
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 text-right hidden sm:table-cell">
+                            <span className="text-gray-300 text-xs sm:text-sm">
                               {formatVolume(user.volume_usd)}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="text-gray-300 text-sm">
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 text-right hidden sm:table-cell">
+                            <span className="text-gray-300 text-xs sm:text-sm">
                               {user.transactions.toLocaleString()}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="text-gray-300 text-sm">
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 text-right hidden lg:table-cell">
+                            <span className="text-gray-300 text-xs sm:text-sm">
                               {user.tokens}
                             </span>
+                          </td>
+                          <td className="px-2 sm:px-3 lg:px-4 py-2.5 sm:py-3 text-right">
+                            <a
+                              href={`/leaderboard/${user.address}`}
+                              className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-white hover:bg-gray-100 text-black rounded-md transition-colors text-xs font-medium group"
+                            >
+                              <span>Details</span>
+                              <svg
+                                className="w-3 h-3 transition-transform group-hover:translate-x-0.5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 5l7 7-7 7"
+                                />
+                              </svg>
+                            </a>
                           </td>
                         </tr>
                       ))
@@ -446,31 +474,34 @@ const LeaderboardReact: React.FC = () => {
 
         {/* Simple Pagination */}
         {!loading && leaderboardData?.pagination && (
-          <div className="mt-5 flex justify-center">
-            <div className="flex gap-2 items-center">
+          <div className="mt-4 sm:mt-5 flex justify-center">
+            <div className="flex gap-1.5 sm:gap-2 items-center flex-wrap justify-center">
               <button
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
+                className="px-2.5 sm:px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
-                First
+                <span className="hidden sm:inline">First</span>
+                <span className="sm:hidden">‹‹</span>
               </button>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={!leaderboardData.pagination.has_prev}
-                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
+                className="px-2.5 sm:px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
-                Previous
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">‹</span>
               </button>
-              <span className="px-3 py-1.5 bg-white text-black rounded-md font-medium text-xs">
+              <span className="px-2.5 sm:px-3 py-1.5 bg-white text-black rounded-md font-medium text-xs">
                 {currentPage}
               </span>
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={!leaderboardData.pagination.has_next}
-                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
+                className="px-2.5 sm:px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
-                Next
+                <span className="hidden sm:inline">Next</span>
+                <span className="sm:hidden">›</span>
               </button>
               <button
                 onClick={() =>
@@ -479,9 +510,10 @@ const LeaderboardReact: React.FC = () => {
                 disabled={
                   currentPage === leaderboardData.pagination.total_pages
                 }
-                className="px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
+                className="px-2.5 sm:px-3 py-1.5 bg-gray-700/30 hover:bg-gray-600/30 disabled:bg-gray-800/30 disabled:text-gray-600 text-white rounded-md transition-colors text-xs"
               >
-                Last
+                <span className="hidden sm:inline">Last</span>
+                <span className="sm:hidden">››</span>
               </button>
             </div>
           </div>
