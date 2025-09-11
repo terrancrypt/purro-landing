@@ -4,6 +4,8 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Button from "../components/Button";
 import chrome from "../assets/chrome.png";
+import edge from "../assets/edge.png";
+import brave from "../assets/brave.png";
 import screenshot1 from "../assets/full-screenshots/1.png";
 import screenshot2 from "../assets/full-screenshots/2.png";
 import screenshot3 from "../assets/full-screenshots/3.png";
@@ -28,6 +30,10 @@ import {
 // Constants for easy customization
 const CHROME_STORE_URL =
   "https://chromewebstore.google.com/detail/purro-beta/ehfplamebglaemcflkgjlomdbbpmehof";
+const EDGE_STORE_URL =
+  "https://microsoftedge.microsoft.com/addons/detail/purro-beta/ehfplamebglaemcflkgjlomdbbpmehof";
+const BRAVE_STORE_URL =
+  "https://chrome.google.com/webstore/detail/purro-beta/ehfplamebglaemcflkgjlomdbbpmehof";
 const GITHUB_RELEASES_URL =
   "https://github.com/terrancrypt/purro-extension/releases";
 ---
@@ -36,129 +42,116 @@ const GITHUB_RELEASES_URL =
   <Header />
 
   <main
-    class="min-h-screen bg-gradient-to-br from-[#081919] via-[#0e2a2a] to-[#081919] pt-32 pb-16"
+    class="min-h-screen bg-gradient-to-br from-[#081919] via-[#0e2a2a] to-[#081919] pt-32 pb-24"
   >
     <div class="max-w-6xl mx-auto px-4">
       <!-- Hero Section -->
-      <div class="text-center mb-20 scroll-animate">
+      <div class="text-center scroll-animate">
         <img
           src="/Purro_Logotype_White.png"
           alt="Purro Logo"
           class="h-16 mx-auto mb-8"
         />
-        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
-          Install Purro Extension
-        </h1>
-        <p
-          class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
-        >
-          Get started with Purro - the purr-fect Web3 wallet extension.
-          Available now on the Chrome Web Store.
-        </p>
       </div>
 
-      <!-- Chrome Web Store Installation (Main Focus) -->
-      <div class="max-w-2xl mx-auto mb-32">
-        <div
-          class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate hover:border-[#02f1dc]/30 transition-all duration-300"
-        >
-          <div class="flex items-center gap-4 mb-8">
-            <div class="p-4 bg-[#02f1dc]/20 rounded-full">
-              <img src={chrome.src} alt="chrome" class="h-8 w-8" />
-            </div>
-            <h2 class="text-2xl font-semibold text-white">Chrome Web Store</h2>
-          </div>
-
-          <p class="text-gray-300 mb-8 leading-relaxed">
-            Purro is now available on the Chrome Web Store! Get automatic
-            updates, enhanced security, and seamless Chrome integration with
-            one-click installation.
+      <!-- Browser Installation Options -->
+      <div class="max-w-4xl mx-auto mb-32 scroll-animate">
+        <div class="text-center mb-12">
+          <h2 class="text-2xl md:text-3xl font-semibold text-white mb-4">
+            Choose Your Browser To Install Purro
+          </h2>
+          <p class="text-sm md:text-base text-gray-300 max-w-2xl mx-auto">
+            Purro works seamlessly across Chromium-based browsers. Pick your
+            preferred platform.
           </p>
+        </div>
 
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Chrome -->
+          <a
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate hover:border-[#02f1dc]/30 transition-all duration-300"
+            href={CHROME_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-[#02f1dc]/20 rounded-full">
+                <img src={chrome.src} alt="chrome" class="h-8 w-8" />
+              </div>
+              <h3 class="text-lg font-semibold text-white">Chrome</h3>
+            </div>
+          </a>
+
+          <!-- Edge -->
           <a
             href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            class="w-full bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-bold py-4 px-8 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-3 no-underline mb-8"
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate hover:border-[#02f1dc]/30 transition-all duration-300"
           >
-            <ExternalLinkIcon class="h-6 w-6" />
-            Install from Chrome Web Store
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-[#02f1dc]/20 rounded-full">
+                <img src={edge.src} alt="edge" class="h-8 w-8" />
+              </div>
+              <h3 class="text-lg font-semibold text-white">Edge</h3>
+            </div>
           </a>
 
-          <!-- Benefits -->
-          <div class="p-6 bg-white/5 rounded-2xl border border-white/10">
-            <h3 class="text-xl font-semibold text-white mb-4">Benefits:</h3>
-            <ul class="text-gray-300 space-y-3">
-              <li class="flex items-center gap-3">
-                <span class="text-[#02f1dc] text-xl">•</span>
-                Automatic updates
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[#02f1dc] text-xl">•</span>
-                One-click installation
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[#02f1dc] text-xl">•</span>
-                Enhanced security
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[#02f1dc] text-xl">•</span>
-                Seamless Chrome integration
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="text-[#02f1dc] text-xl">•</span>
-                Official Chrome Web Store verification
-              </li>
-            </ul>
-          </div>
+          <!-- Brave -->
+          <a
+            href={CHROME_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate hover:border-[#02f1dc]/30 transition-all duration-300"
+          >
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-[#02f1dc]/20 rounded-full">
+                <img src={brave.src} alt="brave" class="h-8 w-8" />
+              </div>
+              <h3 class="text-lg font-semibold text-white">Brave</h3>
+            </div>
+          </a>
         </div>
       </div>
 
       <!-- Release Notes Section -->
-      <div class="mb-24 scroll-animate">
+      <div class="mb-32 scroll-animate">
         <div class="text-center mb-16">
           <h2 class="text-3xl md:text-4xl font-semibold text-white mb-6">
             Stay Updated
           </h2>
-          <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+          <p class="text-sm md:text-lg text-gray-300 max-w-2xl mx-auto">
             Check out the latest features, bug fixes, and improvements in our
             release notes.
           </p>
         </div>
 
         <div class="max-w-2xl mx-auto">
-          <div
-            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 hover:border-[#02f1dc]/30 transition-all duration-300"
+          <a
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 hover:border-[#02f1dc]/30 transition-all duration-300 block"
+            href={GITHUB_RELEASES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <div class="flex items-center gap-4 mb-8">
               <div class="p-4 bg-[#02f1dc]/20 rounded-full">
                 <GithubIcon class="h-8 w-8 text-[#02f1dc]" />
               </div>
-              <h3 class="text-2xl font-semibold text-white">Release Notes</h3>
+              <h3 class="text-xl font-semibold text-white">Release Notes</h3>
             </div>
 
-            <p class="text-gray-300 mb-8 leading-relaxed">
+            <p class="text-gray-300 leading-relaxed">
               View detailed release notes, changelog, and technical
               documentation for all Purro extension versions.
             </p>
-
-            <a
-              href={GITHUB_RELEASES_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="w-full bg-black/30 hover:bg-black/50 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold py-4 px-8 text-lg rounded-full transition-all duration-300 flex items-center justify-center gap-3 no-underline"
-            >
-              <GithubIcon class="h-6 w-6" />
-              View Release Notes
-            </a>
-          </div>
+          </a>
         </div>
       </div>
 
       <!-- Key Features Highlight -->
-      <div class="mb-24 scroll-animate">
+      <div class="mb-32 scroll-animate">
         <h2
-          class="text-3xl md:text-4xl font-semibold text-white text-center mb-16"
+          class="text-3xl md:text-4xl font-semibold text-white text-center mb-12"
         >
           Why Choose Purro?
         </h2>
@@ -181,7 +174,7 @@ const GITHUB_RELEASES_URL =
                 ></path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-white mb-4">
+            <h3 class="text-lg font-semibold text-white mb-4">
               Secure & Non-Custodial
             </h3>
             <p class="text-gray-300 leading-relaxed">
@@ -206,7 +199,7 @@ const GITHUB_RELEASES_URL =
                   d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-white mb-4">
+            <h3 class="text-lg font-semibold text-white mb-4">
               Lightning Fast
             </h3>
             <p class="text-gray-300 leading-relaxed">
@@ -232,7 +225,7 @@ const GITHUB_RELEASES_URL =
                 ></path>
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-white mb-4">User Friendly</h3>
+            <h3 class="text-lg font-semibold text-white mb-4">User Friendly</h3>
             <p class="text-gray-300 leading-relaxed">
               Intuitive design that makes Web3 accessible to everyone, from
               beginners to pros
@@ -242,18 +235,22 @@ const GITHUB_RELEASES_URL =
       </div>
 
       <!-- Extension Preview (Supporting Content) -->
-      <div class="mb-24 scroll-animate">
-        <h2 class="text-4xl font-semibold text-white text-center mb-8">
+      <div class="mb-32 scroll-animate">
+        <h2
+          class="text-3xl md:text-4xl font-semibold text-white text-center mb-12"
+        >
           See Purro in Action
         </h2>
-        <p class="text-xl text-gray-300 text-center mb-16 max-w-3xl mx-auto">
+        <p
+          class="text-sm md:text-lg text-gray-300 text-center mb-16 max-w-3xl mx-auto"
+        >
           Get a preview of what you'll experience with Purro extension
         </p>
 
         <!-- Mobile Carousel -->
         <div class="md:hidden mb-12">
           <div class="overflow-x-auto pb-4">
-            <div class="flex gap-6 w-max px-4">
+            <div class="flex gap-4 w-max px-4">
               <div
                 class="bg-black/20 rounded-2xl overflow-hidden border border-white/10 w-80 flex-shrink-0"
               >
@@ -430,21 +427,23 @@ const GITHUB_RELEASES_URL =
         </div>
 
         <!-- Featured PC Screenshots -->
-        <div class="space-y-12">
+        <div class="space-y-20">
           <!-- Import Feature -->
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-3xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10"
           >
-            <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
               <div>
-                <h4 class="text-2xl font-semibold text-white mb-6">
+                <h4 class="text-xl font-semibold text-white mb-8">
                   Easy Wallet Import
                 </h4>
-                <p class="text-gray-300 mb-6 text-lg leading-relaxed">
+                <p
+                  class="text-gray-300 mb-8 text-sm md:text-base leading-relaxed"
+                >
                   Import your existing wallets seamlessly. Support for seed
                   phrases, private keys, and popular wallet formats.
                 </p>
-                <ul class="text-gray-400 space-y-3">
+                <ul class="text-gray-400 space-y-4">
                   <li class="flex items-center gap-3">
                     <span class="text-[#02f1dc] text-xl">✓</span>
                     12/24 word seed phrases
@@ -473,18 +472,20 @@ const GITHUB_RELEASES_URL =
 
           <!-- Onboarding Feature -->
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-3xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10"
           >
-            <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
               <div class="md:order-2">
-                <h4 class="text-2xl font-semibold text-white mb-6">
+                <h4 class="text-xl font-semibold text-white mb-8">
                   Smooth Onboarding
                 </h4>
-                <p class="text-gray-300 mb-6 text-lg leading-relaxed">
+                <p
+                  class="text-gray-300 mb-8 text-sm md:text-base leading-relaxed"
+                >
                   Get started in minutes with our intuitive onboarding flow. No
                   Web3 experience required.
                 </p>
-                <ul class="text-gray-400 space-y-3">
+                <ul class="text-gray-400 space-y-4">
                   <li class="flex items-center gap-3">
                     <span class="text-[#02f1dc] text-xl">✓</span>
                     Step-by-step guidance
@@ -515,18 +516,24 @@ const GITHUB_RELEASES_URL =
 
       <!-- System Requirements -->
       <div
-        class="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 scroll-animate mb-24"
+        class="bg-black/20 backdrop-blur-sm rounded-3xl p-12 border border-white/10 scroll-animate mb-32"
       >
-        <h2 class="text-3xl font-semibold text-white mb-10 text-center">
+        <h2
+          class="text-2xl md:text-3xl font-semibold text-white mb-12 text-center"
+        >
           System Requirements
         </h2>
         <div class="grid md:grid-cols-3 gap-10 text-center">
           <div>
-            <img src={chrome.src} alt="chrome" class="h-12 w-12 mx-auto mb-4" />
-            <h3 class="text-xl font-semibold text-white mb-3">
-              Chrome Browser
+            <div class="flex justify-center gap-3 mb-4">
+              <img src={chrome.src} alt="chrome" class="h-10 w-10" />
+              <img src={edge.src} alt="edge" class="h-10 w-10" />
+              <img src={brave.src} alt="brave" class="h-10 w-10" />
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-3">
+              Supported Browsers
             </h3>
-            <p class="text-gray-300">Version 88 or higher</p>
+            <p class="text-gray-300">Chrome, Edge, Brave (Chromium-based)</p>
           </div>
           <div>
             <svg
@@ -538,7 +545,7 @@ const GITHUB_RELEASES_URL =
                 d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
               ></path>
             </svg>
-            <h3 class="text-xl font-semibold text-white mb-3">
+            <h3 class="text-lg font-semibold text-white mb-3">
               Operating System
             </h3>
             <p class="text-gray-300">Windows, macOS, or Linux</p>
@@ -554,72 +561,96 @@ const GITHUB_RELEASES_URL =
                 d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
                 clip-rule="evenodd"></path>
             </svg>
-            <h3 class="text-xl font-semibold text-white mb-3">
-              Internet Connection
+            <h3 class="text-lg font-semibold text-white mb-3">
+              Browser Version
             </h3>
-            <p class="text-gray-300">Required for installation</p>
+            <p class="text-gray-300">Version 88 or higher</p>
           </div>
         </div>
       </div>
 
       <!-- FAQ Section -->
-      <div class="mb-24 scroll-animate">
-        <h2 class="text-4xl font-semibold text-white text-center mb-16">
+      <div class="mb-32 scroll-animate">
+        <h2
+          class="text-3xl md:text-4xl font-semibold text-white text-center mb-16"
+        >
           Frequently Asked Questions
         </h2>
-        <div class="space-y-8">
+        <div class="space-y-6">
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-10 border border-white/10"
           >
-            <h3 class="text-2xl font-semibold text-white mb-4">
+            <h3 class="text-xl font-semibold text-white mb-4">
               How do I install Purro extension?
             </h3>
-            <p class="text-gray-300 text-lg leading-relaxed">
-              Simply click the "Install from Chrome Web Store" button above.
-              This will take you to the official Chrome Web Store where you can
-              install Purro with one click. The extension will be automatically
-              updated when new versions are released.
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              Choose your preferred browser above and click the install button.
+              This will take you to the official store where you can install
+              Purro with one click. The extension will be automatically updated
+              when new versions are released.
             </p>
           </div>
 
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-10 border border-white/10"
           >
-            <h3 class="text-2xl font-semibold text-white mb-4">
-              Is Purro safe to install from Chrome Web Store?
+            <h3 class="text-xl font-semibold text-white mb-4">
+              Is Purro safe to install?
             </h3>
-            <p class="text-gray-300 text-lg leading-relaxed">
-              Yes! Purro is officially verified by Google and available on the
-              Chrome Web Store. This means it has passed Google's security
-              review process and is safe to install. The extension is also open
-              source, so you can review the code on GitHub.
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              Yes! Purro is officially verified and available on official stores
+              (Chrome Web Store, Microsoft Edge Add-ons). This means it has
+              passed security review processes and is safe to install. The
+              extension is also open source, so you can review the code on
+              GitHub.
             </p>
           </div>
 
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-10 border border-white/10"
           >
-            <h3 class="text-2xl font-semibold text-white mb-4">
+            <h3 class="text-xl font-semibold text-white mb-4">
               How do I get updates for Purro?
             </h3>
-            <p class="text-gray-300 text-lg leading-relaxed">
-              When installed from the Chrome Web Store, Purro will automatically
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              When installed from official stores, Purro will automatically
               update to the latest version. You can also manually check for
-              updates by going to chrome://extensions/ and clicking the refresh
-              icon on the Purro extension card.
+              updates by going to your browser's extensions page and clicking
+              the refresh icon on the Purro extension card.
             </p>
           </div>
 
           <div
-            class="bg-black/20 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-10 border border-white/10"
           >
-            <h3 class="text-2xl font-semibold text-white mb-4">
+            <h3 class="text-xl font-semibold text-white mb-4">
               What browsers are supported?
             </h3>
-            <p class="text-gray-300 text-lg leading-relaxed">
-              Currently, Purro is available for Chrome and other Chromium-based
-              browsers (like Edge, Brave, and Opera). We're working on support
-              for Firefox and other browsers in future releases.
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              Purro is available for Chrome, Microsoft Edge, and Brave browsers.
+              All three are Chromium-based, ensuring consistent performance and
+              features across platforms. We're working on support for Firefox
+              and other browsers in future releases.
+            </p>
+          </div>
+
+          <div
+            class="bg-black/20 backdrop-blur-sm rounded-2xl p-10 border border-white/10"
+          >
+            <h3 class="text-xl font-semibold text-white mb-4">
+              Is Purro available in my region?
+            </h3>
+            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+              Purro extension is available in most regions worldwide through
+              Chrome Web Store distribution. However, some regions may have
+              restrictions due to local regulations.
+              <a
+                href="/region"
+                class="text-[#02f1dc] hover:text-[#02f1dc]/80 underline"
+              >
+                Check our region support page
+              </a> to see if Purro is available in your country and verify your browser
+              compatibility.
             </p>
           </div>
         </div>
@@ -627,11 +658,13 @@ const GITHUB_RELEASES_URL =
 
       <!-- Call to Action -->
       <div class="text-center scroll-animate">
-        <h2 class="text-3xl font-semibold text-white mb-6">Need Help?</h2>
-        <p class="text-gray-300 mb-10 text-lg">
+        <h2 class="text-2xl md:text-3xl font-semibold text-white mb-4">
+          Need Help?
+        </h2>
+        <p class="text-gray-300 mb-10 text-sm md:text-base">
           Join our community for support and updates about Purro extension.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-6 mb-8">
+        <div class="flex flex-col sm:flex-row justify-center gap-6 mb-10">
           <a
             href="https://discord.gg/pa7aVJy8YG"
             target="_blank"
@@ -639,6 +672,12 @@ const GITHUB_RELEASES_URL =
             class="bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 no-underline text-lg"
           >
             Join Discord
+          </a>
+          <a
+            href="/region"
+            class="bg-black/30 hover:bg-black/50 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold px-8 py-4 rounded-full transition-all duration-300 no-underline text-lg"
+          >
+            Check Region Support
           </a>
           <a
             href="https://docs.purro.xyz"
