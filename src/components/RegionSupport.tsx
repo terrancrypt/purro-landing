@@ -5,6 +5,14 @@ import {
   GlobeIcon,
   AlertTriangleIcon,
 } from "lucide-react";
+import {
+  detectBrowser,
+  detectRegion,
+  detectRegionEnhanced,
+  detectRegionSimple,
+  type BrowserInfo,
+  type RegionInfo,
+} from "../lib/detection";
 
 // Supported regions based on Chrome Web Store distribution (excluding Vietnam)
 const SUPPORTED_REGIONS = [
@@ -73,17 +81,7 @@ const BROWSER_SUPPORT = [
   { name: "Safari", supported: false, reason: "Not Chromium-based" },
 ];
 
-interface BrowserInfo {
-  browserName: string;
-  browserVersion: string;
-  isSupported: boolean;
-}
-
-interface RegionInfo {
-  regionName: string;
-  regionCode: string;
-  isSupported: boolean;
-}
+// Types are now imported from detection.ts
 
 // Custom hook for browser and region detection
 const useBrowserDetection = () => {
@@ -99,89 +97,25 @@ const useBrowserDetection = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const detectBrowser = (): BrowserInfo => {
-    const userAgent = navigator.userAgent;
-    let browserName = "Unknown Browser";
-    let browserVersion = "Unknown";
-    let isSupported = false;
-
-    if (
-      userAgent.includes("Chrome") &&
-      !userAgent.includes("Edg") &&
-      !userAgent.includes("Brave")
-    ) {
-      browserName = "Google Chrome";
-      const match = userAgent.match(/Chrome\/(\d+)/);
-      browserVersion = match ? match[1] : "Unknown";
-      isSupported = parseInt(browserVersion) >= 88;
-    } else if (userAgent.includes("Edg")) {
-      browserName = "Microsoft Edge";
-      const match = userAgent.match(/Edg\/(\d+)/);
-      browserVersion = match ? match[1] : "Unknown";
-      isSupported = parseInt(browserVersion) >= 88;
-    } else if (userAgent.includes("Brave")) {
-      browserName = "Brave Browser";
-      const match = userAgent.match(/Chrome\/(\d+)/);
-      browserVersion = match ? match[1] : "Unknown";
-      isSupported = parseInt(browserVersion) >= 88;
-    } else if (userAgent.includes("Firefox")) {
-      browserName = "Mozilla Firefox";
-      const match = userAgent.match(/Firefox\/(\d+)/);
-      browserVersion = match ? match[1] : "Unknown";
-      isSupported = false;
-    } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
-      browserName = "Safari";
-      const match = userAgent.match(/Version\/(\d+)/);
-      browserVersion = match ? match[1] : "Unknown";
-      isSupported = false;
-    }
-
-    return { browserName, browserVersion, isSupported };
-  };
-
-  const detectRegion = (): RegionInfo => {
-    // Try to get region from timezone
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    let regionName = "Unknown";
-    let regionCode = "Unknown";
-    let isSupported = true;
-
-    // Basic timezone to region mapping
-    const timezoneMap: Record<string, { name: string; code: string }> = {
-      "America/New_York": { name: "United States", code: "US" },
-      "America/Los_Angeles": { name: "United States", code: "US" },
-      "America/Chicago": { name: "United States", code: "US" },
-      "America/Denver": { name: "United States", code: "US" },
-      "Europe/London": { name: "United Kingdom", code: "GB" },
-      "Europe/Paris": { name: "France", code: "FR" },
-      "Europe/Berlin": { name: "Germany", code: "DE" },
-      "Asia/Tokyo": { name: "Japan", code: "JP" },
-      "Asia/Seoul": { name: "South Korea", code: "KR" },
-      "Asia/Shanghai": { name: "China", code: "CN" },
-      "Asia/Ho_Chi_Minh": { name: "Vietnam", code: "VN" },
-      "Asia/Singapore": { name: "Singapore", code: "SG" },
-      "Australia/Sydney": { name: "Australia", code: "AU" },
-      "America/Toronto": { name: "Canada", code: "CA" },
-    };
-
-    if (timezoneMap[timezone]) {
-      regionName = timezoneMap[timezone].name;
-      regionCode = timezoneMap[timezone].code;
-      isSupported = regionCode !== "VN" && regionCode !== "CN";
-    }
-
-    return { regionName, regionCode, isSupported };
-  };
+  // Detection functions are now imported from detection.ts
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const detectAll = async () => {
+      console.log("🚀 Starting detection process...");
+
       const browserInfo = detectBrowser();
-      const regionInfo = detectRegion();
+      console.log("🌐 Browser detection result:", browserInfo);
+
+      // Try simple region detection first (more reliable)
+      const regionInfo = await detectRegionSimple();
+      console.log("🌍 Region detection result:", regionInfo);
 
       setBrowser(browserInfo);
       setRegion(regionInfo);
       setIsLoading(false);
-    }, 1000); // Simulate loading time
+    };
+
+    const timer = setTimeout(detectAll, 1000); // Simulate loading time
 
     return () => clearTimeout(timer);
   }, []);
@@ -193,115 +127,139 @@ const RegionSupport: React.FC = () => {
   const { browser, region, isLoading } = useBrowserDetection();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#081919] via-[#0e2a2a] to-[#081919] pt-32 pb-24">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#081919] via-[#0e2a2a] to-[#081919] pt-32 pb-16 sm:pb-20 md:pb-24">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="text-center scroll-animate mb-16">
+        <div className="text-center scroll-animate mb-12 sm:mb-16">
           <img
             src="/Purro_Logotype_White.png"
             alt="Purro Logo"
-            className="h-16 mx-auto mb-8"
+            className="h-12 sm:h-14 md:h-16 mx-auto mb-6 sm:mb-8"
           />
-          <h1 className="text-3xl md:text-4xl font-semibold text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white mb-3 sm:mb-4 px-4">
             Region & Browser Support
           </h1>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <p className="text-gray-300 max-w-2xl mx-auto text-sm sm:text-base px-4">
             Check if Purro extension is available in your region and compatible
             with your browser
           </p>
         </div>
 
         {/* Detection Section */}
-        <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-10 border border-white/10 mb-16 scroll-animate">
-          <h2 className="text-2xl font-semibold text-white mb-8 text-center">
+        <div className="mb-12 sm:mb-16 scroll-animate">
+          <h2 className="text-xl sm:text-2xl font-semibold text-white mb-6 sm:mb-8 text-center px-4">
             Your Current Setup
           </h2>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Browser Detection */}
-            <div className="flex items-center justify-between p-6 bg-black/30 rounded-2xl border border-white/10">
-              <div className="flex items-center gap-4">
-                <GlobeIcon className="h-8 w-8 text-[#02f1dc]" />
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Browser</h3>
-                  <p className="text-gray-300">
+            <div className="bg-black/30 rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden">
+              <div className="p-4 sm:p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#02f1dc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <GlobeIcon className="h-5 w-5 sm:h-6 sm:w-6 text-[#02f1dc]" />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white">
+                        Browser
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-[#02f1dc]"></div>
+                        <span className="text-gray-300 text-sm sm:text-base hidden xs:inline">
+                          Checking...
+                        </span>
+                      </>
+                    ) : browser.isSupported ? (
+                      <>
+                        <CheckCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-400" />
+                        <span className="text-green-400 font-semibold text-sm sm:text-base">
+                          Supported
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-red-400" />
+                        <span className="text-red-400 font-semibold text-sm sm:text-base">
+                          Not Supported
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="pl-13 sm:pl-14">
+                  <p className="text-gray-300 text-sm sm:text-base">
                     {isLoading
-                      ? "Detecting..."
+                      ? "Detecting your browser..."
                       : `${browser.browserName} ${browser.browserVersion}`}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#02f1dc]"></div>
-                    <span className="text-gray-300">Checking...</span>
-                  </>
-                ) : browser.isSupported ? (
-                  <>
-                    <CheckCircleIcon className="h-6 w-6 text-green-400" />
-                    <span className="text-green-400 font-semibold">
-                      Supported
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <XCircleIcon className="h-6 w-6 text-red-400" />
-                    <span className="text-red-400 font-semibold">
-                      Not Supported
-                    </span>
-                  </>
-                )}
-              </div>
             </div>
 
             {/* Region Detection */}
-            <div className="flex items-center justify-between p-6 bg-black/30 rounded-2xl border border-white/10">
-              <div className="flex items-center gap-4">
-                <GlobeIcon className="h-8 w-8 text-[#02f1dc]" />
-                <div>
-                  <h3 className="text-lg font-semibold text-white">Region</h3>
-                  <p className="text-gray-300">
+            <div className="bg-black/30 rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden">
+              <div className="p-4 sm:p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#02f1dc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <GlobeIcon className="h-5 w-5 sm:h-6 sm:w-6 text-[#02f1dc]" />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold text-white">
+                        Region
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-[#02f1dc]"></div>
+                        <span className="text-gray-300 text-sm sm:text-base hidden xs:inline">
+                          Checking...
+                        </span>
+                      </>
+                    ) : region.isSupported ? (
+                      <>
+                        <CheckCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-400" />
+                        <span className="text-green-400 font-semibold text-sm sm:text-base">
+                          Supported
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-red-400" />
+                        <span className="text-red-400 font-semibold text-sm sm:text-base">
+                          Not Supported
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="pl-13 sm:pl-14">
+                  <p className="text-gray-300 text-sm sm:text-base">
                     {isLoading
-                      ? "Detecting..."
+                      ? "Detecting your location..."
                       : `${region.regionName} (${region.regionCode})`}
                   </p>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#02f1dc]"></div>
-                    <span className="text-gray-300">Checking...</span>
-                  </>
-                ) : region.isSupported ? (
-                  <>
-                    <CheckCircleIcon className="h-6 w-6 text-green-400" />
-                    <span className="text-green-400 font-semibold">
-                      Supported
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <XCircleIcon className="h-6 w-6 text-red-400" />
-                    <span className="text-red-400 font-semibold">
-                      Not Supported
-                    </span>
-                  </>
-                )}
               </div>
             </div>
 
             {/* Warning if not supported */}
             {!isLoading && (!browser.isSupported || !region.isSupported) && (
-              <div className="mt-6 p-4 bg-red-900/20 border border-red-500/30 rounded-2xl">
-                <div className="flex items-center gap-3">
-                  <AlertTriangleIcon className="h-6 w-6 text-red-400" />
+              <div className="mt-4 sm:mt-6 p-4 sm:p-6 bg-red-900/20 border border-red-500/30 rounded-xl sm:rounded-2xl">
+                <div className="flex items-start gap-3">
+                  <AlertTriangleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-red-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-lg font-semibold text-white">
+                    <h4 className="text-base sm:text-lg font-semibold text-white mb-2">
                       Extension Not Available
                     </h4>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-300 text-sm sm:text-base">
                       Purro extension is not available for your current browser
                       or region. Please check the supported browsers and regions
                       below.
@@ -314,30 +272,32 @@ const RegionSupport: React.FC = () => {
         </div>
 
         {/* Supported Regions */}
-        <div className="mb-16 scroll-animate">
-          <h2 className="text-3xl font-semibold text-white mb-8 text-center">
+        <div className="mb-12 sm:mb-16 scroll-animate">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-8 text-center px-4">
             Supported Regions
           </h2>
-          <p className="text-gray-300 text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-gray-300 text-center mb-8 sm:mb-12 max-w-3xl mx-auto text-sm sm:text-base px-4">
             Purro extension is available in the following regions through Chrome
             Web Store distribution
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
             {SUPPORTED_REGIONS.map((region, index) => (
               <div
                 key={index}
-                className="bg-black/20 backdrop-blur-sm rounded-2xl p-4 border border-white/10 hover:border-[#02f1dc]/30 transition-all duration-300"
+                className="bg-black/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10 hover:border-[#02f1dc]/30 transition-all duration-300"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{region.flag}</span>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-xl sm:text-2xl flex-shrink-0">
+                    {region.flag}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xs sm:text-sm font-semibold text-white truncate">
                       {region.name}
                     </h3>
                     <p className="text-xs text-gray-400">{region.code}</p>
                   </div>
-                  <CheckCircleIcon className="h-5 w-5 text-green-400 ml-auto" />
+                  <CheckCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-400 flex-shrink-0" />
                 </div>
               </div>
             ))}
@@ -345,30 +305,32 @@ const RegionSupport: React.FC = () => {
         </div>
 
         {/* Unsupported Regions */}
-        <div className="mb-16 scroll-animate">
-          <h2 className="text-3xl font-semibold text-white mb-8 text-center">
+        <div className="mb-12 sm:mb-16 scroll-animate">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-8 text-center px-4">
             Unsupported Regions
           </h2>
-          <p className="text-gray-300 text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-gray-300 text-center mb-8 sm:mb-12 max-w-3xl mx-auto text-sm sm:text-base px-4">
             Purro extension is not available in the following regions due to
             regulatory restrictions
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {UNSUPPORTED_REGIONS.map((region, index) => (
               <div
                 key={index}
-                className="bg-red-900/20 backdrop-blur-sm rounded-2xl p-4 border border-red-500/30"
+                className="bg-red-900/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-red-500/30"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{region.flag}</span>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-xl sm:text-2xl flex-shrink-0">
+                    {region.flag}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xs sm:text-sm font-semibold text-white truncate">
                       {region.name}
                     </h3>
                     <p className="text-xs text-gray-400">{region.code}</p>
                   </div>
-                  <XCircleIcon className="h-5 w-5 text-red-400 ml-auto" />
+                  <XCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 text-red-400 flex-shrink-0" />
                 </div>
               </div>
             ))}
@@ -376,54 +338,60 @@ const RegionSupport: React.FC = () => {
         </div>
 
         {/* Browser Compatibility */}
-        <div className="mb-16 scroll-animate">
-          <h2 className="text-3xl font-semibold text-white mb-8 text-center">
+        <div className="mb-12 sm:mb-16 scroll-animate">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-8 text-center px-4">
             Browser Compatibility
           </h2>
-          <p className="text-gray-300 text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-gray-300 text-center mb-8 sm:mb-12 max-w-3xl mx-auto text-sm sm:text-base px-4">
             Purro works with Chromium-based browsers. Check your browser
             compatibility below
           </p>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {BROWSER_SUPPORT.map((browser, index) => (
               <div
                 key={index}
-                className="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
+                className="bg-black/20 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#02f1dc]/20 rounded-full flex items-center justify-center">
-                      <GlobeIcon className="h-6 w-6 text-[#02f1dc]" />
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#02f1dc]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <GlobeIcon className="h-5 w-5 sm:h-6 sm:w-6 text-[#02f1dc]" />
+                      </div>
+                      <div>
+                        <h3 className="text-base sm:text-lg font-semibold text-white">
+                          {browser.name}
+                        </h3>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">
-                        {browser.name}
-                      </h3>
+                    <div className="flex items-center gap-2">
                       {browser.supported ? (
-                        <p className="text-gray-300">
-                          Minimum version: {browser.minVersion}
-                        </p>
+                        <>
+                          <CheckCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-400" />
+                          <span className="text-green-400 font-semibold text-sm sm:text-base">
+                            Supported
+                          </span>
+                        </>
                       ) : (
-                        <p className="text-gray-400">{browser.reason}</p>
+                        <>
+                          <XCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 text-red-400" />
+                          <span className="text-red-400 font-semibold text-sm sm:text-base">
+                            Not Supported
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="pl-13 sm:pl-14">
                     {browser.supported ? (
-                      <>
-                        <CheckCircleIcon className="h-6 w-6 text-green-400" />
-                        <span className="text-green-400 font-semibold">
-                          Supported
-                        </span>
-                      </>
+                      <p className="text-gray-300 text-sm sm:text-base">
+                        Minimum version: {browser.minVersion}
+                      </p>
                     ) : (
-                      <>
-                        <XCircleIcon className="h-6 w-6 text-red-400" />
-                        <span className="text-red-400 font-semibold">
-                          Not Supported
-                        </span>
-                      </>
+                      <p className="text-gray-400 text-sm sm:text-base">
+                        {browser.reason}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -433,14 +401,14 @@ const RegionSupport: React.FC = () => {
         </div>
 
         {/* Important Notice */}
-        <div className="bg-yellow-900/20 backdrop-blur-sm rounded-3xl p-10 border border-yellow-500/30 mb-16 scroll-animate">
-          <div className="flex items-start gap-4">
-            <AlertTriangleIcon className="h-8 w-8 text-yellow-400 flex-shrink-0 mt-1" />
+        <div className="bg-yellow-900/20 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-yellow-500/30 mb-12 sm:mb-16 scroll-animate">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <AlertTriangleIcon className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-400 flex-shrink-0 mt-0.5 sm:mt-1" />
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">
+              <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
                 Important Notice
               </h3>
-              <div className="space-y-3 text-gray-300">
+              <div className="space-y-3 text-gray-300 text-sm sm:text-base">
                 <p>
                   <strong>Vietnam Restriction:</strong> Purro extension is not
                   available in Vietnam due to local regulatory requirements.
@@ -464,25 +432,25 @@ const RegionSupport: React.FC = () => {
 
         {/* Call to Action */}
         <div className="text-center scroll-animate">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-3 sm:mb-4 px-4">
             Need Help?
           </h2>
-          <p className="text-gray-300 mb-10 text-sm md:text-base">
+          <p className="text-gray-300 mb-8 sm:mb-10 text-sm sm:text-base px-4">
             Have questions about region support or browser compatibility?
             Contact our support team.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mb-8 sm:mb-10 px-4">
             <a
               href="https://discord.gg/pa7aVJy8YG"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 no-underline text-lg"
+              className="bg-[#02f1dc] hover:bg-[#02f1dc]/80 text-black font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 no-underline text-base sm:text-lg"
             >
               Join Discord
             </a>
             <a
               href="mailto:hello@purro.xyz"
-              className="bg-black/30 hover:bg-black/50 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold px-8 py-4 rounded-full transition-all duration-300 no-underline text-lg"
+              className="bg-black/30 hover:bg-black/50 text-[#02f1dc] border border-[#02f1dc]/30 font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 no-underline text-base sm:text-lg"
             >
               Contact Support
             </a>
