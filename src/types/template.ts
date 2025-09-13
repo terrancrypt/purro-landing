@@ -1,10 +1,8 @@
 export interface Template {
     id: string;
     name: string;
-    description: string;
     img: string;
     mode: "light" | "dark";
-    category?: "default" | "premium" | "seasonal";
     colors: {
         primary: string;
         secondary: string;

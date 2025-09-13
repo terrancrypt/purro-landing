@@ -25,7 +25,7 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {templates.map((template) => (
           <div
             key={template.id}
@@ -77,9 +77,6 @@ const TemplateManager: React.FC<TemplateManagerProps> = ({
             <div className="p-2 sm:p-3">
               <div className="font-medium text-white text-xs sm:text-sm mb-1">
                 {template.name}
-              </div>
-              <div className="text-gray-400 text-xs line-clamp-2 hidden sm:block">
-                {template.description}
               </div>
 
               {/* Color palette preview */}
