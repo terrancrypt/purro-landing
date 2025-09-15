@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 interface HLName {
   address: string;
@@ -41,6 +41,42 @@ interface LeaderboardResponse {
   data: LeaderboardData;
 }
 
+interface Transaction {
+  hash: string;
+  block_number: number;
+  user_address: string;
+  dex_address: string;
+  dex_name: string;
+  token_in_address: string;
+  token_out_address: string;
+  token_in_symbol: string;
+  token_out_symbol: string;
+  amount_in: string;
+  amount_out: string;
+  amount_in_decimal: number;
+  amount_out_decimal: number;
+  token_in_price_usd: number;
+  token_out_price_usd: number;
+  volume_usd: number;
+  timestamp: number;
+}
+
+interface TransactionsResponse {
+  success: boolean;
+  data: {
+    transactions: Transaction[];
+    pagination: {
+      page: number;
+      limit: number;
+      total_pages: number;
+      has_next: boolean;
+      has_prev: boolean;
+    };
+    start_time: number;
+    end_time: number;
+  };
+}
+
 type TimeframeOption = "1d" | "7d" | "30d" | "all";
 
 const LeaderboardReact: React.FC = () => {
@@ -53,6 +89,14 @@ const LeaderboardReact: React.FC = () => {
   const [searchAddress, setSearchAddress] = useState("");
   const [limit] = useState(20);
   const [hlNames, setHlNames] = useState<Map<string, string>>(new Map());
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currentTransactionIndex, setCurrentTransactionIndex] = useState(0);
+  const [displayedTransaction, setDisplayedTransaction] =
+    useState<Transaction | null>(null);
+  const [isShowingTransaction, setIsShowingTransaction] = useState(false);
+  const [isDisplayCycleActive, setIsDisplayCycleActive] = useState(false);
+  const intervalRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
 
   const fetchHLNames = useCallback(async () => {
     try {
@@ -83,6 +127,134 @@ const LeaderboardReact: React.FC = () => {
       console.warn("Error fetching HL Names:", err);
     }
   }, []);
+
+  // Function to fetch 20 latest transactions
+  const fetchTransactionsData = useCallback(async () => {
+    try {
+      console.log("Fetching transactions data...");
+      const response = await fetch(
+        "https://api.purro.xyz/api/v1/transactions?page=1&limit=50&sort_by=timestamp&sort_order=desc"
+      );
+
+      if (!response.ok) {
+        console.error("Failed to fetch transactions:", response.status);
+        return;
+      }
+
+      const result: TransactionsResponse = await response.json();
+      console.log("Transactions data:", result);
+
+      if (result.success && result.data.transactions) {
+        // Reverse the array to show from oldest to newest
+        const reversedTransactions = [...result.data.transactions].reverse();
+        setTransactions(reversedTransactions);
+        setCurrentTransactionIndex(0);
+      }
+    } catch (err) {
+      console.error("Error fetching transactions:", err);
+    }
+  }, []);
+
+  // LocalStorage functions for managing displayed transactions
+  const getDisplayedTransactions = useCallback(() => {
+    try {
+      const stored = localStorage.getItem("purro_displayed_transactions");
+      return stored ? JSON.parse(stored) : [];
+    } catch (err) {
+      console.warn(
+        "Error reading displayed transactions from localStorage:",
+        err
+      );
+      return [];
+    }
+  }, []);
+
+  const saveDisplayedTransaction = useCallback(
+    (transactionHash: string) => {
+      try {
+        const displayed = getDisplayedTransactions();
+        const updated = [...displayed, transactionHash];
+
+        // Keep only the latest 20 transactions
+        if (updated.length > 20) {
+          updated.splice(0, updated.length - 20);
+        }
+
+        localStorage.setItem(
+          "purro_displayed_transactions",
+          JSON.stringify(updated)
+        );
+      } catch (err) {
+        console.warn(
+          "Error saving displayed transaction to localStorage:",
+          err
+        );
+      }
+    },
+    [getDisplayedTransactions]
+  );
+
+  const isTransactionDisplayed = useCallback(
+    (transactionHash: string) => {
+      const displayed = getDisplayedTransactions();
+      return displayed.includes(transactionHash);
+    },
+    [getDisplayedTransactions]
+  );
+
+  // Function to show next transaction
+  const showNextTransaction = useCallback(() => {
+    if (transactions.length === 0) return;
+
+    console.log(
+      `Showing next transaction, current index: ${currentTransactionIndex}`
+    );
+
+    // Find next transaction that hasn't been displayed
+    let nextIndex = currentTransactionIndex;
+    let attempts = 0;
+
+    while (attempts < transactions.length) {
+      const transaction = transactions[nextIndex];
+
+      if (!isTransactionDisplayed(transaction.hash)) {
+        console.log(`Displaying transaction: ${transaction.hash}`);
+        setDisplayedTransaction(transaction);
+        setIsShowingTransaction(true);
+        saveDisplayedTransaction(transaction.hash);
+
+        setCurrentTransactionIndex((nextIndex + 1) % transactions.length);
+        return;
+      }
+
+      nextIndex = (nextIndex + 1) % transactions.length;
+      attempts++;
+    }
+
+    // If all transactions have been displayed, reset and start over
+    console.log("All transactions displayed, resetting...");
+    setCurrentTransactionIndex(0);
+  }, [
+    transactions,
+    currentTransactionIndex,
+    isTransactionDisplayed,
+    saveDisplayedTransaction,
+  ]);
+
+  // Function to start the transaction display cycle (idempotent)
+  const startTransactionDisplay = useCallback(() => {
+    if (intervalRef.current) return; // already running
+    console.log("Starting transaction display cycle");
+    setIsDisplayCycleActive(true);
+
+    // Show first transaction immediately
+    showNextTransaction();
+
+    // Then show every 10 seconds
+    intervalRef.current = window.setInterval(() => {
+      showNextTransaction();
+    }, 10000);
+  }, [showNextTransaction]);
 
   const fetchLeaderboardData = useCallback(
     async (
@@ -136,6 +308,32 @@ const LeaderboardReact: React.FC = () => {
   useEffect(() => {
     fetchLeaderboardData(1, timeframe);
   }, [fetchLeaderboardData, timeframe]);
+
+  // Fetch transactions data on component mount
+  useEffect(() => {
+    fetchTransactionsData();
+  }, [fetchTransactionsData]);
+
+  // Start transaction display when transactions are loaded
+  useEffect(() => {
+    if (transactions.length > 0 && !intervalRef.current) {
+      console.log(
+        `Starting transaction display with ${transactions.length} transactions`
+      );
+      startTransactionDisplay();
+    }
+  }, [transactions.length, startTransactionDisplay]);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setIsDisplayCycleActive(false);
+    };
+  }, []);
 
   const getDisplayName = useCallback(
     (address: string) => {
@@ -197,6 +395,16 @@ const LeaderboardReact: React.FC = () => {
     return "bg-gray-600 text-white";
   };
 
+  // Function to format transaction display
+  const formatTransactionDisplay = (transaction: Transaction) => {
+    const address = getDisplayName(transaction.user_address);
+    const tokenIn = transaction.token_in_symbol;
+    const tokenOut = transaction.token_out_symbol;
+    const amountOut = transaction.amount_out_decimal.toFixed(4);
+
+    return `${address} swapped ${tokenIn} → ${tokenOut}`;
+  };
+
   // Skeleton component for table rows
   const SkeletonRow = () => (
     <tr className="border-t border-gray-700/30">
@@ -252,7 +460,7 @@ const LeaderboardReact: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 lg:pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
+    <div className="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20">
       <div className="container max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8 lg:mb-10">
@@ -286,6 +494,33 @@ const LeaderboardReact: React.FC = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Live Transaction Display */}
+        <div className="mb-4 sm:mb-5 lg:mb-6">
+          <div className="bg-black/10 border border-gray-700/30 rounded-lg relative overflow-hidden">
+            {displayedTransaction && (
+              <div
+                key={displayedTransaction.hash}
+                className="flex items-center justify-center animate-live-shake p-3 sm:p-4"
+                style={{
+                  background: `linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(${Math.floor(
+                    Math.random() * 256
+                  )}, ${Math.floor(Math.random() * 256)}, ${Math.floor(
+                    Math.random() * 256
+                  )}, 0.12) 50%, rgba(0,0,0,0) 100%)`,
+                }}
+              >
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-white text-sm sm:text-base font-mono">
+                    {formatTransactionDisplay(displayedTransaction)}
+                  </span>
+                </div>
+                {/* Removed time-ago as requested */}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Point System Description */}
