@@ -650,10 +650,6 @@ const LeaderboardReact: React.FC = () => {
                                     </span>
                                   )}
                                 </div>
-                                <div className="text-gray-400 text-xs hidden sm:block">
-                                  {user.address.slice(0, 6)}...
-                                  {user.address.slice(-4)}
-                                </div>
                               </div>
                             </div>
                           </td>
