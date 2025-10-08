@@ -1,0 +1,312 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import hlNamesLogo from "../assets/hyperliquid-names.svg";
+import gluexLogo from "../assets/GlueX_isotope_logo.svg";
+---
+
+<Layout title="Partners | Purro">
+  <Header />
+
+  <div
+    class="min-h-screen pt-32 bg-gradient-to-b from-[#021919] via-[#0e2a2a] to-[#081919] relative py-20"
+  >
+    <div class="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header Section -->
+      <div class="text-center mb-16">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl text-white font-bold mb-4">
+          Our Partners
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+          We collaborate with leading platforms in the Web3 ecosystem to bring
+          you the best experience
+        </p>
+      </div>
+
+      <!-- Partners Grid -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto"
+      >
+        <!-- GlueX Card -->
+        <div
+          class="group bg-gradient-to-br from-[#0a2525] to-[#081919] rounded-2xl p-8 lg:p-10 border border-[#02f1dc]/20 hover:border-[#02f1dc]/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(2,241,220,0.2)] h-full flex flex-col"
+        >
+          <!-- Logo Section -->
+          <div class="mb-6 flex items-center justify-center h-24">
+            <img src={gluexLogo.src} alt="GlueX" class="h-20 w-auto" />
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-2xl font-bold text-white mb-4 text-center">
+            GlueX Protocol
+          </h3>
+
+          <!-- Description -->
+          <p class="text-gray-300 mb-6 leading-relaxed text-center flex-grow">
+            Multi-Chain DeFi Services Platform offering comprehensive DeFi
+            aggregation, trading, lending, and staking services. Access best
+            price discovery across 17+ blockchains with over $10 billion in
+            transaction volume.
+          </p>
+
+          <!-- Features -->
+          <div class="space-y-3 mb-6">
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >Deep Liquidity Aggregation & Best Rates</span
+              >
+            </div>
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >MEV Protection & Zero Routing Fees</span
+              >
+            </div>
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >17+ Supported Blockchains</span
+              >
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div
+            class="flex flex-col sm:flex-row gap-3 items-center justify-center"
+          >
+            <a
+              href="https://gluex.xyz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#02f1dc] to-[#00c4b8] text-black font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(2,241,220,0.5)] transition-all duration-300 hover:scale-105 text-sm"
+            >
+              <span>Visit GlueX</span>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            <a
+              href="https://x.com/GluexProtocol/status/1969763574001389600"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-[#02f1dc] transition-colors text-sm border border-gray-600 hover:border-[#02f1dc] px-4 py-2.5 rounded-full"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                ></path>
+              </svg>
+              <span>Announcement</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- HL Names Card -->
+        <div
+          class="group bg-gradient-to-br from-[#0a2525] to-[#081919] rounded-2xl p-8 lg:p-10 border border-[#02f1dc]/20 hover:border-[#02f1dc]/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(2,241,220,0.2)] h-full flex flex-col"
+        >
+          <!-- Logo Section -->
+          <div class="mb-6 flex items-center justify-center h-24">
+            <img src={hlNamesLogo.src} alt="HL Names" class="h-20 w-auto" />
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-2xl font-bold text-white mb-4 text-center">
+            HL Names
+          </h3>
+
+          <!-- Description -->
+          <p class="text-gray-300 mb-6 leading-relaxed text-center flex-grow">
+            Hyperliquid Name Service providing human-readable names for
+            Hyperliquid addresses. Create your unique identity in the
+            Hyperliquid ecosystem with a memorable name that's easy to share and
+            recognize.
+          </p>
+
+          <!-- Features -->
+          <div class="space-y-3 mb-6">
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >Human-Readable Address Names</span
+              >
+            </div>
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >Unique Identity on Hyperliquid</span
+              >
+            </div>
+            <div class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-[#02f1dc] mt-0.5 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <span class="text-sm text-gray-400"
+                >Easy to Share & Recognize</span
+              >
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div
+            class="flex flex-col sm:flex-row gap-3 items-center justify-center"
+          >
+            <a
+              href="https://app.hlnames.xyz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#02f1dc] to-[#00c4b8] text-black font-semibold px-6 py-2.5 rounded-full hover:shadow-[0_0_20px_rgba(2,241,220,0.5)] transition-all duration-300 hover:scale-105 text-sm"
+            >
+              <span>Visit HL Names</span>
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            <a
+              href="https://x.com/hlnames/status/1957835051879760328"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-[#02f1dc] transition-colors text-sm border border-gray-600 hover:border-[#02f1dc] px-4 py-2.5 rounded-full"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                ></path>
+              </svg>
+              <span>Announcement</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom CTA Section -->
+      <div class="mt-20 text-center">
+        <div
+          class="bg-gradient-to-br from-[#0a2525] to-[#081919] rounded-2xl p-10 border border-[#02f1dc]/20 max-w-3xl mx-auto"
+        >
+          <h2 class="text-3xl font-bold text-white mb-4">
+            Interested in Partnering?
+          </h2>
+          <p class="text-gray-300 mb-8 text-lg">
+            Join us in building the future of Web3. Let's create something
+            amazing together.
+          </p>
+          <a
+            href="mailto:hello@purro.xyz"
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-[#02f1dc] to-[#00c4b8] text-black font-semibold px-8 py-3 rounded-full hover:shadow-[0_0_20px_rgba(2,241,220,0.5)] transition-all duration-300 hover:scale-105"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+            hello@purro.xyz
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Animation for cards on scroll */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

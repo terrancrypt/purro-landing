@@ -199,7 +199,7 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
             )}
             <p className="m-0 text-[0.85rem] opacity-85">{c.subtitle}</p>
             {c.location && (
-              <span className="text-[0.85rem] opacity-85 text-right">
+              <span className="text-[0.85rem] opacity-85 text-right ">
                 {c.location}
               </span>
             )}
